@@ -1,39 +1,60 @@
 package pe.com.outfitpro.entity;
 
+import java.io.Serializable;
+
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
-public abstract class Seguridad {
+@MappedSuperclass
+public class Seguridad implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int codigo;
 	
 	@Column(name="activo", nullable=false)
-	private Boolean activo;
+	private Boolean activo = true;
 	
 	@Column(name="idusuariocreacion", nullable=false)
 	private int idUsuarioCreacion;
 	
 	@Column(name="fechahoracreacion", nullable=false)
-	private Date fechaHoraCreacion;
+	private Date fechaHoraCreacion = new Date();
 	
 	@Column(name="idusuariomodificacion", nullable=false)
 	private int idUsuarioModificacion;
 	
-	@Column(name="fechahoramodificacion", nullable=false)
+	@Column(name="fechahoramodificacion", nullable=true)
 	private Date fechaHoraModificacion;
 
 	public Seguridad() {
 		super();
 	}
 
-	public Seguridad(Boolean activo, int idUsuarioCreacion, Date fechaHoraCreacion, int idUsuarioModificacion, Date fechaHoraModificacion) {
+	public Seguridad(int codigo, Boolean activo, int idUsuarioCreacion, Date fechaHoraCreacion, int idUsuarioModificacion, Date fechaHoraModificacion) {
 		super();
+		this.codigo = codigo;
 		this.activo = activo;
 		this.idUsuarioCreacion = idUsuarioCreacion;
 		this.fechaHoraCreacion = fechaHoraCreacion;
 		this.idUsuarioModificacion = idUsuarioModificacion;
 		this.fechaHoraModificacion = fechaHoraModificacion;
 	}
+	
+	public int getCodigo() {
+		return codigo;
+	}
 
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
+	
 	public Boolean getActivo() {
 		return activo;
 	}

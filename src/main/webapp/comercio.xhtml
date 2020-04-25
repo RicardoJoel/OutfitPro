@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="master.xhtml">
+
+	<ui:define name="title">
+        Outfit Pro - Registro de nuevo comercio
+    </ui:define>
+
+	<ui:define name="titleCont">
+		<span>Comercios</span>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+			<!-- h:outputLabel for="codigo" value="Código" 
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="codigo"
+				styleClass="form-control" 
+				value="#{comercioController.comercio.codigo}"
+				required="true" /-->
+						
+			<h:outputLabel for="nombre" value="Nombre"
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="nombre"
+				styleClass="form-control"
+				value="#{comercioController.comercio.nombre}" maxlength="500"
+				required="true" />
+
+			<h:outputLabel for="ruc" value="R.U.C."
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="ruc"
+				styleClass="form-control"
+				value="#{comercioController.comercio.ruc}" maxlength="11"
+				required="true" />
+			
+			<h:outputLabel for="correo" value="Correo"
+				styleClass="control-label" />
+				
+			<p:inputText autocomplete="off" id="correo"
+				styleClass="form-control"
+				value="#{comercioController.comercio.correo}" maxlength="500"
+				required="true" />
+				
+			<h:outputLabel for="telefono" value="Teléfono"
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="telefono"
+				styleClass="form-control"
+				value="#{comercioController.comercio.telefono}" maxlength="500"
+				required="true" />
+				
+			<h:outputLabel for="nombreRepres" value="Representante"
+				styleClass="control-label" />
+				
+			<p:inputText autocomplete="off" id="nombreRepres"
+				styleClass="form-control"
+				value="#{comercioController.comercio.nombreRepres}" maxlength="500"
+				required="true" />
+							
+			<h:outputLabel for="correoRepres" value="Correo representante"
+				styleClass="control-label" />
+				
+			<p:inputText autocomplete="off" id="correoRepres"
+				styleClass="form-control"
+				value="#{comercioController.comercio.correoRepres}" maxlength="500"
+				required="true" />
+				
+			<h:outputLabel for="telefonoRepres" value="Teléfono representante"
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="telefonoRepres"
+				styleClass="form-control"
+				value="#{comercioController.comercio.telefonoRepres}" maxlength="500"
+				required="true" />
+				
+			<br />
+
+			<p:commandButton value="Grabar"
+				actionListener="#{comercioController.insertar()}"
+				styleClass="btn btn-primary " update="@form"
+				action="listComercio?faces-redirect=true" />
+				
+			<p:commandButton value="Cancelar"
+				action="listComercio?faces-redirect=true" immediate="true"
+				styleClass="btn btn-default" ajax="false" />
+
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+		</h:form>
+	</ui:define>
+
+	<ui:define name="footerCont"></ui:define>
+</ui:composition>
+</html>
