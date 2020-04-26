@@ -20,8 +20,8 @@ public class MarcaServiceImpl implements IMarcaService, Serializable {
 	private IMarcaDao md;
 	
 	@Override
-	public void insertar(Marca objeto) {
-		md.insertar(objeto);
+	public void insertar(Marca obj) {
+		md.insertar(obj);
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class MarcaServiceImpl implements IMarcaService, Serializable {
 	}
 
 	@Override
-	public void eliminar(int codigo) {
-		md.eliminar(codigo);
+	public void eliminar(int id) {
+		md.eliminar(id);
 	}
 }

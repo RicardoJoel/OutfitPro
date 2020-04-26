@@ -32,15 +32,15 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="form-group table-responsive box-table-class">
-						<p:dataTable id="lstPerfil" var="cmr"
+						<p:dataTable id="lstComercio" var="cmr"
 							value="#{comercioController.lista}" paginator="true"
 							paginatorPosition="top" rowsPerPageTemplate="10,20,30,40,50"
 							rows="10" styleClass="table table-bordered"
 							emptyMessage="No existen registros" rowIndexVar="item"
 							style="margin-bottom:0">
 
-							<p:column headerText="Código" sortBy="#{cmr.codigo}">
-								<h:outputText value="#{cmr.codigo}" />
+							<p:column headerText="Id" sortBy="#{cmr.id}">
+								<h:outputText value="#{cmr.id}" />
 							</p:column>
 
 							<p:column headerText="Nombre" sortBy="#{cmr.nombre}">
@@ -49,14 +49,6 @@
 							
 							<p:column headerText="R.U.C." sortBy="#{cmr.ruc}">
 								<h:outputText value="#{cmr.ruc}" />
-							</p:column>
-							
-							<p:column headerText="Correo" sortBy="#{cmr.correo}">
-								<h:outputText value="#{cmr.correo}" />
-							</p:column>
-							
-							<p:column headerText="Teléfono" sortBy="#{cmr.telefono}">
-								<h:outputText value="#{cmr.telefono}" />
 							</p:column>
 							
 							<p:column headerText="Representante" sortBy="#{cmr.nombreRepres}">
@@ -72,7 +64,7 @@
 							</p:column>
 							
 							<p:column headerText="Operación" exportable="false">
-								<h:commandLink action="listPerfil" value="Eliminar"
+								<h:commandLink action="listComercio" value="Eliminar"
 									actionListener="#{comercioController.eliminar(cmr)}" />
 							</p:column>
 						</p:dataTable>

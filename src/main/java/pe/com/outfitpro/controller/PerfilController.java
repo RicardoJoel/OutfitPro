@@ -60,7 +60,7 @@ public class PerfilController implements Serializable {
 	
 	public void eliminar(Perfil objeto) {
 		try {
-			service.eliminar(objeto.getCodigo());
+			service.eliminar(objeto.getId());
 			listar();
 		}
 		catch (Exception ex) {

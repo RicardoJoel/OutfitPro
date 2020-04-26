@@ -29,7 +29,7 @@ public class MarcaController implements Serializable {
 		this.listar();
 	}
 	
-	public String nuevaMarca() {
+	public String nuevoMarca() {
 		this.setMarca(new Marca());
 		return "marca.xhtml";
 	}
@@ -60,7 +60,7 @@ public class MarcaController implements Serializable {
 	
 	public void eliminar(Marca objeto) {
 		try {
-			service.eliminar(objeto.getCodigo());
+			service.eliminar(objeto.getId());
 			listar();
 		}
 		catch (Exception ex) {

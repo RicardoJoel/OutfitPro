@@ -16,7 +16,7 @@ public class Seguridad implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int codigo;
+	private int id;
 	
 	@Column(name="activo", nullable=false)
 	private Boolean activo = true;
@@ -37,9 +37,9 @@ public class Seguridad implements Serializable {
 		super();
 	}
 
-	public Seguridad(int codigo, Boolean activo, int idUsuarioCreacion, Date fechaHoraCreacion, int idUsuarioModificacion, Date fechaHoraModificacion) {
+	public Seguridad(int id, Boolean activo, int idUsuarioCreacion, Date fechaHoraCreacion, int idUsuarioModificacion, Date fechaHoraModificacion) {
 		super();
-		this.codigo = codigo;
+		this.id = id;
 		this.activo = activo;
 		this.idUsuarioCreacion = idUsuarioCreacion;
 		this.fechaHoraCreacion = fechaHoraCreacion;
@@ -47,12 +47,12 @@ public class Seguridad implements Serializable {
 		this.fechaHoraModificacion = fechaHoraModificacion;
 	}
 	
-	public int getCodigo() {
-		return codigo;
+	public int getId() {
+		return id;
 	}
 
-	public void setCodigo(int codigo) {
-		this.codigo = codigo;
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public Boolean getActivo() {

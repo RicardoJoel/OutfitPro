@@ -20,9 +20,9 @@ public class ComercioDaoImpl implements IComercioDao, Serializable {
 	
 	@Transactional
 	@Override
-	public void insertar(Comercio objeto) {
+	public void insertar(Comercio obj) {
 		try {
-			em.persist(objeto);
+			em.persist(obj);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());
@@ -45,10 +45,10 @@ public class ComercioDaoImpl implements IComercioDao, Serializable {
 
 	@Transactional
 	@Override
-	public void eliminar(int codigo) {
+	public void eliminar(int id) {
 		Comercio obj = new Comercio();
 		try {
-			obj = em.getReference(Comercio.class, codigo);
+			obj = em.getReference(Comercio.class, id);
 			em.remove(obj);
 		}
 		catch (Exception ex) {

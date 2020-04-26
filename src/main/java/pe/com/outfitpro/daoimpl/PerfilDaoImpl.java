@@ -20,9 +20,9 @@ public class PerfilDaoImpl implements IPerfilDao, Serializable {
 	
 	@Transactional
 	@Override
-	public void insertar(Perfil objeto) {
+	public void insertar(Perfil obj) {
 		try {
-			em.persist(objeto);
+			em.persist(obj);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());
@@ -45,10 +45,10 @@ public class PerfilDaoImpl implements IPerfilDao, Serializable {
 
 	@Transactional
 	@Override
-	public void eliminar(int codigo) {
+	public void eliminar(int id) {
 		Perfil obj = new Perfil();
 		try {
-			obj = em.getReference(Perfil.class, codigo);
+			obj = em.getReference(Perfil.class, id);
 			em.remove(obj);
 		}
 		catch (Exception ex) {

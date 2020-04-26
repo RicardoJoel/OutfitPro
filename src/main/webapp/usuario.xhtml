@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="master.xhtml">
+
+	<ui:define name="title">
+        Outfit Pro - Registro de nuevo usuario
+    </ui:define>
+
+	<ui:define name="titleCont">
+		<span>Nuevo usuario</span>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+			<!-- h:outputLabel for="id" value="Id" 
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="id"
+				styleClass="form-control" 
+				value="#{usuarioController.usuario.id}"
+				required="true" /-->
+				
+			<h:outputLabel for="perfil" value="Perfil"
+				styleClass="control-label" />
+				
+			<p:inputText autocomplete="off" id="perfil"
+				styleClass="form-control"
+				value="#{usuarioController.usuario.perfil.nombre}" 
+				required="true" />
+				
+			<h:outputLabel for="nombre" value="Nombre"
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="nombre"
+				styleClass="form-control"
+				value="#{usuarioController.usuario.nombre}" maxlength="100"
+				required="true" />
+
+			<h:outputLabel for="apellido" value="Apellido"
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="apellido"
+				styleClass="form-control"
+				value="#{usuarioController.usuario.apellido}" maxlength="100"
+				required="true" />
+			
+			<h:outputLabel for="correo" value="Correo"
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="correo"
+				styleClass="form-control"
+				value="#{usuarioController.usuario.correo}" maxlength="100"
+				required="true" />
+				
+			<h:outputLabel for="contrasena" value="Contraseña"
+				styleClass="control-label" />
+				
+			<p:inputText autocomplete="off" id="contrasena"
+				styleClass="form-control"
+				value="#{usuarioController.usuario.contrasena}" maxlength="100"
+				required="true" />
+				
+			<h:outputLabel for="tipDocumento" value="Tipo de documento"
+				styleClass="control-label" />
+				
+			<p:inputText autocomplete="off" id="tipDocumento"
+				styleClass="form-control"
+				value="#{usuarioController.usuario.tipDocumento}" maxlength="100"
+				required="true" />
+			
+			<h:outputLabel for="codDocumento" value="Número de documento"
+				styleClass="control-label" />
+				
+			<p:inputText autocomplete="off" id="codDocumento"
+				styleClass="form-control"
+				value="#{usuarioController.usuario.codDocumento}" maxlength="100"
+				required="true" />
+									
+			<h:outputLabel for="telefono" value="Teléfono"
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="telefono"
+				styleClass="form-control"
+				value="#{usuarioController.usuario.telefono}" maxlength="100"
+				required="true" />
+						
+			<h:outputLabel for="direccion" value="Dirección"
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="direccion"
+				styleClass="form-control"
+				value="#{usuarioController.usuario.direccion}" maxlength="100"
+				required="true" />
+											
+			<br />
+
+			<p:commandButton value="Grabar"
+				actionListener="#{usuarioController.insertar()}"
+				styleClass="btn btn-primary " update="@form"
+				action="listUsuario?faces-redirect=true" />
+				
+			<p:commandButton value="Cancelar"
+				action="listUsuario?faces-redirect=true" immediate="true"
+				styleClass="btn btn-default" ajax="false" />
+
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+		</h:form>
+	</ui:define>
+
+	<ui:define name="footerCont"></ui:define>
+</ui:composition>
+</html>

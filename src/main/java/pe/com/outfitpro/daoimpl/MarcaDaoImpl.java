@@ -20,9 +20,9 @@ public class MarcaDaoImpl implements IMarcaDao, Serializable {
 	
 	@Transactional
 	@Override
-	public void insertar(Marca objeto) {
+	public void insertar(Marca obj) {
 		try {
-			em.persist(objeto);
+			em.persist(obj);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());
@@ -45,10 +45,10 @@ public class MarcaDaoImpl implements IMarcaDao, Serializable {
 
 	@Transactional
 	@Override
-	public void eliminar(int codigo) {
+	public void eliminar(int id) {
 		Marca obj = new Marca();
 		try {
-			obj = em.getReference(Marca.class, codigo);
+			obj = em.getReference(Marca.class, id);
 			em.remove(obj);
 		}
 		catch (Exception ex) {

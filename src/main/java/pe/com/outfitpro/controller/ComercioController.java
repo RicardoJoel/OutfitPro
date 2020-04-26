@@ -60,7 +60,7 @@ public class ComercioController implements Serializable {
 	
 	public void eliminar(Comercio objeto) {
 		try {
-			service.eliminar(objeto.getCodigo());
+			service.eliminar(objeto.getId());
 			listar();
 		}
 		catch (Exception ex) {

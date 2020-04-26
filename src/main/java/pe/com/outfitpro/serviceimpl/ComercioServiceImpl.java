@@ -20,8 +20,8 @@ public class ComercioServiceImpl implements IComercioService, Serializable {
 	private IComercioDao md;
 	
 	@Override
-	public void insertar(Comercio objeto) {
-		md.insertar(objeto);
+	public void insertar(Comercio obj) {
+		md.insertar(obj);
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class ComercioServiceImpl implements IComercioService, Serializable {
 	}
 
 	@Override
-	public void eliminar(int codigo) {
-		md.eliminar(codigo);
+	public void eliminar(int id) {
+		md.eliminar(id);
 	}
 }

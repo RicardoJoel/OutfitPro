@@ -5,7 +5,7 @@ import java.util.List;
 import pe.com.outfitpro.entity.Perfil;
 
 public interface IPerfilDao {
-	public void insertar(Perfil objeto);
+	public void insertar(Perfil obj);
 	public List<Perfil> listar();
-	public void eliminar(int codigo);
+	public void eliminar(int id);
 }

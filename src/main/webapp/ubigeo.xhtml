@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="master.xhtml">
+
+	<ui:define name="title">
+        Outfit Pro - Registro de nuevo ubigeo
+    </ui:define>
+
+	<ui:define name="titleCont">
+		<span>Nuevo ubigeo</span>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+			<!-- h:outputLabel for="id" value="Id" 
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="id"
+				styleClass="form-control" 
+				value="#{ubigeoController.ubigeo.id}"
+				required="true" /-->
+				
+			<h:outputLabel for="departamento" value="Departamento"
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="departamento"
+				styleClass="form-control"
+				value="#{ubigeoController.ubigeo.departamento}" maxlength="500"
+				required="true" />
+
+			<h:outputLabel for="provincia" value="Provincia"
+				styleClass="control-label" />
+
+			<p:inputText autocomplete="off" id="provincia"
+				styleClass="form-control"
+				value="#{ubigeoController.ubigeo.provincia}" maxlength="500"
+				required="true" />
+				
+			<h:outputLabel for="distrito" value="Distrito"
+				styleClass="control-label" />
+				
+			<p:inputText autocomplete="off" id="distrito"
+				styleClass="form-control"
+				value="#{ubigeoController.ubigeo.distrito}"  maxlength="500"
+				required="true" />
+
+			<br />
+
+			<p:commandButton value="Grabar"
+				actionListener="#{ubigeoController.insertar()}"
+				styleClass="btn btn-primary " update="@form"
+				action="listUbigeo?faces-redirect=true" />
+				
+			<p:commandButton value="Cancelar"
+				action="listUbigeo?faces-redirect=true" immediate="true"
+				styleClass="btn btn-default" ajax="false" />
+
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+		</h:form>
+	</ui:define>
+
+	<ui:define name="footerCont"></ui:define>
+</ui:composition>
+</html>

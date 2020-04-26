@@ -20,8 +20,8 @@ public class PerfilServiceImpl implements IPerfilService, Serializable {
 	private IPerfilDao md;
 	
 	@Override
-	public void insertar(Perfil objeto) {
-		md.insertar(objeto);
+	public void insertar(Perfil obj) {
+		md.insertar(obj);
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class PerfilServiceImpl implements IPerfilService, Serializable {
 	}
 
 	@Override
-	public void eliminar(int codigo) {
-		md.eliminar(codigo);
+	public void eliminar(int id) {
+		md.eliminar(id);
 	}
 }
