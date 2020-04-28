@@ -5,9 +5,9 @@
 CREATE TABLE public.perfil
 (
     id serial NOT NULL,
-    nombre character varying(500) COLLATE pg_catalog."default" NOT NULL,
+    nombre character varying(100) COLLATE pg_catalog."default" NOT NULL,
     descripcion character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    nivelacceso integer NOT NULL DEFAULT 1,
+    nivelacceso integer NOT NULL,
     activo boolean NOT NULL DEFAULT true,
     idusuariocreacion bigint NOT NULL DEFAULT 0,
     fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -30,9 +30,9 @@ ALTER TABLE public.perfil
 CREATE TABLE public.ubigeo
 (
     id serial NOT NULL,
-    departamento character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    provincia character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    distrito character varying(500) COLLATE pg_catalog."default" NOT NULL,
+    departamento character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    provincia character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    distrito character varying(100) COLLATE pg_catalog."default" NOT NULL,
     activo boolean NOT NULL DEFAULT true,
     idusuariocreacion integer NOT NULL DEFAULT 0,
     fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -46,10 +46,386 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.ubigeo
+    OWNER to postgres;    
+
+-- Table: public.comercio
+
+-- DROP TABLE public.comercio;
+
+CREATE TABLE public.comercio
+(
+    id serial NOT NULL,
+    nombre character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    ruc character varying(11) COLLATE pg_catalog."default" NOT NULL,
+    correo character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    telefono character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    nombrecontacto character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    correocontacto character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    telefonocontacto character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion integer NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion integer NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT "comercio_pkey" PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.comercio
+    OWNER to postgres;
+
+-- Table: public.tipoprenda
+
+-- DROP TABLE public.tipoprenda;
+
+CREATE TABLE public.tipoprenda
+(
+    id serial NOT NULL,
+    nombre character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    descripcion character varying(500) COLLATE pg_catalog."default" NOT NULL,
+    activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion integer NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion integer NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT tipoprenda_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.tipoprenda
     OWNER to postgres;
     
+-- Table: public.talla
+
+-- DROP TABLE public.talla;
+
+CREATE TABLE public.talla
+(
+    id serial NOT NULL,
+    nombre character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    detalle character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    tipoprenda_id integer REFERENCES tipoprenda(id) NOT NULL DEFAULT 0,
+    activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion integer NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion integer NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT talla_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.talla
+    OWNER to postgres;
+    
+-- Table: public.marca
+
+-- DROP TABLE public.marca;
+
+CREATE TABLE public.marca
+(
+    id serial NOT NULL,
+    nombre character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    descripcion character varying(500) COLLATE pg_catalog."default" NOT NULL,
+    activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion integer NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion integer NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT marca_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.marca
+    OWNER to postgres;
+    
+-- Table: public.color
+
+-- DROP TABLE public.color;
+
+CREATE TABLE public.color
+(
+    id serial NOT NULL,
+    nombre character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    hexadecimal character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion integer NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion integer NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT color_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.color
+    OWNER to postgres;
+    
+-- Table: public.prenda
+
+-- DROP TABLE public.prenda;
+
+CREATE TABLE public.prenda
+(
+    id serial NOT NULL,
+    nombre character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    descripcion character varying(500) COLLATE pg_catalog."default" NOT NULL,
+	modelo character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	genero character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	precio float NOT NULL,
+	stock integer NOT NULL,
+	talla_id integer REFERENCES talla(id) NOT NULL DEFAULT 0,
+	color_id integer REFERENCES color(id) NOT NULL DEFAULT 0,
+	marca_id integer REFERENCES marca(id) NOT NULL DEFAULT 0,
+	comercio_id integer REFERENCES comercio(id) NOT NULL DEFAULT 0,
+	tipoprenda_id integer REFERENCES tipoprenda(id) NOT NULL DEFAULT 0,
+    activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion integer NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion integer NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT prenda_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.prenda
+    OWNER to postgres;
+
+-- Table: public.descuento
+
+-- DROP TABLE public.descuento;
+
+CREATE TABLE public.descuento
+(
+    id serial NOT NULL,
+    nombre character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    descripcion character varying(500) COLLATE pg_catalog."default",
+	monto float NOT NULL,
+	porcentaje float NOT NULL,
+	fechaini timestamp without time zone NOT NULL,
+	fechafin timestamp without time zone NOT NULL,
+	prenda_id integer REFERENCES prenda(id) NOT NULL,
+    activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion integer NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion integer NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT descuento_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.descuento
+    OWNER to postgres;
+
+-- Table: public.usuario
+
+-- DROP TABLE public.usuario;
+
+CREATE TABLE public.usuario
+(
+    id serial NOT NULL,
+    nombre character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	apellido character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	correo character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	contrasena character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	genero character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	telefono character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	direccion character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	tipdocumento character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	coddocumento character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	referencia character varying(500) COLLATE pg_catalog."default" NOT NULL,
+	premium boolean NOT NULL DEFAULT false,
+	aseslibres integer NOT NULL,
+	valoracion integer NOT NULL,
+    fechnacimiento timestamp without time zone,
+	fechaltapremium timestamp without time zone,
+	fechbajapremium timestamp without time zone,
+	perfil_id integer REFERENCES perfil(id) NOT NULL DEFAULT 0,
+	ubigeo_id integer REFERENCES ubigeo(id) NOT NULL DEFAULT 0,
+	activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion integer NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion integer NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT usuario_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.usuario
+    OWNER to postgres;
+    
+-- Table: public.metodopago
+
+-- DROP TABLE public.metodopago;
+
+CREATE TABLE public.metodopago
+(
+    id serial NOT NULL,
+    tipopago character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	tarjeta character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	contrasena character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	vencimiento timestamp without time zone NOT NULL,
+	ccv integer NOT NULL,
+	usuario_id integer REFERENCES usuario(id) NOT NULL,
+	activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion integer NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion integer NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT metodopago_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.metodopago
+    OWNER to postgres;
+    
+-- Table: public.asesoria
+
+-- DROP TABLE public.asesoria;
+
+CREATE TABLE public.asesoria
+(
+    id serial NOT NULL,
+    fechoraini timestamp without time zone NOT NULL,
+    fechorafin timestamp without time zone,
+    valoracion integer NOT NULL DEFAULT 0,
+    cliente_id integer REFERENCES usuario(id) NOT NULL DEFAULT 0,
+	asesor_id integer REFERENCES usuario(id) NOT NULL DEFAULT 0,
+    activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion bigint NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion bigint NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT asesoria_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.asesoria
+    OWNER to postgres;
+    
+-- Table: public.preferencia
+
+-- DROP TABLE public.preferencia;
+
+CREATE TABLE public.preferencia
+(
+    id serial NOT NULL,
+    explicita boolean NOT NULL DEFAULT true,
+	genero character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	talla_id integer REFERENCES talla(id) NOT NULL DEFAULT 0,
+	color_id integer REFERENCES color(id) NOT NULL DEFAULT 0,
+	marca_id integer REFERENCES marca(id) NOT NULL DEFAULT 0,
+	usuario_id integer REFERENCES usuario(id) NOT NULL DEFAULT 0,
+	asesoria_id integer REFERENCES asesoria(id) NOT NULL DEFAULT 0,
+	tipoprenda_id integer REFERENCES tipoprenda(id) NOT NULL DEFAULT 0,
+    activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion integer NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion integer NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT preferencia_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.preferencia
+    OWNER to postgres;
+
+-- Table: public.compra
+
+-- DROP TABLE public.compra;
+
+CREATE TABLE public.compra
+(
+    id serial NOT NULL,
+	totalsinigv float NOT NULL,
+	igv float NOT NULL,
+	totalfinal float NOT NULL,
+	estado character varying(100) COLLATE pg_catalog."default" NOT NULL,
+	fechorapago timestamp without time zone,
+	usuario_id integer REFERENCES usuario(id) NOT NULL DEFAULT 0,
+	metodopago_id integer REFERENCES metodopago(id) NOT NULL DEFAULT 0,
+    activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion integer NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion integer NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT compra_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.compra
+    OWNER to postgres;
+
+-- Table: public.detalle
+
+-- DROP TABLE public.detalle;
+
+CREATE TABLE public.detalle
+(
+    id serial NOT NULL,
+	cantidad integer NOT NULL,
+	subtotal float NOT NULL,
+	montodesc float NOT NULL,
+	subtotalfinal float NOT NULL,
+	igv float NOT NULL,
+	compra_id integer REFERENCES compra(id) NOT NULL DEFAULT 0,
+	usuario_id integer REFERENCES usuario(id) NOT NULL DEFAULT 0,
+	descuento_id integer REFERENCES descuento(id) NOT NULL DEFAULT 0,
+    activo boolean NOT NULL DEFAULT true,
+    idusuariocreacion integer NOT NULL DEFAULT 0,
+    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    idusuariomodificacion integer NOT NULL DEFAULT 0,
+    fechahoramodificacion timestamp without time zone,
+    CONSTRAINT detalle_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.detalle
+    OWNER to postgres;
+
+insert into perfil (nombre, descripcion, nivelacceso) values ('Administrador','Usuario administrador del sistema. Da mantenimiento a clases maestras y agrega usuarios, prendas y promociones.',1);
+insert into perfil (nombre, descripcion, nivelacceso) values ('Asesor','Usuario asesor de imagen. Ofrece asesor√≠as de imagen a los clientes.',2);
+insert into perfil (nombre, descripcion, nivelacceso) values ('Cliente','Usuario comprador. Compra prendas y art√≠culos de vestir. Adem√°s, recibe asesor√≠as de imagen.',3);
+
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Chachapoyas','Chachapoyas');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Chachapoyas','AsunciÛn');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Chachapoyas','Asunci√≥n');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Chachapoyas','Balsas');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Chachapoyas','Cheto');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Chachapoyas','Chiliquin');
@@ -75,21 +451,21 @@ insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bagua
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bagua','El Parco');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bagua','Imaza');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bagua','La Peca');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar·','Jumbilla');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar·','Chisquilla');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar·','Churuja');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar·','Corosha');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar·','Cuispes');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar·','Florida');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar·','Jazan');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar·','Recta');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar·','San Carlos');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar·','Shipasbamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar·','Valera');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar·','Yambrasbamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar√°','Jumbilla');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar√°','Chisquilla');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar√°','Churuja');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar√°','Corosha');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar√°','Cuispes');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar√°','Florida');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar√°','Jazan');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar√°','Recta');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar√°','San Carlos');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar√°','Shipasbamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar√°','Valera');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Bongar√°','Yambrasbamba');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Condorcanqui','Nieva');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Condorcanqui','El Cenepa');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Condorcanqui','RÌo Santiago');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Condorcanqui','R√≠o Santiago');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Lamud');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Camporredondo');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Cocabamba');
@@ -100,31 +476,31 @@ insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya'
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Lonya Chico');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Luya');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Luya Viejo');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','MarÌa');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Mar√≠a');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Ocalli');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Ocumal');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Pisuquia');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Providencia');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','San CristÛbal');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','San Crist√≥bal');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','San Francisco de Yeso');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','San JerÛnimo');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','San Jer√≥nimo');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','San Juan de Lopecancha');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Santa Catalina');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Santo Tomas');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Tingo');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Luya','Trita');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','RodrÌguez de Mendoza','San Nicol·s');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','RodrÌguez de Mendoza','Chirimoto');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','RodrÌguez de Mendoza','Cochamal');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','RodrÌguez de Mendoza','Huambo');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','RodrÌguez de Mendoza','Limabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','RodrÌguez de Mendoza','Longar');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','RodrÌguez de Mendoza','Mariscal Benavides');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','RodrÌguez de Mendoza','Milpuc');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','RodrÌguez de Mendoza','Omia');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','RodrÌguez de Mendoza','Santa Rosa');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','RodrÌguez de Mendoza','Totora');
-insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','RodrÌguez de Mendoza','Vista Alegre');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Rodr√≠guez de Mendoza','San Nicol√°s');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Rodr√≠guez de Mendoza','Chirimoto');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Rodr√≠guez de Mendoza','Cochamal');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Rodr√≠guez de Mendoza','Huambo');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Rodr√≠guez de Mendoza','Limabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Rodr√≠guez de Mendoza','Longar');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Rodr√≠guez de Mendoza','Mariscal Benavides');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Rodr√≠guez de Mendoza','Milpuc');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Rodr√≠guez de Mendoza','Omia');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Rodr√≠guez de Mendoza','Santa Rosa');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Rodr√≠guez de Mendoza','Totora');
+insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Rodr√≠guez de Mendoza','Vista Alegre');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Utcubamba','Bagua Grande');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Utcubamba','Cajaruro');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Utcubamba','Cumba');
@@ -132,256 +508,256 @@ insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Utcub
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Utcubamba','Jamalca');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Utcubamba','Lonya Grande');
 insert into ubigeo (departamento, provincia, distrito) values ('Amazonas','Utcubamba','Yamon');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaraz','Huaraz');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaraz','Cochabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaraz','Colcabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaraz','Huanchay');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaraz','Independencia');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaraz','Jangas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaraz','La Libertad');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaraz','Olleros');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaraz','Pampas Grande');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaraz','Pariacoto');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaraz','Pira');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaraz','Tarica');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Aija','Aija');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Aija','Coris');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Aija','Huacllan');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Aija','La Merced');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Aija','Succha');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Antonio Raymondi','Llamellin');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Antonio Raymondi','Aczo');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Antonio Raymondi','Chaccho');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Antonio Raymondi','Chingas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Antonio Raymondi','Mirgas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Antonio Raymondi','San Juan de Rontoy');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','AsunciÛn','Chacas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','AsunciÛn','Acochaca');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Chiquian');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Abelardo Pardo Lezameta');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Antonio Raymondi');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Aquia');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Cajacay');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Canis');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Colquioc');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Huallanca');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Huasta');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Huayllacayan');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','La Primavera');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Mangas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Pacllon');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','San Miguel de Corpanqui');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Bolognesi','Ticllos');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carhuaz','Carhuaz');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carhuaz','Acopampa');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carhuaz','Amashca');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carhuaz','Anta');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carhuaz','Ataquero');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carhuaz','Marcara');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carhuaz','Pariahuanca');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carhuaz','San Miguel de Aco');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carhuaz','Shilla');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carhuaz','Tinco');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carhuaz','Yungar');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carlos FermÌn Fitzcarrald','San Luis');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carlos FermÌn Fitzcarrald','San Nicol·s');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Carlos FermÌn Fitzcarrald','Yauya');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Casma','Casma');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Casma','Buena Vista Alta');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Casma','Comandante Noel');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Casma','Yautan');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Corongo','Corongo');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Corongo','Aco');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Corongo','Bambas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Corongo','Cusca');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Corongo','La Pampa');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Corongo','Yanac');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Corongo','Yupan');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Huari');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Anra');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Cajay');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Chavin de Huantar');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Huacachi');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Huacchis');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Huachis');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Huantar');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Masin');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Paucas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Ponto');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Rahuapampa');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Rapayan');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','San Marcos');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','San Pedro de Chana');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huari','Uco');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huarmey','Huarmey');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huarmey','Cochapeti');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huarmey','Culebras');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huarmey','Huayan');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huarmey','Malvas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaylas','Caraz');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaylas','Huallanca');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaylas','Huata');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaylas','Huaylas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaylas','Mato');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaylas','Pamparomas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaylas','Pueblo Libre');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaylas','Santa Cruz');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaylas','Santo Toribio');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Huaylas','Yuracmarca');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Mariscal Luzuriaga','Piscobamba');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Mariscal Luzuriaga','Casca');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Mariscal Luzuriaga','Eleazar Guzm·n Barron');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Mariscal Luzuriaga','Fidel Olivas Escudero');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Mariscal Luzuriaga','Llama');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Mariscal Luzuriaga','Llumpa');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Mariscal Luzuriaga','Lucma');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Mariscal Luzuriaga','Musga');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Ocros','Ocros');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Ocros','Acas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Ocros','Cajamarquilla');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Ocros','Carhuapampa');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Ocros','Cochas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Ocros','Congas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Ocros','Llipa');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Ocros','San CristÛbal de Rajan');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Ocros','San Pedro');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Ocros','Santiago de Chilcas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pallasca','Cabana');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pallasca','Bolognesi');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pallasca','Conchucos');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pallasca','Huacaschuque');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pallasca','Huandoval');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pallasca','Lacabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pallasca','Llapo');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pallasca','Pallasca');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pallasca','Pampas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pallasca','Santa Rosa');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pallasca','Tauca');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pomabamba','Pomabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pomabamba','Huayllan');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pomabamba','Parobamba');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Pomabamba','Quinuabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Recuay','Recuay');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Recuay','Catac');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Recuay','Cotaparaco');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Recuay','Huayllapampa');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Recuay','Llacllin');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Recuay','Marca');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Recuay','Pampas Chico');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Recuay','Pararin');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Recuay','Tapacocha');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Recuay','Ticapampa');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Santa','Chimbote');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Santa','C·ceres del Per˙');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Santa','Coishco');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Santa','Macate');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Santa','Moro');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Santa','NepeÒa');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Santa','Samanco');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Santa','Santa');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Santa','Nuevo Chimbote');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Sihuas','Sihuas');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Sihuas','Acobamba');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Sihuas','Alfonso Ugarte');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Sihuas','Cashapampa');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Sihuas','Chingalpo');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Sihuas','Huayllabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Sihuas','Quiches');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Sihuas','Ragash');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Sihuas','San Juan');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Sihuas','Sicsibamba');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Yungay','Yungay');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Yungay','Cascapara');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Yungay','Mancos');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Yungay','Matacoto');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Yungay','Quillo');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Yungay','Ranrahirca');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Yungay','Shupluy');
-insert into ubigeo (departamento, provincia, distrito) values ('¡ncash','Yungay','Yanama');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Abancay','Abancay');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Abancay','Chacoche');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Abancay','Circa');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Abancay','Curahuasi');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Abancay','Huanipaca');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Abancay','Lambrama');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Abancay','Pichirhua');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Abancay','San Pedro de Cachora');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Abancay','Tamburco');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Andahuaylas');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Andarapa');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Chiara');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Huancarama');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Huancaray');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Huayana');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Kishuara');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Pacobamba');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Pacucha');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Pampachiri');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Pomacocha');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','San Antonio de Cachi');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','San JerÛnimo');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','San Miguel de Chaccrampa');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Santa MarÌa de Chicmo');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Talavera');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Tumay Huaraca');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Turpo');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','Kaquiabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Andahuaylas','JosÈ MarÌa Arguedas');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Antabamba','Antabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Antabamba','El Oro');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Antabamba','Huaquirca');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Antabamba','Juan Espinoza Medrano');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Antabamba','Oropesa');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Antabamba','Pachaconas');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Antabamba','Sabaino');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Chalhuanca');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Capaya');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Caraybamba');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Chapimarca');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Colcabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Cotaruse');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Ihuayllo');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Justo Apu Sahuaraura');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Lucre');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Pocohuanca');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','San Juan de ChacÒa');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','SaÒayca');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Soraya');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Tapairihua');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Tintay');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Toraya');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Aymaraes','Yanaca');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Cotabambas','Tambobamba');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Cotabambas','Cotabambas');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Cotabambas','Coyllurqui');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Cotabambas','Haquira');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Cotabambas','Mara');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Cotabambas','Challhuahuacho');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Chincheros','Chincheros');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Chincheros','Anco_Huallo');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Chincheros','Cocharcas');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Chincheros','Huaccana');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Chincheros','Ocobamba');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Chincheros','Ongoy');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Chincheros','Uranmarca');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Chincheros','Ranracancha');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Chincheros','Rocchacc');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Chincheros','El Porvenir');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Chincheros','Los Chankas');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Chuquibambilla');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Curpahuasi');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Gamarra');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Huayllati');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Mamara');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Micaela Bastidas');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Pataypampa');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Progreso');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','San Antonio');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Santa Rosa');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Turpay');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Vilcabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Virundo');
-insert into ubigeo (departamento, provincia, distrito) values ('ApurÌmac','Grau','Curasco');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaraz','Huaraz');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaraz','Cochabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaraz','Colcabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaraz','Huanchay');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaraz','Independencia');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaraz','Jangas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaraz','La Libertad');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaraz','Olleros');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaraz','Pampas Grande');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaraz','Pariacoto');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaraz','Pira');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaraz','Tarica');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Aija','Aija');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Aija','Coris');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Aija','Huacllan');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Aija','La Merced');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Aija','Succha');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Antonio Raymondi','Llamellin');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Antonio Raymondi','Aczo');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Antonio Raymondi','Chaccho');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Antonio Raymondi','Chingas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Antonio Raymondi','Mirgas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Antonio Raymondi','San Juan de Rontoy');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Asunci√≥n','Chacas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Asunci√≥n','Acochaca');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Chiquian');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Abelardo Pardo Lezameta');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Antonio Raymondi');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Aquia');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Cajacay');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Canis');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Colquioc');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Huallanca');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Huasta');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Huayllacayan');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','La Primavera');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Mangas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Pacllon');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','San Miguel de Corpanqui');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Bolognesi','Ticllos');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carhuaz','Carhuaz');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carhuaz','Acopampa');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carhuaz','Amashca');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carhuaz','Anta');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carhuaz','Ataquero');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carhuaz','Marcara');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carhuaz','Pariahuanca');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carhuaz','San Miguel de Aco');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carhuaz','Shilla');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carhuaz','Tinco');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carhuaz','Yungar');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carlos Ferm√≠n Fitzcarrald','San Luis');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carlos Ferm√≠n Fitzcarrald','San Nicol√°s');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Carlos Ferm√≠n Fitzcarrald','Yauya');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Casma','Casma');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Casma','Buena Vista Alta');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Casma','Comandante Noel');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Casma','Yautan');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Corongo','Corongo');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Corongo','Aco');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Corongo','Bambas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Corongo','Cusca');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Corongo','La Pampa');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Corongo','Yanac');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Corongo','Yupan');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Huari');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Anra');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Cajay');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Chavin de Huantar');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Huacachi');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Huacchis');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Huachis');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Huantar');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Masin');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Paucas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Ponto');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Rahuapampa');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Rapayan');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','San Marcos');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','San Pedro de Chana');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huari','Uco');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huarmey','Huarmey');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huarmey','Cochapeti');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huarmey','Culebras');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huarmey','Huayan');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huarmey','Malvas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaylas','Caraz');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaylas','Huallanca');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaylas','Huata');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaylas','Huaylas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaylas','Mato');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaylas','Pamparomas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaylas','Pueblo Libre');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaylas','Santa Cruz');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaylas','Santo Toribio');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Huaylas','Yuracmarca');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Mariscal Luzuriaga','Piscobamba');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Mariscal Luzuriaga','Casca');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Mariscal Luzuriaga','Eleazar Guzm√°n Barron');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Mariscal Luzuriaga','Fidel Olivas Escudero');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Mariscal Luzuriaga','Llama');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Mariscal Luzuriaga','Llumpa');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Mariscal Luzuriaga','Lucma');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Mariscal Luzuriaga','Musga');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Ocros','Ocros');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Ocros','Acas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Ocros','Cajamarquilla');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Ocros','Carhuapampa');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Ocros','Cochas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Ocros','Congas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Ocros','Llipa');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Ocros','San Crist√≥bal de Rajan');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Ocros','San Pedro');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Ocros','Santiago de Chilcas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pallasca','Cabana');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pallasca','Bolognesi');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pallasca','Conchucos');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pallasca','Huacaschuque');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pallasca','Huandoval');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pallasca','Lacabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pallasca','Llapo');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pallasca','Pallasca');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pallasca','Pampas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pallasca','Santa Rosa');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pallasca','Tauca');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pomabamba','Pomabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pomabamba','Huayllan');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pomabamba','Parobamba');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Pomabamba','Quinuabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Recuay','Recuay');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Recuay','Catac');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Recuay','Cotaparaco');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Recuay','Huayllapampa');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Recuay','Llacllin');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Recuay','Marca');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Recuay','Pampas Chico');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Recuay','Pararin');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Recuay','Tapacocha');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Recuay','Ticapampa');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Santa','Chimbote');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Santa','C√°ceres del Per√∫');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Santa','Coishco');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Santa','Macate');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Santa','Moro');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Santa','Nepe√±a');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Santa','Samanco');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Santa','Santa');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Santa','Nuevo Chimbote');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Sihuas','Sihuas');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Sihuas','Acobamba');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Sihuas','Alfonso Ugarte');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Sihuas','Cashapampa');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Sihuas','Chingalpo');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Sihuas','Huayllabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Sihuas','Quiches');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Sihuas','Ragash');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Sihuas','San Juan');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Sihuas','Sicsibamba');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Yungay','Yungay');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Yungay','Cascapara');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Yungay','Mancos');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Yungay','Matacoto');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Yungay','Quillo');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Yungay','Ranrahirca');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Yungay','Shupluy');
+insert into ubigeo (departamento, provincia, distrito) values ('√Åncash','Yungay','Yanama');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Abancay','Abancay');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Abancay','Chacoche');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Abancay','Circa');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Abancay','Curahuasi');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Abancay','Huanipaca');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Abancay','Lambrama');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Abancay','Pichirhua');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Abancay','San Pedro de Cachora');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Abancay','Tamburco');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Andahuaylas');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Andarapa');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Chiara');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Huancarama');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Huancaray');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Huayana');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Kishuara');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Pacobamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Pacucha');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Pampachiri');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Pomacocha');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','San Antonio de Cachi');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','San Jer√≥nimo');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','San Miguel de Chaccrampa');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Santa Mar√≠a de Chicmo');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Talavera');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Tumay Huaraca');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Turpo');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Kaquiabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Andahuaylas','Jos√© Mar√≠a Arguedas');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Antabamba','Antabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Antabamba','El Oro');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Antabamba','Huaquirca');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Antabamba','Juan Espinoza Medrano');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Antabamba','Oropesa');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Antabamba','Pachaconas');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Antabamba','Sabaino');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Chalhuanca');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Capaya');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Caraybamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Chapimarca');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Colcabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Cotaruse');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Ihuayllo');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Justo Apu Sahuaraura');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Lucre');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Pocohuanca');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','San Juan de Chac√±a');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Sa√±ayca');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Soraya');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Tapairihua');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Tintay');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Toraya');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Aymaraes','Yanaca');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Cotabambas','Tambobamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Cotabambas','Cotabambas');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Cotabambas','Coyllurqui');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Cotabambas','Haquira');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Cotabambas','Mara');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Cotabambas','Challhuahuacho');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Chincheros','Chincheros');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Chincheros','Anco_Huallo');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Chincheros','Cocharcas');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Chincheros','Huaccana');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Chincheros','Ocobamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Chincheros','Ongoy');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Chincheros','Uranmarca');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Chincheros','Ranracancha');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Chincheros','Rocchacc');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Chincheros','El Porvenir');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Chincheros','Los Chankas');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Chuquibambilla');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Curpahuasi');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Gamarra');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Huayllati');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Mamara');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Micaela Bastidas');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Pataypampa');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Progreso');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','San Antonio');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Santa Rosa');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Turpay');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Vilcabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Virundo');
+insert into ubigeo (departamento, provincia, distrito) values ('Apur√≠mac','Grau','Curasco');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Arequipa');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Alto Selva Alegre');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Cayma');
@@ -396,7 +772,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequ
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Paucarpata');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Pocsi');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Polobaya');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','QuequeÒa');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Queque√±a');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Sabandia');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Sachaca');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','San Juan de Siguas');
@@ -410,28 +786,28 @@ insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequ
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Yanahuara');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Yarabamba');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Yura');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','JosÈ Luis Bustamante Y Rivero');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman·','Caman·');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman·','JosÈ MarÌa Quimper');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman·','Mariano Nicol·s Valc·rcel');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman·','Mariscal C·ceres');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman·','Nicol·s de Pierola');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman·','OcoÒa');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman·','Quilca');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman·','Samuel Pastor');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','CaravelÌ');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','AcarÌ');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','Atico');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','Atiquipa');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','Bella UniÛn');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','Cahuacho');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','Chala');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','Chaparra');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','Huanuhuanu');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','Jaqui');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','Lomas');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','Quicacha');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','CaravelÌ','Yauca');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Arequipa','Jos√© Luis Bustamante Y Rivero');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman√°','Caman√°');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman√°','Jos√© Mar√≠a Quimper');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman√°','Mariano Nicol√°s Valc√°rcel');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman√°','Mariscal C√°ceres');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman√°','Nicol√°s de Pierola');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman√°','Oco√±a');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman√°','Quilca');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caman√°','Samuel Pastor');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Caravel√≠');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Acar√≠');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Atico');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Atiquipa');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Bella Uni√≥n');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Cahuacho');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Chala');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Chaparra');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Huanuhuanu');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Jaqui');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Lomas');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Quicacha');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caravel√≠','Yauca');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Castilla','Aplao');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Castilla','Andagua');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Castilla','Ayo');
@@ -443,7 +819,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Casti
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Castilla','Orcopampa');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Castilla','Pampacolca');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Castilla','Tipan');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Castilla','UÒon');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Castilla','U√±on');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Castilla','Uraca');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Castilla','Viraco');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Caylloma','Chivay');
@@ -471,7 +847,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Conde
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Condesuyos','Cayarani');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Condesuyos','Chichas');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Condesuyos','Iray');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Condesuyos','RÌo Grande');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Condesuyos','R√≠o Grande');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Condesuyos','Salamanca');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Condesuyos','Yanaquihua');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Islay','Mollendo');
@@ -479,18 +855,18 @@ insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Islay
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Islay','Dean Valdivia');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Islay','Islay');
 insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Islay','Mejia');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Islay','Punta de BombÛn');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La UniÚn','Cotahuasi');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La UniÚn','Alca');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La UniÚn','Charcana');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La UniÚn','Huaynacotas');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La UniÚn','Pampamarca');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La UniÚn','Puyca');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La UniÚn','Quechualla');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La UniÚn','Sayla');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La UniÚn','Tauria');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La UniÚn','Tomepampa');
-insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La UniÚn','Toro');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','Islay','Punta de Bomb√≥n');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La Uni√≤n','Cotahuasi');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La Uni√≤n','Alca');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La Uni√≤n','Charcana');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La Uni√≤n','Huaynacotas');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La Uni√≤n','Pampamarca');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La Uni√≤n','Puyca');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La Uni√≤n','Quechualla');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La Uni√≤n','Sayla');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La Uni√≤n','Tauria');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La Uni√≤n','Tomepampa');
+insert into ubigeo (departamento, provincia, distrito) values ('Arequipa','La Uni√≤n','Toro');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Ayacucho');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Acocro');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Acos Vinchos');
@@ -499,18 +875,18 @@ insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huama
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Ocros');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Pacaycasa');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Quinua');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','San JosÈ de Ticllas');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','San Jos√© de Ticllas');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','San Juan Bautista');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Santiago de Pischa');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Socos');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Tambillo');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Vinchos');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Jes˙s Nazareno');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','AndrÈs Avelino C·ceres Dorregaray');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Jes√∫s Nazareno');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huamanga','Andr√©s Avelino C√°ceres Dorregaray');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Cangallo','Cangallo');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Cangallo','Chuschi');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Cangallo','Los Morochucos');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Cangallo','MarÌa Parado de Bellido');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Cangallo','Mar√≠a Parado de Bellido');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Cangallo','Paras');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Cangallo','Totos');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Huanca Sancos','Sancos');
@@ -544,17 +920,17 @@ insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucan
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Aucara');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Cabana');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Carmen Salcedo');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','ChaviÒa');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Chavi√±a');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Chipao');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Huac-Huas');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Laramate');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Leoncio Prado');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Llauta');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Lucanas');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','OcaÒa');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Oca√±a');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Otoca');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Saisa');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','San CristÛbal');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','San Crist√≥bal');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','San Juan');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','San Pedro');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','San Pedro de Palco');
@@ -563,61 +939,61 @@ insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucan
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Lucanas','Santa Lucia');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Parinacochas','Coracora');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Parinacochas','Chumpi');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Parinacochas','Coronel CastaÒeda');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Parinacochas','Coronel Casta√±eda');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Parinacochas','Pacapausa');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Parinacochas','Pullo');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Parinacochas','Puyusca');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Parinacochas','San Francisco de Ravacayco');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Parinacochas','Upahuacho');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P‡ucar del Sara Sara','Pausa');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P‡ucar del Sara Sara','Colta');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P‡ucar del Sara Sara','Corculla');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P‡ucar del Sara Sara','Lampa');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P‡ucar del Sara Sara','Marcabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P‡ucar del Sara Sara','Oyolo');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P‡ucar del Sara Sara','Pararca');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P‡ucar del Sara Sara','San Javier de Alpabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P‡ucar del Sara Sara','San JosÈ de Ushua');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P‡ucar del Sara Sara','Sara Sara');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P√†ucar del Sara Sara','Pausa');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P√†ucar del Sara Sara','Colta');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P√†ucar del Sara Sara','Corculla');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P√†ucar del Sara Sara','Lampa');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P√†ucar del Sara Sara','Marcabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P√†ucar del Sara Sara','Oyolo');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P√†ucar del Sara Sara','Pararca');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P√†ucar del Sara Sara','San Javier de Alpabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P√†ucar del Sara Sara','San Jos√© de Ushua');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','P√†ucar del Sara Sara','Sara Sara');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','Querobamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','BelÈn');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','Bel√©n');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','Chalcos');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','Chilcayoc');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','HuacaÒa');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','Huaca√±a');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','Morcolla');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','Paico');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','San Pedro de Larcay');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','San Salvador de Quije');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','Santiago de Paucaray');
 insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Sucre','Soras');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','VÌctor Fajardo','Huancapi');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','VÌctor Fajardo','Alcamenca');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','VÌctor Fajardo','Apongo');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','VÌctor Fajardo','Asquipata');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','VÌctor Fajardo','Canaria');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','VÌctor Fajardo','Cayara');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','VÌctor Fajardo','Colca');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','VÌctor Fajardo','Huamanquiquia');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','VÌctor Fajardo','Huancaraylla');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','VÌctor Fajardo','Hualla');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','VÌctor Fajardo','Sarhua');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','VÌctor Fajardo','Vilcanchos');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam·n','Vilcas Huaman');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam·n','Accomarca');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam·n','Carhuanca');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam·n','ConcepciÛn');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam·n','Huambalpa');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam·n','Independencia');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam·n','Saurama');
-insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam·n','Vischongo');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','V√≠ctor Fajardo','Huancapi');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','V√≠ctor Fajardo','Alcamenca');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','V√≠ctor Fajardo','Apongo');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','V√≠ctor Fajardo','Asquipata');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','V√≠ctor Fajardo','Canaria');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','V√≠ctor Fajardo','Cayara');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','V√≠ctor Fajardo','Colca');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','V√≠ctor Fajardo','Huamanquiquia');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','V√≠ctor Fajardo','Huancaraylla');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','V√≠ctor Fajardo','Hualla');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','V√≠ctor Fajardo','Sarhua');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','V√≠ctor Fajardo','Vilcanchos');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam√°n','Vilcas Huaman');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam√°n','Accomarca');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam√°n','Carhuanca');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam√°n','Concepci√≥n');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam√°n','Huambalpa');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam√°n','Independencia');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam√°n','Saurama');
+insert into ubigeo (departamento, provincia, distrito) values ('Ayacucho','Vilcas Huam√°n','Vischongo');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Cajamarca');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','AsunciÛn');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Asunci√≥n');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Chetilla');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Cospan');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','EncaÒada');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Jes˙s');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Enca√±ada');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Jes√∫s');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Llacanora');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Los BaÒos del Inca');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Los Ba√±os del Inca');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Magdalena');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Matara');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajamarca','Namora');
@@ -626,18 +1002,18 @@ insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Caja
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajabamba','Cachachi');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajabamba','Condebamba');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cajabamba','Sitacocha');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','CelendÌn','CelendÌn');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','CelendÌn','Chumuch');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','CelendÌn','Cortegana');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','CelendÌn','Huasmin');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','CelendÌn','Jorge Ch·vez');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','CelendÌn','JosÈ G·lvez');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','CelendÌn','Miguel Iglesias');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','CelendÌn','Oxamarca');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','CelendÌn','Sorochuco');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','CelendÌn','Sucre');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','CelendÌn','Utco');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','CelendÌn','La Libertad de Pallan');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Celend√≠n','Celend√≠n');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Celend√≠n','Chumuch');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Celend√≠n','Cortegana');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Celend√≠n','Huasmin');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Celend√≠n','Jorge Ch√°vez');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Celend√≠n','Jos√© G√°lvez');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Celend√≠n','Miguel Iglesias');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Celend√≠n','Oxamarca');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Celend√≠n','Sorochuco');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Celend√≠n','Sucre');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Celend√≠n','Utco');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Celend√≠n','La Libertad de Pallan');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Chota','Chota');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Chota','Anguia');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Chota','Chadin');
@@ -657,14 +1033,14 @@ insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Chot
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Chota','Tacabamba');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Chota','Tocmoche');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Chota','Chalamarca');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz·','Contumaza');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz·','Chilete');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz·','Cupisnique');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz·','Guzmango');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz·','San Benito');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz·','Santa Cruz de Toledo');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz·','Tantarica');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz·','Yonan');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz√°','Contumaza');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz√°','Chilete');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz√°','Cupisnique');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz√°','Guzmango');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz√°','San Benito');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz√°','Santa Cruz de Toledo');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz√°','Tantarica');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Contumaz√°','Yonan');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cutervo','Cutervo');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cutervo','Callayuc');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cutervo','Choros');
@@ -672,7 +1048,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cute
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cutervo','La Ramada');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cutervo','Pimpingos');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cutervo','Querocotillo');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cutervo','San AndrÈs de Cutervo');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cutervo','San Andr√©s de Cutervo');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cutervo','San Juan de Cutervo');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cutervo','San Luis de Lucma');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cutervo','Santa Cruz');
@@ -683,34 +1059,34 @@ insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Cute
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Hualgayoc','Bambamarca');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Hualgayoc','Chugur');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Hualgayoc','Hualgayoc');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','JaÈn','JaÈn');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','JaÈn','Bellavista');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','JaÈn','Chontali');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','JaÈn','Colasay');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','JaÈn','Huabal');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','JaÈn','Las Pirias');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','JaÈn','Pomahuaca');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','JaÈn','Pucara');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','JaÈn','Sallique');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','JaÈn','San Felipe');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','JaÈn','San JosÈ del Alto');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','JaÈn','Santa Rosa');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Ja√©n','Ja√©n');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Ja√©n','Bellavista');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Ja√©n','Chontali');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Ja√©n','Colasay');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Ja√©n','Huabal');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Ja√©n','Las Pirias');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Ja√©n','Pomahuaca');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Ja√©n','Pucara');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Ja√©n','Sallique');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Ja√©n','San Felipe');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Ja√©n','San Jos√© del Alto');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Ja√©n','Santa Rosa');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Ignacio','San Ignacio');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Ignacio','Chirinos');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Ignacio','Huarango');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Ignacio','La Coipa');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Ignacio','Namballe');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Ignacio','San JosÈ de Lourdes');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Ignacio','San Jos√© de Lourdes');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Ignacio','Tabaconas');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Marcos','Pedro G·lvez');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Marcos','Pedro G√°lvez');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Marcos','Chancay');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Marcos','Eduardo Villanueva');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Marcos','Gregorio Pita');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Marcos','Ichocan');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Marcos','JosÈ Manuel Quiroz');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Marcos','JosÈ Sabogal');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Marcos','Jos√© Manuel Quiroz');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Marcos','Jos√© Sabogal');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Miguel','San Miguel');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Miguel','BolÌvar');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Miguel','Bol√≠var');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Miguel','Calquis');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Miguel','Catilluc');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Miguel','El Prado');
@@ -721,7 +1097,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San 
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Miguel','San Gregorio');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Miguel','San Silvestre de Cochan');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Miguel','Tongod');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Miguel','UniÛn Agua Blanca');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Miguel','Uni√≥n Agua Blanca');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Pablo','San Pablo');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Pablo','San Bernardino');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San Pablo','San Luis');
@@ -729,7 +1105,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','San 
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Santa Cruz','Santa Cruz');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Santa Cruz','Andabamba');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Santa Cruz','Catache');
-insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Santa Cruz','ChancaybaÒos');
+insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Santa Cruz','Chancayba√±os');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Santa Cruz','La Esperanza');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Santa Cruz','Ninabamba');
 insert into ubigeo (departamento, provincia, distrito) values ('Cajamarca','Santa Cruz','Pulan');
@@ -743,11 +1119,11 @@ insert into ubigeo (departamento, provincia, distrito) values ('Callao','Prov. C
 insert into ubigeo (departamento, provincia, distrito) values ('Callao','Prov. Const. del Callao','La Perla');
 insert into ubigeo (departamento, provincia, distrito) values ('Callao','Prov. Const. del Callao','La Punta');
 insert into ubigeo (departamento, provincia, distrito) values ('Callao','Prov. Const. del Callao','Ventanilla');
-insert into ubigeo (departamento, provincia, distrito) values ('Callao','Prov. Const. del Callao','Mi Per˙');
+insert into ubigeo (departamento, provincia, distrito) values ('Callao','Prov. Const. del Callao','Mi Per√∫');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Cusco','Cusco');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Cusco','Ccorca');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Cusco','Poroy');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Cusco','San JerÛnimo');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Cusco','San Jer√≥nimo');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Cusco','San Sebastian');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Cusco','Santiago');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Cusco','Saylla');
@@ -798,7 +1174,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Chumbivi
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Chumbivilcas','Colquemarca');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Chumbivilcas','Livitaca');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Chumbivilcas','Llusco');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Chumbivilcas','QuiÒota');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Chumbivilcas','Qui√±ota');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Chumbivilcas','Velille');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Espinar','Espinar');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Espinar','Condoroma');
@@ -808,20 +1184,20 @@ insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Espinar'
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Espinar','Pichigua');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Espinar','Suyckutambo');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Espinar','Alto Pichigua');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Santa Ana');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Echarate');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Huayopata');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Maranura');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Ocobamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Quellouno');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Kimbiri');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Santa Teresa');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Vilcabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Pichari');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Inkawasi');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Villa Virgen');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Villa Kintiarina');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La ConvenciÛn','Megantoni');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Santa Ana');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Echarate');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Huayopata');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Maranura');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Ocobamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Quellouno');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Kimbiri');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Santa Teresa');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Vilcabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Pichari');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Inkawasi');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Villa Virgen');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Villa Kintiarina');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','La Convenci√≥n','Megantoni');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Paruro','Paruro');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Paruro','Accha');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Paruro','Ccapi');
@@ -836,7 +1212,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Paucarta
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Paucartambo','Challabamba');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Paucartambo','Colquepata');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Paucartambo','Huancarani');
-insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Paucartambo','KosÒipata');
+insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Paucartambo','Kos√±ipata');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Quispicanchi','Urcos');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Quispicanchi','Andahuaylillas');
 insert into ubigeo (departamento, provincia, distrito) values ('Cusco','Quispicanchi','Camanti');
@@ -866,14 +1242,14 @@ insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','H
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Izcuchaca');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Laria');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Manta');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Mariscal C·ceres');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Mariscal C√°ceres');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Moya');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Nuevo Occoro');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Palca');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Pilchaca');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Vilca');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Yauli');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','AscensiÛn');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Ascensi√≥n');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huancavelica','Huando');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Acobamba','Acobamba');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Acobamba','Andabamba');
@@ -919,31 +1295,31 @@ insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','C
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Churcampa','San Pedro de Coris');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Churcampa','Pachamarca');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Churcampa','Cosme');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','Huaytara');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','Ayavi');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','CÛrdova');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','Huayacundo Arma');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','Laramarca');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','Ocoyo');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','Pilpichaca');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','Querco');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','Quito-Arma');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','San Antonio de Cusicancha');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','San Francisco de Sangayaico');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','San Isidro');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','Santiago de Chocorvos');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','Santiago de Quirahuara');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','Santo Domingo de Capillas');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar·','Tambo');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','Huaytara');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','Ayavi');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','C√≥rdova');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','Huayacundo Arma');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','Laramarca');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','Ocoyo');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','Pilpichaca');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','Querco');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','Quito-Arma');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','San Antonio de Cusicancha');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','San Francisco de Sangayaico');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','San Isidro');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','Santiago de Chocorvos');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','Santiago de Quirahuara');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','Santo Domingo de Capillas');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Huaytar√°','Tambo');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Pampas');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Acostambo');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Acraquia');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Ahuaycha');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Colcabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Daniel Hern·ndez');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Daniel Hern√°ndez');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Huachocolpa');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Huaribamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','—ahuimpuquio');
+insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','√ëahuimpuquio');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Pazos');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Quishuar');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Salcabamba');
@@ -956,99 +1332,99 @@ insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','T
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Roble');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Pichos');
 insert into ubigeo (departamento, provincia, distrito) values ('Huancavelica','Tayacaja','Santiago de Tucuma');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','Huanuco');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','Amarilis');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','Chinchao');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','Churubamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','Margos');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','Quisqui (Kichki)');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','San Francisco de Cayran');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','San Pedro de Chaulan');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','Santa MarÌa del Valle');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','Yarumayo');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','Pillco Marca');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','Yacus');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Hu·nuco','San Pablo de Pillao');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Ambo','Ambo');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Ambo','Cayna');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Ambo','Colpas');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Ambo','Conchamarca');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Ambo','Huacar');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Ambo','San Francisco');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Ambo','San Rafael');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Ambo','Tomay Kichwa');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Dos de Mayo','La UniÛn');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Dos de Mayo','Chuquis');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Dos de Mayo','MarÌas');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Dos de Mayo','Pachas');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Dos de Mayo','Quivilla');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Dos de Mayo','Ripan');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Dos de Mayo','Shunqui');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Dos de Mayo','Sillapata');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Dos de Mayo','Yanas');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Huacaybamba','Huacaybamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Huacaybamba','Canchabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Huacaybamba','Cochabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Huacaybamba','Pinra');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','HuamalÌes','Llata');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','HuamalÌes','Arancay');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','HuamalÌes','ChavÌn de Pariarca');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','HuamalÌes','Jacas Grande');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','HuamalÌes','Jircan');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','HuamalÌes','Miraflores');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','HuamalÌes','MonzÛn');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','HuamalÌes','Punchao');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','HuamalÌes','PuÒos');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','HuamalÌes','Singa');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','HuamalÌes','Tantamayo');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Leoncio Prado','Rupa-Rupa');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Leoncio Prado','Daniel AlomÌa Robles');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Leoncio Prado','HermÌlio Valdizan');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Leoncio Prado','JosÈ Crespo y Castillo');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Leoncio Prado','Luyando');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Leoncio Prado','Mariano Damaso Beraun');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Leoncio Prado','Pucayacu');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Leoncio Prado','Castillo Grande');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Leoncio Prado','Pueblo Nuevo');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Leoncio Prado','Santo Domingo de Anda');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','MaraÒÛn','Huacrachuco');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','MaraÒÛn','Cholon');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','MaraÒÛn','San Buenaventura');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','MaraÒÛn','La Morada');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','MaraÒÛn','Santa Rosa de Alto Yanajanca');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Pachitea','Panao');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Pachitea','Chaglla');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Pachitea','Molino');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Pachitea','Umari');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Puerto Inca','Puerto Inca');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Puerto Inca','Codo del Pozuzo');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Puerto Inca','Honoria');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Puerto Inca','Tournavista');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Puerto Inca','Yuyapichis');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Lauricocha','Jes˙s');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Lauricocha','BaÒos');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Lauricocha','Jivia');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Lauricocha','Queropalca');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Lauricocha','Rondos');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Lauricocha','San Francisco de AsÌs');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Lauricocha','San Miguel de Cauri');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Yarowilca','Chavinillo');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Yarowilca','Cahuac');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Yarowilca','Chacabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Yarowilca','Aparicio Pomares');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Yarowilca','Jacas Chico');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Yarowilca','Obas');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Yarowilca','Pampamarca');
-insert into ubigeo (departamento, provincia, distrito) values ('Hu·nuco','Yarowilca','Choras');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','Huanuco');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','Amarilis');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','Chinchao');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','Churubamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','Margos');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','Quisqui (Kichki)');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','San Francisco de Cayran');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','San Pedro de Chaulan');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','Santa Mar√≠a del Valle');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','Yarumayo');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','Pillco Marca');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','Yacus');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Hu√°nuco','San Pablo de Pillao');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Ambo','Ambo');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Ambo','Cayna');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Ambo','Colpas');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Ambo','Conchamarca');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Ambo','Huacar');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Ambo','San Francisco');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Ambo','San Rafael');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Ambo','Tomay Kichwa');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Dos de Mayo','La Uni√≥n');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Dos de Mayo','Chuquis');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Dos de Mayo','Mar√≠as');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Dos de Mayo','Pachas');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Dos de Mayo','Quivilla');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Dos de Mayo','Ripan');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Dos de Mayo','Shunqui');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Dos de Mayo','Sillapata');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Dos de Mayo','Yanas');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huacaybamba','Huacaybamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huacaybamba','Canchabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huacaybamba','Cochabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huacaybamba','Pinra');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huamal√≠es','Llata');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huamal√≠es','Arancay');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huamal√≠es','Chav√≠n de Pariarca');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huamal√≠es','Jacas Grande');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huamal√≠es','Jircan');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huamal√≠es','Miraflores');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huamal√≠es','Monz√≥n');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huamal√≠es','Punchao');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huamal√≠es','Pu√±os');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huamal√≠es','Singa');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Huamal√≠es','Tantamayo');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Leoncio Prado','Rupa-Rupa');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Leoncio Prado','Daniel Alom√≠a Robles');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Leoncio Prado','Herm√≠lio Valdizan');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Leoncio Prado','Jos√© Crespo y Castillo');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Leoncio Prado','Luyando');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Leoncio Prado','Mariano Damaso Beraun');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Leoncio Prado','Pucayacu');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Leoncio Prado','Castillo Grande');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Leoncio Prado','Pueblo Nuevo');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Leoncio Prado','Santo Domingo de Anda');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Mara√±√≥n','Huacrachuco');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Mara√±√≥n','Cholon');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Mara√±√≥n','San Buenaventura');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Mara√±√≥n','La Morada');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Mara√±√≥n','Santa Rosa de Alto Yanajanca');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Pachitea','Panao');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Pachitea','Chaglla');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Pachitea','Molino');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Pachitea','Umari');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Puerto Inca','Puerto Inca');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Puerto Inca','Codo del Pozuzo');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Puerto Inca','Honoria');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Puerto Inca','Tournavista');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Puerto Inca','Yuyapichis');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Lauricocha','Jes√∫s');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Lauricocha','Ba√±os');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Lauricocha','Jivia');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Lauricocha','Queropalca');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Lauricocha','Rondos');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Lauricocha','San Francisco de As√≠s');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Lauricocha','San Miguel de Cauri');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Yarowilca','Chavinillo');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Yarowilca','Cahuac');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Yarowilca','Chacabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Yarowilca','Aparicio Pomares');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Yarowilca','Jacas Chico');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Yarowilca','Obas');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Yarowilca','Pampamarca');
+insert into ubigeo (departamento, provincia, distrito) values ('Hu√°nuco','Yarowilca','Choras');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','Ica');
-insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','La TinguiÒa');
+insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','La Tingui√±a');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','Los Aquijes');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','Ocucaje');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','Pachacutec');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','Parcona');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','Pueblo Nuevo');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','Salas');
-insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','San JosÈ de Los Molinos');
+insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','San Jos√© de Los Molinos');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','San Juan Bautista');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','Santiago');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Ica','Subtanjalla');
@@ -1072,7 +1448,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Ica','Nasca','Ma
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Nasca','Vista Alegre');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Palpa','Palpa');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Palpa','Llipata');
-insert into ubigeo (departamento, provincia, distrito) values ('Ica','Palpa','RÌo Grande');
+insert into ubigeo (departamento, provincia, distrito) values ('Ica','Palpa','R√≠o Grande');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Palpa','Santa Cruz');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Palpa','Tibillo');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Pisco','Pisco');
@@ -1080,133 +1456,133 @@ insert into ubigeo (departamento, provincia, distrito) values ('Ica','Pisco','Hu
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Pisco','Humay');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Pisco','Independencia');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Pisco','Paracas');
-insert into ubigeo (departamento, provincia, distrito) values ('Ica','Pisco','San AndrÈs');
+insert into ubigeo (departamento, provincia, distrito) values ('Ica','Pisco','San Andr√©s');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Pisco','San Clemente');
 insert into ubigeo (departamento, provincia, distrito) values ('Ica','Pisco','Tupac Amaru Inca');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Huancayo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Carhuacallanga');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Chacapampa');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Chicche');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Chilca');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Chongos Alto');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Chupuro');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Colca');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Cullhuas');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','El Tambo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Huacrapuquio');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Hualhuas');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Huancan');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Huasicancha');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Huayucachi');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Ingenio');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Pariahuanca');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Pilcomayo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Pucara');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Quichuay');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Quilcas');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','San AgustÌn');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','San JerÛnimo de Tunan');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','SaÒo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Sapallanga');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Sicaya');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Santo Domingo de Acobamba');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Huancayo','Viques');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','ConcepciÛn');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','Aco');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','Andamarca');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','Chambara');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','Cochas');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','Comas');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','HeroÌnas Toledo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','Manzanares');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','Mariscal Castilla');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','Matahuasi');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','Mito');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','Nueve de Julio');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','Orcotuna');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','San JosÈ de Quero');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','ConcepciÛn','Santa Rosa de Ocopa');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chanchamayo','Chanchamayo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chanchamayo','Perene');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chanchamayo','Pichanaqui');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chanchamayo','San Luis de Shuaro');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chanchamayo','San RamÛn');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chanchamayo','Vitoc');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Jauja');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Acolla');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Apata');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Ataura');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Canchayllo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Curicaca');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','El Mantaro');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Huamali');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Huaripampa');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Huertas');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Janjaillo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Julc·n');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Leonor OrdÛÒez');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Llocllapampa');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Marco');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Masma');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Masma Chicche');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Molinos');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Monobamba');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Muqui');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Muquiyauyo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Paca');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Paccha');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Pancan');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Parco');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Pomacancha');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Ricran');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','San Lorenzo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','San Pedro de Chunan');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Sausa');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Sincos');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Tunan Marca');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Yauli');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Jauja','Yauyos');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','JunÌn','Junin');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','JunÌn','Carhuamayo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','JunÌn','Ondores');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','JunÌn','Ulcumayo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Satipo','Satipo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Satipo','Coviriali');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Satipo','Llaylla');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Satipo','Mazamari');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Satipo','Pampa Hermosa');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Satipo','Pangoa');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Satipo','RÌo Negro');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Satipo','RÌo Tambo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Satipo','Vizcatan del Ene');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Tarma','Tarma');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Tarma','Acobamba');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Tarma','Huaricolca');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Tarma','Huasahuasi');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Tarma','La UniÛn');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Tarma','Palca');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Tarma','Palcamayo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Tarma','San Pedro de Cajas');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Tarma','Tapo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Yauli','La Oroya');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Yauli','Chacapalpa');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Yauli','Huay-Huay');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Yauli','Marcapomacocha');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Yauli','Morococha');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Yauli','Paccha');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Yauli','Santa B·rbara de Carhuacayan');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Yauli','Santa Rosa de Sacco');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Yauli','Suitucancha');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Yauli','Yauli');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chupaca','Chupaca');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chupaca','Ahuac');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chupaca','Chongos Bajo');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chupaca','Huachac');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chupaca','Huamancaca Chico');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chupaca','San Juan de Iscos');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chupaca','San Juan de Jarpa');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chupaca','Tres de Diciembre');
-insert into ubigeo (departamento, provincia, distrito) values ('JunÌn','Chupaca','Yanacancha');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Huancayo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Carhuacallanga');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Chacapampa');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Chicche');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Chilca');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Chongos Alto');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Chupuro');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Colca');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Cullhuas');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','El Tambo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Huacrapuquio');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Hualhuas');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Huancan');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Huasicancha');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Huayucachi');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Ingenio');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Pariahuanca');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Pilcomayo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Pucara');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Quichuay');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Quilcas');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','San Agust√≠n');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','San Jer√≥nimo de Tunan');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Sa√±o');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Sapallanga');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Sicaya');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Santo Domingo de Acobamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Huancayo','Viques');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Concepci√≥n');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Aco');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Andamarca');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Chambara');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Cochas');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Comas');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Hero√≠nas Toledo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Manzanares');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Mariscal Castilla');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Matahuasi');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Mito');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Nueve de Julio');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Orcotuna');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','San Jos√© de Quero');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Concepci√≥n','Santa Rosa de Ocopa');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chanchamayo','Chanchamayo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chanchamayo','Perene');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chanchamayo','Pichanaqui');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chanchamayo','San Luis de Shuaro');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chanchamayo','San Ram√≥n');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chanchamayo','Vitoc');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Jauja');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Acolla');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Apata');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Ataura');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Canchayllo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Curicaca');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','El Mantaro');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Huamali');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Huaripampa');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Huertas');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Janjaillo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Julc√°n');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Leonor Ord√≥√±ez');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Llocllapampa');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Marco');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Masma');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Masma Chicche');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Molinos');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Monobamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Muqui');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Muquiyauyo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Paca');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Paccha');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Pancan');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Parco');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Pomacancha');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Ricran');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','San Lorenzo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','San Pedro de Chunan');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Sausa');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Sincos');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Tunan Marca');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Yauli');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jauja','Yauyos');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jun√≠n','Junin');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jun√≠n','Carhuamayo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jun√≠n','Ondores');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Jun√≠n','Ulcumayo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Satipo','Satipo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Satipo','Coviriali');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Satipo','Llaylla');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Satipo','Mazamari');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Satipo','Pampa Hermosa');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Satipo','Pangoa');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Satipo','R√≠o Negro');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Satipo','R√≠o Tambo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Satipo','Vizcatan del Ene');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Tarma','Tarma');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Tarma','Acobamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Tarma','Huaricolca');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Tarma','Huasahuasi');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Tarma','La Uni√≥n');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Tarma','Palca');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Tarma','Palcamayo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Tarma','San Pedro de Cajas');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Tarma','Tapo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Yauli','La Oroya');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Yauli','Chacapalpa');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Yauli','Huay-Huay');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Yauli','Marcapomacocha');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Yauli','Morococha');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Yauli','Paccha');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Yauli','Santa B√°rbara de Carhuacayan');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Yauli','Santa Rosa de Sacco');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Yauli','Suitucancha');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Yauli','Yauli');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chupaca','Chupaca');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chupaca','Ahuac');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chupaca','Chongos Bajo');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chupaca','Huachac');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chupaca','Huamancaca Chico');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chupaca','San Juan de Iscos');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chupaca','San Juan de Jarpa');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chupaca','Tres de Diciembre');
+insert into ubigeo (departamento, provincia, distrito) values ('Jun√≠n','Chupaca','Yanacancha');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Trujillo','Trujillo');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Trujillo','El Porvenir');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Trujillo','Florencia de Mora');
@@ -1223,22 +1599,22 @@ insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','As
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Ascope','Chocope');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Ascope','Magdalena de Cao');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Ascope','Paijan');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Ascope','R·zuri');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Ascope','R√°zuri');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Ascope','Santiago de Cao');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Ascope','Casa Grande');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','BolÌvar','BolÌvar');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','BolÌvar','Bambamarca');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','BolÌvar','Condormarca');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','BolÌvar','Longotea');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','BolÌvar','Uchumarca');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','BolÌvar','Ucuncha');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','ChepÈn','Chepen');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','ChepÈn','Pacanga');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','ChepÈn','Pueblo Nuevo');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Julc·n','Julcan');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Julc·n','Calamarca');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Julc·n','Carabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Julc·n','Huaso');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Bol√≠var','Bol√≠var');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Bol√≠var','Bambamarca');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Bol√≠var','Condormarca');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Bol√≠var','Longotea');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Bol√≠var','Uchumarca');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Bol√≠var','Ucuncha');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Chep√©n','Chepen');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Chep√©n','Pacanga');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Chep√©n','Pueblo Nuevo');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Julc√°n','Julcan');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Julc√°n','Calamarca');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Julc√°n','Carabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Julc√°n','Huaso');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Otuzco','Otuzco');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Otuzco','Agallpampa');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Otuzco','Charat');
@@ -1253,7 +1629,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pa
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pacasmayo','Guadalupe');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pacasmayo','Jequetepeque');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pacasmayo','Pacasmayo');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pacasmayo','San JosÈ');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pacasmayo','San Jos√©');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pataz','Tayabamba');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pataz','Buldibuyo');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pataz','Chillia');
@@ -1267,14 +1643,14 @@ insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pa
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pataz','Santiago de Challas');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pataz','Taurija');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Pataz','Urpay');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S·nchez CarriÛn','Huamachuco');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S·nchez CarriÛn','Chugay');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S·nchez CarriÛn','Cochorco');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S·nchez CarriÛn','Curgos');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S·nchez CarriÛn','Marcabal');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S·nchez CarriÛn','Sanagoran');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S·nchez CarriÛn','Sarin');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S·nchez CarriÛn','Sartimbamba');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S√°nchez Carri√≥n','Huamachuco');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S√°nchez Carri√≥n','Chugay');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S√°nchez Carri√≥n','Cochorco');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S√°nchez Carri√≥n','Curgos');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S√°nchez Carri√≥n','Marcabal');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S√°nchez Carri√≥n','Sanagoran');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S√°nchez Carri√≥n','Sarin');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','S√°nchez Carri√≥n','Sartimbamba');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Santiago de Chuco','Santiago de Chuco');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Santiago de Chuco','Angasmarca');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Santiago de Chuco','Cachicadan');
@@ -1283,18 +1659,18 @@ insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Sa
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Santiago de Chuco','Quiruvilca');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Santiago de Chuco','Santa Cruz de Chuca');
 insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Santiago de Chuco','Sitabamba');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Gran Chim˙','Cascas');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Gran Chim˙','Lucma');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Gran Chim˙','Marmot');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Gran Chim˙','Sayapullo');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Vir˙','Viru');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Vir˙','Chao');
-insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Vir˙','Guadalupito');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Gran Chim√∫','Cascas');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Gran Chim√∫','Lucma');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Gran Chim√∫','Marmot');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Gran Chim√∫','Sayapullo');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Vir√∫','Viru');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Vir√∫','Chao');
+insert into ubigeo (departamento, provincia, distrito) values ('La Libertad','Vir√∫','Guadalupito');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Chiclayo');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Chongoyape');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Eten');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Eten Puerto');
-insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','JosÈ Leonardo Ortiz');
+insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Jos√© Leonardo Ortiz');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','La Victoria');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Lagunas');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Monsefu');
@@ -1304,18 +1680,18 @@ insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chi
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Pimentel');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Reque');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Santa Rosa');
-insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','SaÒa');
+insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Sa√±a');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Cayalti');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Patapo');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Pomalca');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Pucala');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Chiclayo','Tuman');
-insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','FerreÒafe','FerreÒafe');
-insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','FerreÒafe','CaÒaris');
-insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','FerreÒafe','Incahuasi');
-insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','FerreÒafe','Manuel Antonio Mesones Muro');
-insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','FerreÒafe','Pitipo');
-insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','FerreÒafe','Pueblo Nuevo');
+insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Ferre√±afe','Ferre√±afe');
+insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Ferre√±afe','Ca√±aris');
+insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Ferre√±afe','Incahuasi');
+insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Ferre√±afe','Manuel Antonio Mesones Muro');
+insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Ferre√±afe','Pitipo');
+insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Ferre√±afe','Pueblo Nuevo');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Lambayeque','Lambayeque');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Lambayeque','Chochope');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Lambayeque','Illimo');
@@ -1326,13 +1702,13 @@ insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Lam
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Lambayeque','Olmos');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Lambayeque','Pacora');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Lambayeque','Salas');
-insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Lambayeque','San JosÈ');
+insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Lambayeque','San Jos√©');
 insert into ubigeo (departamento, provincia, distrito) values ('Lambayeque','Lambayeque','Tucume');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Lima');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','AncÛn');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Anc√≥n');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Ate');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Barranco');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','BreÒa');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Bre√±a');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Carabayllo');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Chaclacayo');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Chorrillos');
@@ -1340,7 +1716,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Ci
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Comas');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','El Agustino');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Independencia');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Jes˙s MarÌa');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Jes√∫s Mar√≠a');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','La Molina');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','La Victoria');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Lince');
@@ -1355,22 +1731,22 @@ insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Pu
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Puente Piedra');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Punta Hermosa');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Punta Negra');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','RÌmac');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','R√≠mac');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','San Bartolo');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','San Borja');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','San Isidro');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','San Juan de Lurigancho');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','San Juan de Miraflores');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','San Luis');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','San MartÌn de Porres');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','San Mart√≠n de Porres');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','San Miguel');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Santa Anita');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Santa MarÌa del Mar');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Santa Mar√≠a del Mar');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Santa Rosa');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Santiago de Surco');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Surquillo');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Villa El Salvador');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Villa MarÌa del Triunfo');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Lima','Villa Mar√≠a del Triunfo');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Barranca','Barranca');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Barranca','Paramonga');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Barranca','Pativilca');
@@ -1388,22 +1764,22 @@ insert into ubigeo (departamento, provincia, distrito) values ('Lima','Canta','H
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Canta','Lachaqui');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Canta','San Buenaventura');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Canta','Santa Rosa de Quives');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','San Vicente de CaÒete');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Asia');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Calango');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Cerro Azul');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Chilca');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Coayllo');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Imperial');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Lunahuana');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Mala');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Nuevo Imperial');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Pacaran');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Quilmana');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','San Antonio');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','San Luis');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Santa Cruz de Flores');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','CaÒete','Z˙Òiga');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','San Vicente de Ca√±ete');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Asia');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Calango');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Cerro Azul');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Chilca');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Coayllo');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Imperial');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Lunahuana');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Mala');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Nuevo Imperial');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Pacaran');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Quilmana');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','San Antonio');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','San Luis');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Santa Cruz de Flores');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Ca√±ete','Z√∫√±iga');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaral','Huaral');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaral','Atavillos Alto');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaral','Atavillos Bajo');
@@ -1416,38 +1792,38 @@ insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaral','
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaral','Santa Cruz de Andamarca');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaral','Sumbilca');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaral','Veintisiete de Noviembre');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Matucana');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Antioquia');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Callahuanca');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Carampoma');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Chicla');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Cuenca');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Huachupampa');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Huanza');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Huarochiri');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Lahuaytambo');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Langa');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Laraos');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Mariatana');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Ricardo Palma');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','San AndrÈs de Tupicocha');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','San Antonio');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','San BartolomÈ');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','San Damian');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','San Juan de Iris');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','San Juan de Tantaranche');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','San Lorenzo de Quinti');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','San Mateo');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','San Mateo de Otao');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','San Pedro de Casta');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','San Pedro de Huancayre');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Sangallaya');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Santa Cruz de Cocachacra');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Santa Eulalia');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Santiago de Anchucaya');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Santiago de Tuna');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Santo Domingo de Los Olleros');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','HuarochirÌ','Surco');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Matucana');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Antioquia');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Callahuanca');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Carampoma');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Chicla');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Cuenca');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Huachupampa');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Huanza');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Huarochiri');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Lahuaytambo');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Langa');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Laraos');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Mariatana');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Ricardo Palma');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','San Andr√©s de Tupicocha');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','San Antonio');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','San Bartolom√©');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','San Damian');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','San Juan de Iris');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','San Juan de Tantaranche');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','San Lorenzo de Quinti');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','San Mateo');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','San Mateo de Otao');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','San Pedro de Casta');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','San Pedro de Huancayre');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Sangallaya');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Santa Cruz de Cocachacra');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Santa Eulalia');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Santiago de Anchucaya');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Santiago de Tuna');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Santo Domingo de Los Olleros');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huarochir√≠','Surco');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaura','Huacho');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaura','Ambar');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaura','Caleta de Carquin');
@@ -1457,20 +1833,20 @@ insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaura','
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaura','Leoncio Prado');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaura','Paccho');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaura','Santa Leonor');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaura','Santa MarÌa');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaura','Santa Mar√≠a');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaura','Sayan');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Huaura','Vegueta');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','OyÛn','Oyon');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','OyÛn','Andajes');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','OyÛn','Caujul');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','OyÛn','Cochamarca');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','OyÛn','Navan');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','OyÛn','Pachangara');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Oy√≥n','Oyon');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Oy√≥n','Andajes');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Oy√≥n','Caujul');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Oy√≥n','Cochamarca');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Oy√≥n','Navan');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Oy√≥n','Pachangara');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Yauyos');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Alis');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Allauca');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Ayaviri');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Az·ngaro');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Az√°ngaro');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Cacra');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Carania');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Catahuasi');
@@ -1482,7 +1858,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Huancaya');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Huangascar');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Huantan');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','HuaÒec');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Hua√±ec');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Laraos');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Lincha');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Madean');
@@ -1491,13 +1867,13 @@ insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Putinza');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Quinches');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Quinocay');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','San JoaquÌn');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','San Joaqu√≠n');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','San Pedro de Pilas');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Tanta');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Tauripampa');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Tomas');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Tupe');
-insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','ViÒac');
+insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Vi√±ac');
 insert into ubigeo (departamento, provincia, distrito) values ('Lima','Yauyos','Vitis');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Maynas','Iquitos');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Maynas','Alto Nanay');
@@ -1508,27 +1884,27 @@ insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Maynas'
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Maynas','Napo');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Maynas','Punchana');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Maynas','Torres Causana');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Maynas','BelÈn');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Maynas','Bel√©n');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Maynas','San Juan Bautista');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Alto Amazonas','Yurimaguas');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Alto Amazonas','Balsapuerto');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Alto Amazonas','Jeberos');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Alto Amazonas','Lagunas');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Alto Amazonas','Santa Cruz');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Alto Amazonas','Teniente Cesar LÛpez Rojas');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Alto Amazonas','Teniente Cesar L√≥pez Rojas');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Loreto','Nauta');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Loreto','Parinari');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Loreto','Tigre');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Loreto','Trompeteros');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Loreto','Urarinas');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Mariscal RamÛn Castilla','RamÛn Castilla');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Mariscal RamÛn Castilla','Pebas');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Mariscal RamÛn Castilla','Yavari');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Mariscal RamÛn Castilla','San Pablo');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Mariscal Ram√≥n Castilla','Ram√≥n Castilla');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Mariscal Ram√≥n Castilla','Pebas');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Mariscal Ram√≥n Castilla','Yavari');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Mariscal Ram√≥n Castilla','San Pablo');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Requena','Requena');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Requena','Alto Tapiche');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Requena','Capelo');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Requena','Emilio San MartÌn');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Requena','Emilio San Mart√≠n');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Requena','Maquia');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Requena','Puinahua');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Requena','Saquena');
@@ -1538,16 +1914,16 @@ insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Requena
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Requena','Yaquerana');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Ucayali','Contamana');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Ucayali','Inahuaya');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Ucayali','Padre M·rquez');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Ucayali','Padre M√°rquez');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Ucayali','Pampa Hermosa');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Ucayali','Sarayacu');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Ucayali','Vargas Guerra');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Datem del MaraÒÛn','Barranca');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Datem del MaraÒÛn','Cahuapanas');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Datem del MaraÒÛn','Manseriche');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Datem del MaraÒÛn','Morona');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Datem del MaraÒÛn','Pastaza');
-insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Datem del MaraÒÛn','Andoas');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Datem del Mara√±√≥n','Barranca');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Datem del Mara√±√≥n','Cahuapanas');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Datem del Mara√±√≥n','Manseriche');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Datem del Mara√±√≥n','Morona');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Datem del Mara√±√≥n','Pastaza');
+insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Datem del Mara√±√≥n','Andoas');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Putumayo','Putumayo');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Putumayo','Rosa Panduro');
 insert into ubigeo (departamento, provincia, distrito) values ('Loreto','Putumayo','Teniente Manuel Clavero');
@@ -1560,26 +1936,26 @@ insert into ubigeo (departamento, provincia, distrito) values ('Madre de Dios','
 insert into ubigeo (departamento, provincia, distrito) values ('Madre de Dios','Manu','Fitzcarrald');
 insert into ubigeo (departamento, provincia, distrito) values ('Madre de Dios','Manu','Madre de Dios');
 insert into ubigeo (departamento, provincia, distrito) values ('Madre de Dios','Manu','Huepetuhe');
-insert into ubigeo (departamento, provincia, distrito) values ('Madre de Dios','Tahuamanu','IÒapari');
+insert into ubigeo (departamento, provincia, distrito) values ('Madre de Dios','Tahuamanu','I√±apari');
 insert into ubigeo (departamento, provincia, distrito) values ('Madre de Dios','Tahuamanu','Iberia');
 insert into ubigeo (departamento, provincia, distrito) values ('Madre de Dios','Tahuamanu','Tahuamanu');
 insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','Mariscal Nieto','Moquegua');
 insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','Mariscal Nieto','Carumas');
 insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','Mariscal Nieto','Cuchumbaya');
 insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','Mariscal Nieto','Samegua');
-insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','Mariscal Nieto','San CristÛbal');
+insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','Mariscal Nieto','San Crist√≥bal');
 insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','Mariscal Nieto','Torata');
-insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S·nchez Cerro','Omate');
-insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S·nchez Cerro','Chojata');
-insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S·nchez Cerro','Coalaque');
-insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S·nchez Cerro','IchuÒa');
-insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S·nchez Cerro','La Capilla');
-insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S·nchez Cerro','Lloque');
-insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S·nchez Cerro','Matalaque');
-insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S·nchez Cerro','Puquina');
-insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S·nchez Cerro','Quinistaquillas');
-insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S·nchez Cerro','Ubinas');
-insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S·nchez Cerro','Yunga');
+insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S√°nchez Cerro','Omate');
+insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S√°nchez Cerro','Chojata');
+insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S√°nchez Cerro','Coalaque');
+insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S√°nchez Cerro','Ichu√±a');
+insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S√°nchez Cerro','La Capilla');
+insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S√°nchez Cerro','Lloque');
+insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S√°nchez Cerro','Matalaque');
+insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S√°nchez Cerro','Puquina');
+insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S√°nchez Cerro','Quinistaquillas');
+insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S√°nchez Cerro','Ubinas');
+insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','General S√°nchez Cerro','Yunga');
 insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','Ilo','Ilo');
 insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','Ilo','El Algarrobal');
 insert into ubigeo (departamento, provincia, distrito) values ('Moquegua','Ilo','Pacocha');
@@ -1590,35 +1966,35 @@ insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Pasco','
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Pasco','Ninacaca');
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Pasco','Pallanchacra');
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Pasco','Paucartambo');
-insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Pasco','San Francisco de AsÌs de Yarusyacan');
-insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Pasco','Simon BolÌvar');
+insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Pasco','San Francisco de As√≠s de Yarusyacan');
+insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Pasco','Simon Bol√≠var');
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Pasco','Ticlacayan');
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Pasco','Tinyahuarco');
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Pasco','Vicco');
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Pasco','Yanacancha');
-insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides CarriÛn','Yanahuanca');
-insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides CarriÛn','Chacayan');
-insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides CarriÛn','Goyllarisquizga');
-insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides CarriÛn','Paucar');
-insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides CarriÛn','San Pedro de Pillao');
-insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides CarriÛn','Santa Ana de Tusi');
-insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides CarriÛn','Tapuc');
-insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides CarriÛn','Vilcabamba');
+insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides Carri√≥n','Yanahuanca');
+insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides Carri√≥n','Chacayan');
+insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides Carri√≥n','Goyllarisquizga');
+insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides Carri√≥n','Paucar');
+insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides Carri√≥n','San Pedro de Pillao');
+insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides Carri√≥n','Santa Ana de Tusi');
+insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides Carri√≥n','Tapuc');
+insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Daniel Alcides Carri√≥n','Vilcabamba');
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Oxapampa','Oxapampa');
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Oxapampa','Chontabamba');
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Oxapampa','Huancabamba');
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Oxapampa','Palcazu');
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Oxapampa','Pozuzo');
-insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Oxapampa','Puerto Berm˙dez');
+insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Oxapampa','Puerto Berm√∫dez');
 insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Oxapampa','Villa Rica');
-insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Oxapampa','ConstituciÛn');
+insert into ubigeo (departamento, provincia, distrito) values ('Pasco','Oxapampa','Constituci√≥n');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Piura','Piura');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Piura','Castilla');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Piura','Catacaos');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Piura','Cura Mori');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Piura','El Tallan');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Piura','La Arena');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','Piura','La UniÛn');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Piura','La Uni√≥n');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Piura','Las Lomas');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Piura','Tambo Grande');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Piura','Veintiseis de Octubre');
@@ -1640,16 +2016,16 @@ insert into ubigeo (departamento, provincia, distrito) values ('Piura','Huancaba
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Huancabamba','San Miguel de El Faique');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Huancabamba','Sondor');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Huancabamba','Sondorillo');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','MorropÛn','Chulucanas');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','MorropÛn','Buenos Aires');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','MorropÛn','Chalaco');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','MorropÛn','La Matanza');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','MorropÛn','Morropon');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','MorropÛn','Salitral');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','MorropÛn','San Juan de Bigote');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','MorropÛn','Santa Catalina de Mossa');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','MorropÛn','Santo Domingo');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','MorropÛn','Yamango');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Morrop√≥n','Chulucanas');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Morrop√≥n','Buenos Aires');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Morrop√≥n','Chalaco');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Morrop√≥n','La Matanza');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Morrop√≥n','Morropon');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Morrop√≥n','Salitral');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Morrop√≥n','San Juan de Bigote');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Morrop√≥n','Santa Catalina de Mossa');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Morrop√≥n','Santo Domingo');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Morrop√≥n','Yamango');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Paita','Paita');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Paita','Amotape');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Paita','Arenal');
@@ -1665,14 +2041,14 @@ insert into ubigeo (departamento, provincia, distrito) values ('Piura','Sullana'
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Sullana','Miguel Checa');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Sullana','Querecotillo');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Sullana','Salitral');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','Talara','PariÒas');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Talara','Pari√±as');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Talara','El Alto');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Talara','La Brea');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Talara','Lobitos');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Talara','Los Organos');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Talara','Mancora');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Sechura','Sechura');
-insert into ubigeo (departamento, provincia, distrito) values ('Piura','Sechura','Bellavista de la UniÛn');
+insert into ubigeo (departamento, provincia, distrito) values ('Piura','Sechura','Bellavista de la Uni√≥n');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Sechura','Bernal');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Sechura','Cristo Nos Valga');
 insert into ubigeo (departamento, provincia, distrito) values ('Piura','Sechura','Vice');
@@ -1685,28 +2061,28 @@ insert into ubigeo (departamento, provincia, distrito) values ('Puno','Puno','Ca
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Puno','Chucuito');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Puno','Coata');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Puno','Huata');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Puno','MaÒazo');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Puno','Ma√±azo');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Puno','Paucarcolla');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Puno','Pichacani');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Puno','Plateria');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Puno','San Antonio');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Puno','Tiquillaca');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Puno','Vilque');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','Az·ngaro');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','Achaya');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','Arapa');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','Asillo');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','Caminaca');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','Chupa');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','JosÈ Domingo Choquehuanca');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','MuÒani');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','Potoni');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','Saman');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','San Anton');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','San JosÈ');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','San Juan de Salinas');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','Santiago de Pupuja');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az·ngaro','Tirapata');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','Az√°ngaro');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','Achaya');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','Arapa');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','Asillo');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','Caminaca');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','Chupa');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','Jos√© Domingo Choquehuanca');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','Mu√±ani');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','Potoni');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','Saman');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','San Anton');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','San Jos√©');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','San Juan de Salinas');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','Santiago de Pupuja');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Az√°ngaro','Tirapata');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Carabaya','Macusani');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Carabaya','Ajoyani');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Carabaya','Ayapata');
@@ -1729,14 +2105,14 @@ insert into ubigeo (departamento, provincia, distrito) values ('Puno','El Collao
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','El Collao','Pilcuyo');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','El Collao','Santa Rosa');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','El Collao','Conduriri');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','HuancanÈ','Huancane');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','HuancanÈ','Cojata');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','HuancanÈ','Huatasani');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','HuancanÈ','Inchupalla');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','HuancanÈ','Pusi');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','HuancanÈ','Rosaspata');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','HuancanÈ','Taraco');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','HuancanÈ','Vilque Chico');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Huancan√©','Huancane');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Huancan√©','Cojata');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Huancan√©','Huatasani');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Huancan√©','Inchupalla');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Huancan√©','Pusi');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Huancan√©','Rosaspata');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Huancan√©','Taraco');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Huancan√©','Vilque Chico');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Lampa','Lampa');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Lampa','Cabanilla');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Lampa','Calapuja');
@@ -1752,7 +2128,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Puno','Melgar','
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Melgar','Cupi');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Melgar','Llalli');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Melgar','Macari');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','Melgar','NuÒoa');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','Melgar','Nu√±oa');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Melgar','Orurillo');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Melgar','Santa Rosa');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Melgar','Umachiri');
@@ -1765,11 +2141,11 @@ insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Anton
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Antonio de Putina','Pedro Vilca Apaza');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Antonio de Putina','Quilcapuncu');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Antonio de Putina','Sina');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Rom·n','Juliaca');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Rom·n','Cabana');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Rom·n','Cabanillas');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Rom·n','Caracoto');
-insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Rom·n','San Miguel');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Rom√°n','Juliaca');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Rom√°n','Cabana');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Rom√°n','Cabanillas');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Rom√°n','Caracoto');
+insert into ubigeo (departamento, provincia, distrito) values ('Puno','San Rom√°n','San Miguel');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Sandia','Sandia');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Sandia','Cuyocuyo');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Sandia','Limbani');
@@ -1787,83 +2163,83 @@ insert into ubigeo (departamento, provincia, distrito) values ('Puno','Yunguyo',
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Yunguyo','Ollaraya');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Yunguyo','Tinicachi');
 insert into ubigeo (departamento, provincia, distrito) values ('Puno','Yunguyo','Unicachi');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Moyobamba','Moyobamba');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Moyobamba','Calzada');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Moyobamba','Habana');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Moyobamba','Jepelacio');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Moyobamba','Soritor');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Moyobamba','Yantalo');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Bellavista','Bellavista');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Bellavista','Alto Biavo');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Bellavista','Bajo Biavo');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Bellavista','Huallaga');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Bellavista','San Pablo');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Bellavista','San Rafael');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','El Dorado','San JosÈ de Sisa');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','El Dorado','Agua Blanca');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','El Dorado','San MartÌn');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','El Dorado','Santa Rosa');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','El Dorado','Shatoja');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Huallaga','Saposoa');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Huallaga','Alto Saposoa');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Huallaga','El EslabÛn');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Huallaga','Piscoyacu');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Huallaga','Sacanche');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Huallaga','Tingo de Saposoa');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Lamas','Lamas');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Lamas','Alonso de Alvarado');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Lamas','Barranquita');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Lamas','Caynarachi');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Lamas','CuÒumbuqui');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Lamas','Pinto Recodo');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Lamas','Rumisapa');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Lamas','San Roque de Cumbaza');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Lamas','Shanao');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Lamas','Tabalosos');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Lamas','Zapatero');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Mariscal C·ceres','JuanjuÌ');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Mariscal C·ceres','Campanilla');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Mariscal C·ceres','Huicungo');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Mariscal C·ceres','Pachiza');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Mariscal C·ceres','Pajarillo');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Picota','Picota');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Picota','Buenos Aires');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Picota','Caspisapa');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Picota','Pilluana');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Picota','Pucacaca');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Picota','San CristÛbal');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Picota','San HilariÛn');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Picota','Shamboyacu');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Picota','Tingo de Ponasa');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Picota','Tres Unidos');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Rioja','Rioja');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Rioja','Awajun');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Rioja','ElÌas Soplin Vargas');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Rioja','Nueva Cajamarca');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Rioja','Pardo Miguel');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Rioja','Posic');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Rioja','San Fernando');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Rioja','Yorongos');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Rioja','Yuracyacu');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','Tarapoto');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','Alberto Leveau');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','Cacatachi');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','Chazuta');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','Chipurana');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','El Porvenir');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','Huimbayoc');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','Juan Guerra');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','La Banda de Shilcayo');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','Morales');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','Papaplaya');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','San Antonio');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','Sauce');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','San MartÌn','Shapaja');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Tocache','Tocache');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Tocache','Nuevo Progreso');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Tocache','Polvora');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Tocache','Shunte');
-insert into ubigeo (departamento, provincia, distrito) values ('San MartÌn','Tocache','Uchiza');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Moyobamba','Moyobamba');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Moyobamba','Calzada');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Moyobamba','Habana');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Moyobamba','Jepelacio');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Moyobamba','Soritor');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Moyobamba','Yantalo');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Bellavista','Bellavista');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Bellavista','Alto Biavo');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Bellavista','Bajo Biavo');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Bellavista','Huallaga');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Bellavista','San Pablo');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Bellavista','San Rafael');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','El Dorado','San Jos√© de Sisa');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','El Dorado','Agua Blanca');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','El Dorado','San Mart√≠n');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','El Dorado','Santa Rosa');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','El Dorado','Shatoja');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Huallaga','Saposoa');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Huallaga','Alto Saposoa');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Huallaga','El Eslab√≥n');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Huallaga','Piscoyacu');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Huallaga','Sacanche');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Huallaga','Tingo de Saposoa');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Lamas','Lamas');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Lamas','Alonso de Alvarado');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Lamas','Barranquita');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Lamas','Caynarachi');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Lamas','Cu√±umbuqui');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Lamas','Pinto Recodo');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Lamas','Rumisapa');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Lamas','San Roque de Cumbaza');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Lamas','Shanao');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Lamas','Tabalosos');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Lamas','Zapatero');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Mariscal C√°ceres','Juanju√≠');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Mariscal C√°ceres','Campanilla');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Mariscal C√°ceres','Huicungo');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Mariscal C√°ceres','Pachiza');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Mariscal C√°ceres','Pajarillo');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Picota','Picota');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Picota','Buenos Aires');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Picota','Caspisapa');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Picota','Pilluana');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Picota','Pucacaca');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Picota','San Crist√≥bal');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Picota','San Hilari√≥n');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Picota','Shamboyacu');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Picota','Tingo de Ponasa');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Picota','Tres Unidos');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Rioja','Rioja');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Rioja','Awajun');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Rioja','El√≠as Soplin Vargas');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Rioja','Nueva Cajamarca');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Rioja','Pardo Miguel');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Rioja','Posic');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Rioja','San Fernando');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Rioja','Yorongos');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Rioja','Yuracyacu');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','Tarapoto');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','Alberto Leveau');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','Cacatachi');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','Chazuta');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','Chipurana');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','El Porvenir');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','Huimbayoc');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','Juan Guerra');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','La Banda de Shilcayo');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','Morales');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','Papaplaya');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','San Antonio');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','Sauce');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','San Mart√≠n','Shapaja');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Tocache','Tocache');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Tocache','Nuevo Progreso');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Tocache','Polvora');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Tocache','Shunte');
+insert into ubigeo (departamento, provincia, distrito) values ('San Mart√≠n','Tocache','Uchiza');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tacna','Tacna');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tacna','Alto de la Alianza');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tacna','Calana');
@@ -1873,7 +2249,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tacna','
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tacna','Palca');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tacna','Pocollay');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tacna','Sama');
-insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tacna','Coronel Gregorio AlbarracÌn Lanchipa');
+insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tacna','Coronel Gregorio Albarrac√≠n Lanchipa');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tacna','La Yarada los Palos');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Candarave','Candarave');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Candarave','Cairani');
@@ -1885,7 +2261,7 @@ insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Jorge Ba
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Jorge Basadre','Ilabaya');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Jorge Basadre','Ite');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tarata','Tarata');
-insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tarata','HÈroes AlbarracÌn');
+insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tarata','H√©roes Albarrac√≠n');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tarata','Estique');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tarata','Estique-Pampa');
 insert into ubigeo (departamento, provincia, distrito) values ('Tacna','Tarata','Sitajara');
@@ -1921,153 +2297,5 @@ insert into ubigeo (departamento, provincia, distrito) values ('Ucayali','Padre 
 insert into ubigeo (departamento, provincia, distrito) values ('Ucayali','Padre Abad','Curimana');
 insert into ubigeo (departamento, provincia, distrito) values ('Ucayali','Padre Abad','Neshuya');
 insert into ubigeo (departamento, provincia, distrito) values ('Ucayali','Padre Abad','Alexander Von Humboldt');
-insert into ubigeo (departamento, provincia, distrito) values ('Ucayali','Pur˙s','Purus');
+insert into ubigeo (departamento, provincia, distrito) values ('Ucayali','Pur√∫s','Purus');
 
-
--- Table: public.comercio
-
--- DROP TABLE public.comercio;
-
-CREATE TABLE public.comercio
-(
-    id serial NOT NULL,
-    nombre character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    ruc character varying(11) COLLATE pg_catalog."default" NOT NULL,
-    correo character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    telefono character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    nombrerepres character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    correorepres character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    telefonorepres character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    activo boolean NOT NULL DEFAULT true,
-    idusuariocreacion integer NOT NULL DEFAULT 0,
-    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    idusuariomodificacion integer NOT NULL DEFAULT 0,
-    fechahoramodificacion timestamp without time zone,
-    CONSTRAINT "comercio_pkey" PRIMARY KEY (id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.comercio
-    OWNER to postgres;
-
--- Table: public.marca
-
--- DROP TABLE public.marca;
-
-CREATE TABLE public.marca
-(
-    id serial NOT NULL,
-    nombre character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    descripcion character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    activo boolean NOT NULL DEFAULT true,
-    idusuariocreacion integer NOT NULL DEFAULT 0,
-    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    idusuariomodificacion integer NOT NULL DEFAULT 0,
-    fechahoramodificacion timestamp without time zone,
-    CONSTRAINT marca_pkey PRIMARY KEY (id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.marca
-    OWNER to postgres;
-
--- Table: public.tipoprenda
-
--- DROP TABLE public.tipoprenda;
-
-CREATE TABLE public.tipoprenda
-(
-    id serial NOT NULL,
-    nombre character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    descripcion character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    activo boolean NOT NULL DEFAULT true,
-    idusuariocreacion integer NOT NULL DEFAULT 0,
-    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    idusuariomodificacion integer NOT NULL DEFAULT 0,
-    fechahoramodificacion timestamp without time zone,
-    CONSTRAINT tipoprenda_pkey PRIMARY KEY (id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.tipoprenda
-    OWNER to postgres;
-    
--- Table: public.prenda
-
--- DROP TABLE public.prenda;
-
-CREATE TABLE public.prenda
-(
-    id serial NOT NULL,
-    nombre character varying(500) COLLATE pg_catalog."default" NOT NULL,
-    descripcion character varying(500) COLLATE pg_catalog."default" NOT NULL,
-	modelo character varying(100) COLLATE pg_catalog."default" NOT NULL,
-	genero character varying(100) COLLATE pg_catalog."default" NOT NULL,
-	color character varying(100) COLLATE pg_catalog."default" NOT NULL,
-	talla character varying(100) COLLATE pg_catalog."default" NOT NULL,
-	precio float NOT NULL DEFAULT 0,
-	stock integer NOT NULL DEFAULT 0,
-	marca_id integer REFERENCES marca(id) NOT NULL DEFAULT 0,
-	comercio_id integer REFERENCES comercio(id) NOT NULL DEFAULT 0,
-	tipoprenda_id integer REFERENCES tipoprenda(id) NOT NULL DEFAULT 0,
-    activo boolean NOT NULL DEFAULT true,
-    idusuariocreacion integer NOT NULL DEFAULT 0,
-    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    idusuariomodificacion integer NOT NULL DEFAULT 0,
-    fechahoramodificacion timestamp without time zone,
-    CONSTRAINT prenda_pkey PRIMARY KEY (id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.prenda
-    OWNER to postgres;
-    
-CREATE TABLE public.usuario
-(
-    id serial NOT NULL,
-    nombre character varying(100) COLLATE pg_catalog."default" NOT NULL,
-	apellido character varying(100) COLLATE pg_catalog."default" NOT NULL,
-	correo character varying(100) COLLATE pg_catalog."default" NOT NULL,
-	contrasena character varying(100) COLLATE pg_catalog."default" NOT NULL,
-	genero character varying(100) COLLATE pg_catalog."default",
-	telefono character varying(100) COLLATE pg_catalog."default",
-	direccion character varying(100) COLLATE pg_catalog."default",
-	tipdocumento character varying(100) COLLATE pg_catalog."default",
-	coddocumento character varying(100) COLLATE pg_catalog."default",
-	referencia character varying(500) COLLATE pg_catalog."default",
-	premium boolean NOT NULL DEFAULT false,
-	numaseslibres integer NOT NULL DEFAULT 0,
-	calificacion integer NOT NULL DEFAULT 0,
-    fechnacimiento timestamp without time zone,
-	fechaltapremium timestamp without time zone,
-	fechbajapremium timestamp without time zone,
-	perfil_id integer REFERENCES perfil(id) NOT NULL DEFAULT 0,
-	ubigeo_id integer REFERENCES ubigeo(id) NOT NULL DEFAULT 0,
-	activo boolean NOT NULL DEFAULT true,
-    idusuariocreacion integer NOT NULL DEFAULT 0,
-    fechahoracreacion timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    idusuariomodificacion integer NOT NULL DEFAULT 0,
-    fechahoramodificacion timestamp without time zone,
-    CONSTRAINT usuario_pkey PRIMARY KEY (id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.usuario
-    OWNER to postgres;
-    
-    

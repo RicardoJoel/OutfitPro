@@ -15,7 +15,7 @@ public class Prenda extends Seguridad implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="nombre", nullable=false, length=500)
+	@Column(name="nombre", nullable=false, length=100)
 	private String nombre;
 	
 	@Column(name="descripcion", nullable=false, length=500)
@@ -27,12 +27,6 @@ public class Prenda extends Seguridad implements Serializable {
 	@Column(name="genero", nullable=false, length=100)
 	private String genero;
 	
-	@Column(name="color", nullable=false, length=100)
-	private String color;
-	
-	@Column(name="talla", nullable=false, length=100)
-	private String talla;
-	
 	@Column(name="precio", nullable=false)
 	private float precio;
 	
@@ -40,29 +34,35 @@ public class Prenda extends Seguridad implements Serializable {
 	private int stock;
 	
 	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Marca marca = new Marca();
+	private Talla talla;
 	
 	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Comercio comercio = new Comercio();
+	private Color color;
 	
 	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private TipoPrenda tipoPrenda = new TipoPrenda();
+	private Marca marca;
+	
+	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private Comercio comercio;
+	
+	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private TipoPrenda tipoPrenda;
 	
 	public Prenda() {
 		super();
 	}
 
-	public Prenda(String nombre, String descripcion, String modelo, String genero, String color, String talla,
-			float precio, int stock, Marca marca, Comercio comercio, TipoPrenda tipoPrenda) {
+	public Prenda(String nombre, String descripcion, String modelo, String genero, float precio, int stock, Talla talla,
+			Color color, Marca marca, Comercio comercio, TipoPrenda tipoPrenda) {
 		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.modelo = modelo;
 		this.genero = genero;
-		this.color = color;
-		this.talla = talla;
 		this.precio = precio;
 		this.stock = stock;
+		this.talla = talla;
+		this.color = color;
 		this.marca = marca;
 		this.comercio = comercio;
 		this.tipoPrenda = tipoPrenda;
@@ -91,29 +91,13 @@ public class Prenda extends Seguridad implements Serializable {
 	public void setModelo(String modelo) {
 		this.modelo = modelo;
 	}
-	
+
 	public String getGenero() {
 		return genero;
 	}
 
 	public void setGenero(String genero) {
 		this.genero = genero;
-	}
-	
-	public String getColor() {
-		return color;
-	}
-
-	public void setColor(String color) {
-		this.color = color;
-	}
-	
-	public String getTalla() {
-		return talla;
-	}
-
-	public void setTalla(String talla) {
-		this.talla = talla;
 	}
 
 	public float getPrecio() {
@@ -130,6 +114,22 @@ public class Prenda extends Seguridad implements Serializable {
 
 	public void setStock(int stock) {
 		this.stock = stock;
+	}
+
+	public Talla getTalla() {
+		return talla;
+	}
+
+	public void setTalla(Talla talla) {
+		this.talla = talla;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	public Marca getMarca() {

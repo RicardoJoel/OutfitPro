@@ -31,7 +31,7 @@
 
 			<p:inputText autocomplete="off" id="nombre"
 				styleClass="form-control"
-				value="#{prendaController.prenda.nombre}" maxlength="500"
+				value="#{prendaController.prenda.nombre}" maxlength="100"
 				required="true" />
 
 			<h:outputLabel for="descripcion" value="Descripción"
@@ -47,7 +47,7 @@
 				
 			<p:inputText autocomplete="off" id="tipoPrenda"
 				styleClass="form-control"
-				value="#{prendaController.prenda.tipoPrenda.nombre}" 
+				value="#{prendaController.prenda.tipoPrenda.nombre}" maxlength="100"
 				required="true" />
 			
 			<h:outputLabel for="marca" value="Marca"
@@ -55,7 +55,7 @@
 				
 			<p:inputText autocomplete="off" id="marca"
 				styleClass="form-control"
-				value="#{prendaController.prenda.marca.nombre}"
+				value="#{prendaController.prenda.marca.nombre}" maxlength="100"
 				required="true" />
 				
 			<h:outputLabel for="modelo" value="Modelo"
@@ -79,7 +79,7 @@
 
 			<p:inputText autocomplete="off" id="color"
 				styleClass="form-control"
-				value="#{prendaController.prenda.color}" maxlength="100"
+				value="#{prendaController.prenda.color.nombre}" maxlength="100"
 				required="true" />
 					
 			<h:outputLabel for="talla" value="Talla"
@@ -87,7 +87,7 @@
 
 			<p:inputText autocomplete="off" id="talla"
 				styleClass="form-control"
-				value="#{prendaController.prenda.talla}" maxlength="100"
+				value="#{prendaController.prenda.talla.nombre}" maxlength="100"
 				required="true" />
 				
 			<h:outputLabel for="precio" value="Precio (S/)"

@@ -28,32 +28,32 @@ public class Usuario extends Seguridad implements Serializable {
 	@Column(name="contrasena", nullable=false, length=100)
 	private String contrasena;
 	
-	@Column(name="genero", nullable=true, length=100)
+	@Column(name="genero", nullable=false, length=100)
 	private String genero;
 	
-	@Column(name="telefono", nullable=true, length=100)
+	@Column(name="telefono", nullable=false, length=100)
 	private String telefono;
 	
-	@Column(name="direccion", nullable=true, length=100)
+	@Column(name="direccion", nullable=false, length=100)
 	private String direccion;
 	
-	@Column(name="tipdocumento", nullable=true, length=100)
+	@Column(name="tipdocumento", nullable=false, length=100)
 	private String tipDocumento;
 	
-	@Column(name="coddocumento", nullable=true, length=100)
+	@Column(name="coddocumento", nullable=false, length=100)
 	private String codDocumento;
 	
-	@Column(name="referencia", nullable=true, length=500)
+	@Column(name="referencia", nullable=false, length=500)
 	private String referencia;
 	
 	@Column(name="premium", nullable=false)
-	private Boolean premium = false;
+	private Boolean premium;
 	
-	@Column(name="numaseslibres", nullable=false)
-	private int numAsesLibres;
+	@Column(name="aseslibres", nullable=false)
+	private int asesLibres;
 	
-	@Column(name="calificacion", nullable=true)
-	private int calificacion;
+	@Column(name="valoracion", nullable=false)
+	private int valoracion;
 	
 	@Column(name="fechnacimiento", nullable=true)
 	private Date fechNacimiento;
@@ -65,10 +65,10 @@ public class Usuario extends Seguridad implements Serializable {
 	private Date fechBajaPremium;
 	
 	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Perfil perfil = new Perfil();
+	private Perfil perfil;
 	
 	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Ubigeo ubigeo = new Ubigeo();
+	private Ubigeo ubigeo;
 	
 	public Usuario() {
 		super();
@@ -76,7 +76,7 @@ public class Usuario extends Seguridad implements Serializable {
 
 	public Usuario(String nombre, String apellido, String correo, String contrasena, String genero, String telefono,
 			String direccion, String tipDocumento, String codDocumento, String referencia, Boolean premium,
-			int numAsesLibres, int calificacion, Date fechNacimiento, Date fechAltaPremium, Date fechBajaPremium,
+			int asesLibres, int valoracion, Date fechNacimiento, Date fechAltaPremium, Date fechBajaPremium,
 			Perfil perfil, Ubigeo ubigeo) {
 		super();
 		this.nombre = nombre;
@@ -90,8 +90,8 @@ public class Usuario extends Seguridad implements Serializable {
 		this.codDocumento = codDocumento;
 		this.referencia = referencia;
 		this.premium = premium;
-		this.numAsesLibres = numAsesLibres;
-		this.calificacion = calificacion;
+		this.asesLibres = asesLibres;
+		this.valoracion = valoracion;
 		this.fechNacimiento = fechNacimiento;
 		this.fechAltaPremium = fechAltaPremium;
 		this.fechBajaPremium = fechBajaPremium;
@@ -187,20 +187,20 @@ public class Usuario extends Seguridad implements Serializable {
 		this.premium = premium;
 	}
 
-	public int getNumAsesLibres() {
-		return numAsesLibres;
+	public int getAsesLibres() {
+		return asesLibres;
 	}
 
-	public void setNumAsesLibres(int numAsesLibres) {
-		this.numAsesLibres = numAsesLibres;
+	public void setAsesLibres(int asesLibres) {
+		this.asesLibres = asesLibres;
 	}
 
-	public int getCalificacion() {
-		return calificacion;
+	public int getValoracion() {
+		return valoracion;
 	}
 
-	public void setCalificacion(int calificacion) {
-		this.calificacion = calificacion;
+	public void setValoracion(int valoracion) {
+		this.valoracion = valoracion;
 	}
 
 	public Date getFechNacimiento() {
@@ -242,5 +242,5 @@ public class Usuario extends Seguridad implements Serializable {
 	public void setUbigeo(Ubigeo ubigeo) {
 		this.ubigeo = ubigeo;
 	}
-
+	
 }

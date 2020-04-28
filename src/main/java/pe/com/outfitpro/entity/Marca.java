@@ -12,7 +12,7 @@ public class Marca extends Seguridad implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="nombre", nullable=false, length=500)
+	@Column(name="nombre", nullable=false, length=100)
 	private String nombre;
 	
 	@Column(name="descripcion", nullable=false, length=500)

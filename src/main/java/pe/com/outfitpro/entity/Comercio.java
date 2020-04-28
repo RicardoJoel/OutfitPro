@@ -12,40 +12,41 @@ public class Comercio extends Seguridad implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="nombre", nullable=false, length=500)
+	@Column(name="nombre", nullable=false, length=100)
 	private String nombre;
 	
 	@Column(name="ruc", nullable=false, length=11)
 	private String ruc;
 	
-	@Column(name="correo", nullable=false, length=500)
+	@Column(name="correo", nullable=false, length=100)
 	private String correo;
 	
-	@Column(name="telefono", nullable=false, length=500)
+	@Column(name="telefono", nullable=false, length=100)
 	private String telefono;
 	
-	@Column(name="nombrerepres", nullable=false, length=500)
-	private String nombreRepres;
+	@Column(name="nombrecontacto", nullable=false, length=100)
+	private String nombreContacto;
 	
-	@Column(name="correorepres", nullable=false, length=500)
-	private String correoRepres;
+	@Column(name="correocontacto", nullable=false, length=100)
+	private String correoContacto;
 	
-	@Column(name="telefonorepres", nullable=false, length=500)
-	private String telefonoRepres;
+	@Column(name="telefonocontacto", nullable=false, length=100)
+	private String telefonoContacto;
 	
 	public Comercio() {
 		super();
 	}
 
-	public Comercio(String nombre, String ruc, String correo, String telefono, String nombreRepres, String correoRepres, String telefonoRepres) {
+	public Comercio(String nombre, String ruc, String correo, String telefono, String nombreContacto,
+			String correoContacto, String telefonoContacto) {
 		super();
 		this.nombre = nombre;
 		this.ruc = ruc;
 		this.correo = correo;
 		this.telefono = telefono;
-		this.nombreRepres = nombreRepres;
-		this.correoRepres = correoRepres;
-		this.telefonoRepres = telefonoRepres;
+		this.nombreContacto = nombreContacto;
+		this.correoContacto = correoContacto;
+		this.telefonoContacto = telefonoContacto;
 	}
 
 	public String getNombre() {
@@ -80,28 +81,28 @@ public class Comercio extends Seguridad implements Serializable {
 		this.telefono = telefono;
 	}
 
-	public String getNombreRepres() {
-		return nombreRepres;
+	public String getNombreContacto() {
+		return nombreContacto;
 	}
 
-	public void setNombreRepres(String nombreRepres) {
-		this.nombreRepres = nombreRepres;
+	public void setNombreContacto(String nombreContacto) {
+		this.nombreContacto = nombreContacto;
 	}
 
-	public String getCorreoRepres() {
-		return correoRepres;
+	public String getCorreoContacto() {
+		return correoContacto;
 	}
 
-	public void setCorreoRepres(String correoRepres) {
-		this.correoRepres = correoRepres;
-	}
-	
-	public String getTelefonoRepres() {
-		return telefonoRepres;
+	public void setCorreoContacto(String correoContacto) {
+		this.correoContacto = correoContacto;
 	}
 
-	public void setTelefonoRepres(String telefonoRepres) {
-		this.telefonoRepres = telefonoRepres;
+	public String getTelefonoContacto() {
+		return telefonoContacto;
+	}
+
+	public void setTelefonoContacto(String telefonoContacto) {
+		this.telefonoContacto = telefonoContacto;
 	}
 
 }

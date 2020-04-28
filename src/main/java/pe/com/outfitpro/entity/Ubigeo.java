@@ -12,24 +12,40 @@ public class Ubigeo extends Seguridad implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="departamento", nullable=false, length=500)
-	private String departamento;
+	@Column(name="distrito", nullable=false, length=100)
+	private String distrito;
 	
-	@Column(name="provincia", nullable=false, length=500)
+	@Column(name="provincia", nullable=false, length=100)
 	private String provincia;
 	
-	@Column(name="distrito", nullable=false, length=500)
-	private String distrito;
+	@Column(name="departamento", nullable=false, length=100)
+	private String departamento;
 	
 	public Ubigeo() {
 		super();
 	}
 
-	public Ubigeo(String departamento, String provincia, String distrito) {
+	public Ubigeo(String distrito, String provincia, String departamento) {
 		super();
-		this.departamento = departamento;
-		this.provincia = provincia;
 		this.distrito = distrito;
+		this.provincia = provincia;
+		this.departamento = departamento;
+	}
+
+	public String getDistrito() {
+		return distrito;
+	}
+
+	public void setDistrito(String distrito) {
+		this.distrito = distrito;
+	}
+
+	public String getProvincia() {
+		return provincia;
+	}
+
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
 	}
 
 	public String getDepartamento() {
@@ -38,22 +54,6 @@ public class Ubigeo extends Seguridad implements Serializable {
 
 	public void setDepartamento(String departamento) {
 		this.departamento = departamento;
-	}
-	
-	public String getProvincia() {
-		return provincia;
-	}
-
-	public void setProvincia(String provincia) {
-		this.provincia = provincia;
-	}
-	
-	public String getDistrito() {
-		return distrito;
-	}
-
-	public void setDistrito(String distrito) {
-		this.distrito = distrito;
 	}
 	
 }

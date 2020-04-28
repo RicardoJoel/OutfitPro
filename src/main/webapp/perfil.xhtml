@@ -31,7 +31,7 @@
 
 			<p:inputText autocomplete="off" id="nombre"
 				styleClass="form-control"
-				value="#{perfilController.perfil.nombre}" maxlength="500"
+				value="#{perfilController.perfil.nombre}" maxlength="100"
 				required="true" />
 
 			<h:outputLabel for="descripcion" value="Descripción"
@@ -45,10 +45,10 @@
 			<h:outputLabel for="nivelAcceso" value="Nivel de acceso"
 				styleClass="control-label" />
 				
-			<p:inputText autocomplete="off" id="nivelAcceso"
-				styleClass="form-control"
-				value="#{perfilController.perfil.nivelAcceso}" 
-				required="true" />
+			<p:spinner autocomplete="off" id="nivelAcceso" 
+                styleClass="form-control"
+                value="#{perfilController.perfil.nivelAcceso}" min="1" max="5"
+                required="true" />  	
 
 			<br />
 

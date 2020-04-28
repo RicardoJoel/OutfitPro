@@ -12,14 +12,14 @@ public class Perfil extends Seguridad implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="nombre", nullable=false, length=500)
+	@Column(name="nombre", nullable=false, length=100)
 	private String nombre;
 	
 	@Column(name="descripcion", nullable=false, length=500)
 	private String descripcion;
 	
 	@Column(name="nivelacceso", nullable=false)
-	private int nivelAcceso = 1;
+	private int nivelAcceso;
 	
 	public Perfil() {
 		super();
