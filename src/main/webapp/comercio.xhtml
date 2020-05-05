@@ -18,82 +18,68 @@
 
 	<ui:define name="content">
 		<h:form>
-			<!-- h:outputLabel for="id" value="Id" 
-				styleClass="control-label" />
-
-			<p:inputText autocomplete="off" id="id"
-				styleClass="form-control" 
-				value="#{comercioController.comercio.id}"
-				required="true" /-->
+			<h:inputHidden id="id" value="#{comercioController.comercio.id}"/>
 						
 			<h:outputLabel for="nombre" value="Nombre"
-				styleClass="control-label" />
-
+				styleClass="control-label"/>
 			<p:inputText autocomplete="off" id="nombre"
 				styleClass="form-control"
 				value="#{comercioController.comercio.nombre}" maxlength="100"
-				required="true" />
+				required="true"/>
 
 			<h:outputLabel for="ruc" value="R.U.C."
-				styleClass="control-label" />
-
+				styleClass="control-label"/>
 			<p:inputText autocomplete="off" id="ruc"
 				styleClass="form-control"
 				value="#{comercioController.comercio.ruc}" maxlength="11"
-				required="true" />
+				required="true"/>
 			
 			<h:outputLabel for="correo" value="Correo"
-				styleClass="control-label" />
-				
+				styleClass="control-label"/>	
 			<p:inputText autocomplete="off" id="correo"
 				styleClass="form-control"
 				value="#{comercioController.comercio.correo}" maxlength="100"
-				required="true" />
+				required="false"/>
 				
 			<h:outputLabel for="telefono" value="Teléfono"
-				styleClass="control-label" />
-
+				styleClass="control-label"/>
 			<p:inputText autocomplete="off" id="telefono"
 				styleClass="form-control"
 				value="#{comercioController.comercio.telefono}" maxlength="100"
-				required="true" />
+				required="false"/>
 				
-			<h:outputLabel for="nombreContacto" value="Nombre del contacto"
-				styleClass="control-label" />
-				
+			<h:outputLabel for="nombreContacto" value="Contacto"
+				styleClass="control-label"/>
 			<p:inputText autocomplete="off" id="nombreContacto"
 				styleClass="form-control"
 				value="#{comercioController.comercio.nombreContacto}" maxlength="100"
-				required="true" />
+				required="false"/>
 							
 			<h:outputLabel for="correoContacto" value="Correo del contacto"
-				styleClass="control-label" />
-				
+				styleClass="control-label"/>
 			<p:inputText autocomplete="off" id="correoContacto"
 				styleClass="form-control"
 				value="#{comercioController.comercio.correoContacto}" maxlength="100"
-				required="true" />
+				required="false"/>
 				
 			<h:outputLabel for="telefonoContacto" value="Teléfono del contacto"
-				styleClass="control-label" />
-
+				styleClass="control-label"/>
 			<p:inputText autocomplete="off" id="telefonoContacto"
 				styleClass="form-control"
 				value="#{comercioController.comercio.telefonoContacto}" maxlength="100"
-				required="true" />
+				required="false"/>
 				
-			<br />
+			<br/>
 
-			<p:commandButton value="Grabar"
+			<p:commandButton value="Guardar"
 				actionListener="#{comercioController.insertar()}"
-				styleClass="btn btn-primary " update="@form"
-				action="listComercio?faces-redirect=true" />
-				
+				styleClass="btn btn-primary" update="@form"
+				action="listComercio?faces-redirect=true"/>	
 			<p:commandButton value="Cancelar"
 				action="listComercio?faces-redirect=true" immediate="true"
-				styleClass="btn btn-default" ajax="false" />
+				styleClass="btn btn-default" ajax="false"/>
 
-			<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000"/>
 		</h:form>
 	</ui:define>
 

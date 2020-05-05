@@ -18,50 +18,54 @@ public class DescuentoController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Inject
-	private IDescuentoService service;
-	private Descuento objeto;
-	private List<Descuento> lista;
+	private IDescuentoService srvDescuento;
+	private Descuento descuento;
+	private List<Descuento> listaDescuento;
 	
 	@PostConstruct
 	public void init() {
-		this.lista = new ArrayList<Descuento>();
-		this.objeto = new Descuento();
-		this.listar();
+		this.descuento = new Descuento();
+		this.listaDescuento = new ArrayList<Descuento>();
+		this.listarDescuentos();
 	}
 	
-	public String nuevoDescuento() {
+	public String nuevo() {
 		this.setDescuento(new Descuento());
 		return "descuento.xhtml";
 	}
 
+	public String editar(Descuento descuento) {
+		this.setDescuento(descuento);
+		return "descuento.xhtml";
+	}
+
+	public void limpiar() {
+		this.init();
+	}
+	
 	public void insertar() {
 		try {
-			objeto.setIdUsuarioCreacion(1);
-			service.insertar(objeto);
+			srvDescuento.insertar(descuento);
 			limpiar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
-	public void listar() {
+
+	public void eliminar(Descuento descuento) {
 		try {
-			lista = service.listar();
+			srvDescuento.eliminar(descuento.getId());
+			listarDescuentos();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
-	public void limpiar() {
-		this.init();
-	}
-	
-	public void eliminar(Descuento objeto) {
+
+	public void listarDescuentos() {
 		try {
-			service.eliminar(objeto.getId());
-			listar();
+			listaDescuento = srvDescuento.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
@@ -69,18 +73,19 @@ public class DescuentoController implements Serializable {
 	}
 	
 	public Descuento getDescuento() {
-		return objeto;
+		return descuento;
 	}
 
-	public void setDescuento(Descuento objeto) {
-		this.objeto = objeto;
+	public void setDescuento(Descuento descuento) {
+		this.descuento = descuento;
 	}
 
-	public List<Descuento> getLista() {
-		return lista;
+	public List<Descuento> getListaDescuento() {
+		return listaDescuento;
 	}
 
-	public void setLista(List<Descuento> lista) {
-		this.lista = lista;
+	public void setListaDescuento(List<Descuento> listaDescuento) {
+		this.listaDescuento = listaDescuento;
 	}
+
 }

@@ -4,7 +4,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui" >
+	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="master.xhtml">
 
@@ -23,8 +23,8 @@
 					<div class="form-group box-main-btn">
 						<span style="display:block; height:30px;"></span>
 						<p:commandButton value="Nuevo"
-							action="#{marcaController.nuevoMarca()}"
-							styleClass="btn btn-primary" ajax="false" />
+							action="#{marcaController.nuevo()}"
+							styleClass="btn btn-primary" ajax="false"/>
 					</div>
 				</div>
 			</div>
@@ -33,27 +33,29 @@
 				<div class="col-sm-12">
 					<div class="form-group table-responsive box-table-class">
 						<p:dataTable id="lstMarca" var="mrk"
-							value="#{marcaController.lista}" paginator="true"
+							value="#{marcaController.listaMarca}" paginator="true"
 							paginatorPosition="top" rowsPerPageTemplate="10,20,30,40,50"
 							rows="10" styleClass="table table-bordered"
 							emptyMessage="No existen registros" rowIndexVar="item"
 							style="margin-bottom:0">
 
 							<p:column headerText="Id" sortBy="#{mrk.id}">
-								<h:outputText value="#{mrk.id}" />
+								<h:outputText value="#{mrk.id}"/>
 							</p:column>
 
 							<p:column headerText="Nombre" sortBy="#{mrk.nombre}">
-								<h:outputText value="#{mrk.nombre}" />
+								<h:outputText value="#{mrk.nombre}"/>
 							</p:column>
 							
 							<p:column headerText="Descripción" sortBy="#{mrk.descripcion}">
-								<h:outputText value="#{mrk.descripcion}" />
+								<h:outputText value="#{mrk.descripcion}"/>
 							</p:column>
 							
 							<p:column headerText="Operación" exportable="false">
+								<h:commandLink action="marca" value="Editar	"
+									actionListener="#{marcaController.editar(mrk)}"/>
 								<h:commandLink action="listMarca" value="Eliminar"
-									actionListener="#{marcaController.eliminar(mrk)}" />
+									actionListener="#{marcaController.eliminar(mrk)}"/>
 							</p:column>
 						</p:dataTable>
 					</div>

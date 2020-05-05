@@ -22,7 +22,7 @@ public class DescuentoDaoImpl implements IDescuentoDao, Serializable {
 	@Override
 	public void insertar(Descuento obj) {
 		try {
-			em.persist(obj);
+			em.merge(obj);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());

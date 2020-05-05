@@ -17,115 +17,131 @@
 	</ui:define>
 
 	<ui:define name="content">
-		<h:form>
-			<!-- h:outputLabel for="id" value="Id" 
-				styleClass="control-label" />
-
-			<p:inputText autocomplete="off" id="id"
-				styleClass="form-control" 
-				value="#{prendaController.prenda.id}"
-				required="true" /-->
-						
+		<h:form enctype="multipart/form-data">
+			<h:inputHidden id="id" value="#{prendaController.prenda.id}"/>
+			<h:inputHidden id="imagen" value="#{prendaController.prenda.imagen}"/>
+			
 			<h:outputLabel for="nombre" value="Nombre"
-				styleClass="control-label" />
-
+				styleClass="control-label"/>
 			<p:inputText autocomplete="off" id="nombre"
 				styleClass="form-control"
 				value="#{prendaController.prenda.nombre}" maxlength="100"
-				required="true" />
-
+				required="true"/>
+				
 			<h:outputLabel for="descripcion" value="Descripción"
-				styleClass="control-label" />
-
+				styleClass="control-label"/>
 			<p:inputText autocomplete="off" id="descripcion"
 				styleClass="form-control"
 				value="#{prendaController.prenda.descripcion}" maxlength="500"
-				required="true" />
-								
+				required="false"/>
+
+			<h:outputLabel for="genero" value="Género"
+				styleClass="control-label"/>
+			<h:selectOneMenu value = "#{prendaController.prenda.genero}"
+				styleClass="form-control" required="true">
+   				<f:selectItem itemValue="Hombre" itemLabel="Hombre"/>
+				<f:selectItem itemValue="Mujer" itemLabel="Mujer"/> 
+				<f:selectItem itemValue="Unisex" itemLabel="Unisex"/>
+			</h:selectOneMenu>
+											
 			<h:outputLabel for="tipoPrenda" value="Tipo de prenda"
-				styleClass="control-label" />
-				
-			<p:inputText autocomplete="off" id="tipoPrenda"
+				styleClass="control-label"/><br/>
+			<p:selectOneMenu id="tipoPrenda" 
 				styleClass="form-control"
-				value="#{prendaController.prenda.tipoPrenda.nombre}" maxlength="100"
-				required="true" />
+				value="#{prendaController.prenda.tipoPrenda}"
+				converter="omnifaces.SelectItemsConverter">
+				<f:selectItems value="#{prendaController.listaTipoPrenda}" var="m"
+					itemLabel="#{m.nombre}" itemValue="#{m}"/>
+			</p:selectOneMenu><br/>
 			
 			<h:outputLabel for="marca" value="Marca"
-				styleClass="control-label" />
-				
-			<p:inputText autocomplete="off" id="marca"
+				styleClass="control-label"/><br/>
+			<p:selectOneMenu id="marca" 
 				styleClass="form-control"
-				value="#{prendaController.prenda.marca.nombre}" maxlength="100"
-				required="true" />
-				
-			<h:outputLabel for="modelo" value="Modelo"
-				styleClass="control-label" />
-				
-			<p:inputText autocomplete="off" id="modelo"
-				styleClass="form-control"
-				value="#{prendaController.prenda.modelo}" maxlength="100"
-				required="true" />
-				
-			<h:outputLabel for="genero" value="Género"
-				styleClass="control-label" />
-				
-			<p:inputText autocomplete="off" id="genero"
-				styleClass="form-control"
-				value="#{prendaController.prenda.genero}" maxlength="100"
-				required="true" />
+				value="#{prendaController.prenda.marca}"
+				converter="omnifaces.SelectItemsConverter">
+				<f:selectItems value="#{prendaController.listaMarca}" var="m"
+					itemLabel="#{m.nombre}" itemValue="#{m}"/>
+			</p:selectOneMenu><br/>
 			
 			<h:outputLabel for="color" value="Color"
-				styleClass="control-label" />
-
-			<p:inputText autocomplete="off" id="color"
+				styleClass="control-label"/><br/>
+			<p:selectOneMenu id="color" 
 				styleClass="form-control"
-				value="#{prendaController.prenda.color.nombre}" maxlength="100"
-				required="true" />
-					
+				value="#{prendaController.prenda.color}"
+				converter="omnifaces.SelectItemsConverter">
+				<f:selectItems value="#{prendaController.listaColor}" var="m"
+					itemLabel="#{m.nombre}" itemValue="#{m}"/>
+			</p:selectOneMenu><br/>
+						
 			<h:outputLabel for="talla" value="Talla"
-				styleClass="control-label" />
-
-			<p:inputText autocomplete="off" id="talla"
+				styleClass="control-label"/><br/>
+			<p:selectOneMenu id="talla" 
 				styleClass="form-control"
-				value="#{prendaController.prenda.talla.nombre}" maxlength="100"
-				required="true" />
-				
-			<h:outputLabel for="precio" value="Precio (S/)"
-				styleClass="control-label" />
-				
-			<p:inputText autocomplete="off" id="precio"
-				styleClass="form-control"
-				value="#{prendaController.prenda.precio}"
-				required="true" />
-				
-			<h:outputLabel for="stock" value="Stock"
-				styleClass="control-label" />
-
-			<p:inputText autocomplete="off" id="stock"
-				styleClass="form-control"
-				value="#{prendaController.prenda.stock}"
-				required="true" />
+				value="#{prendaController.prenda.talla}"
+				converter="omnifaces.SelectItemsConverter">
+				<f:selectItems value="#{prendaController.listaTalla}" var="m"
+					itemLabel="#{m.detalle}" itemValue="#{m}"/>
+			</p:selectOneMenu><br/>
 				
 			<h:outputLabel for="comercio" value="Comercio"
-				styleClass="control-label" />
-				
-			<p:inputText autocomplete="off" id="comercio"
+				styleClass="control-label"/><br/>
+			<p:selectOneMenu id="comercio" 
 				styleClass="form-control"
-				value="#{prendaController.prenda.comercio.nombre}"
-				required="true" />
+				value="#{prendaController.prenda.comercio}"
+				converter="omnifaces.SelectItemsConverter">
+				<f:selectItems value="#{prendaController.listaComercio}" var="m"
+					itemLabel="#{m.nombre}" itemValue="#{m}"/>
+			</p:selectOneMenu><br/>
 				
-			<br />
-
-			<p:commandButton value="Grabar"
-				actionListener="#{prendaController.insertar()}"
-				styleClass="btn btn-primary " update="@form"
-				action="listPrenda?faces-redirect=true" />
+			<h:outputLabel for="descuento" value="Descuento"
+				styleClass="control-label"/><br/>
+			<p:selectOneMenu id="descuento" 
+				styleClass="form-control"
+				value="#{prendaController.prenda.descuento}"
+				converter="omnifaces.SelectItemsConverter">
+				<f:selectItem itemValue="#{null}" itemLabel="Ninguno"/>
+				<f:selectItems value="#{prendaController.listaDescuento}" var="m"
+					itemLabel="#{m.nombre}" itemValue="#{m}"/>
+			</p:selectOneMenu><br/>
+			
+			<h:outputLabel for="precio" value="Precio (S/)"
+				styleClass="control-label"/>
+			<p:inputNumber autocomplete="off" id="precio"
+				styleClass="form-control"
+				value="#{prendaController.prenda.precio}" minValue="0" 
+				decimalPlaces="2" decimalSeparator="." thousandSeparator=","
+				required="true"/>
+					
+			<h:outputLabel for="stock" value="Stock"
+				styleClass="control-label"/>
+			<p:inputNumber autocomplete="off" id="stock"
+				styleClass="form-control"
+				value="#{prendaController.prenda.stock}" 
+				minValue="0" decimalPlaces="0"
+				required="true"/>
+			
+			<h:outputLabel for="urlimagen" value="Imagen" 
+				styleClass="control-label"/><br/>
+			<p:graphicImage id="urlimagen" value="#{prendaController.prenda.imagen}" 
+				alt="Imagen no disponible" width="500" height="100%"/><br/>
+			<h:inputFile id="file"
+				value="#{prendaController.file}"/><br/>
 				
-			<p:commandButton value="Cancelar"
+			<br/>
+			
+			<h:commandButton value="Guardar"
+				styleClass="btn btn-primary" update="@form"
+				action="listPrenda?faces-redirect=true">
+				<!-- f:ajax execute="@form" render="urlimagen"/-->
+				<f:actionListener binding="#{prendaController.guardarFile()}"/>
+				<f:actionListener binding="#{prendaController.insertar()}"/>
+			</h:commandButton>
+			<h:commandButton value="Cancelar"
 				action="listPrenda?faces-redirect=true" immediate="true"
-				styleClass="btn btn-default" ajax="false" />
-
-			<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+				styleClass="btn btn-default" ajax="false"/>
+				
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000"/>
 		</h:form>
 	</ui:define>
 

@@ -8,29 +8,29 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="comercio")
-public class Comercio extends Seguridad implements Serializable {
+public class Comercio extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Column(name="nombre", nullable=false, length=100)
 	private String nombre;
 	
 	@Column(name="ruc", nullable=false, length=11)
 	private String ruc;
 	
-	@Column(name="correo", nullable=false, length=100)
+	@Column(name="correo", nullable=true, length=100)
 	private String correo;
 	
-	@Column(name="telefono", nullable=false, length=100)
+	@Column(name="telefono", nullable=true, length=100)
 	private String telefono;
 	
-	@Column(name="nombrecontacto", nullable=false, length=100)
+	@Column(name="nombreContacto", nullable=true, length=100)
 	private String nombreContacto;
 	
-	@Column(name="correocontacto", nullable=false, length=100)
+	@Column(name="correoContacto", nullable=true, length=100)
 	private String correoContacto;
 	
-	@Column(name="telefonocontacto", nullable=false, length=100)
+	@Column(name="telefonoContacto", nullable=true, length=100)
 	private String telefonoContacto;
 	
 	public Comercio() {
@@ -104,5 +104,4 @@ public class Comercio extends Seguridad implements Serializable {
 	public void setTelefonoContacto(String telefonoContacto) {
 		this.telefonoContacto = telefonoContacto;
 	}
-
 }

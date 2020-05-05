@@ -1,6 +1,10 @@
 package pe.com.outfitpro.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,9 +12,24 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.Part;
 
+import org.apache.commons.io.FilenameUtils;
+
+import pe.com.outfitpro.entity.Color;
+import pe.com.outfitpro.entity.Comercio;
+import pe.com.outfitpro.entity.Descuento;
+import pe.com.outfitpro.entity.Marca;
 import pe.com.outfitpro.entity.Prenda;
+import pe.com.outfitpro.entity.Talla;
+import pe.com.outfitpro.entity.TipoPrenda;
+import pe.com.outfitpro.service.IColorService;
+import pe.com.outfitpro.service.IComercioService;
+import pe.com.outfitpro.service.IDescuentoService;
+import pe.com.outfitpro.service.IMarcaService;
 import pe.com.outfitpro.service.IPrendaService;
+import pe.com.outfitpro.service.ITallaService;
+import pe.com.outfitpro.service.ITipoPrendaService;
 
 @Named
 @RequestScoped
@@ -18,50 +37,152 @@ public class PrendaController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Inject
-	private IPrendaService service;
-	private Prenda objeto;
-	private List<Prenda> lista;
+	private IPrendaService srvPrenda;
+	@Inject
+	private ITallaService srvTalla;
+	@Inject
+	private IColorService srvColor;
+	@Inject
+	private IMarcaService srvMarca;
+	@Inject
+	private ITipoPrendaService srvTipoPrenda;
+	@Inject
+	private IDescuentoService srvDescuento;
+	@Inject
+	private IComercioService srvComercio;
 	
+	private Prenda prenda;
+	private Talla talla;
+	private Color color;
+	private Marca marca;
+	private TipoPrenda tipoPrenda;
+	private Descuento descuento;
+	private Comercio comercio;
+	
+	private List<Prenda> listaPrenda;
+	private List<Talla> listaTalla;
+	private List<Color> listaColor;
+	private List<Marca> listaMarca;
+	private List<TipoPrenda> listaTipoPrenda;
+	private List<Descuento> listaDescuento;
+	private List<Comercio> listaComercio;
+		
 	@PostConstruct
 	public void init() {
-		this.lista = new ArrayList<Prenda>();
-		this.objeto = new Prenda();
-		this.listar();
+		this.prenda = new Prenda();
+		this.talla = new Talla();
+		this.color = new Color();
+		this.marca = new Marca();
+		this.tipoPrenda = new TipoPrenda();
+		this.descuento = new Descuento();
+		this.comercio = new Comercio();
+		this.listaPrenda = new ArrayList<Prenda>();
+		this.listaTalla = new ArrayList<Talla>();
+		this.listaColor = new ArrayList<Color>();
+		this.listaMarca = new ArrayList<Marca>();
+		this.listaTipoPrenda = new ArrayList<TipoPrenda>();
+		this.listaDescuento = new ArrayList<Descuento>();
+		this.listaComercio = new ArrayList<Comercio>();
+		this.listarPrendas();
+		this.listarTallas();
+		this.listarColores();
+		this.listarMarcas();
+		this.listarTipoPrendas();
+		this.listarDescuentos();
+		this.listarComercios();
 	}
 	
-	public String nuevoPrenda() {
+	public String nuevo() {
 		this.setPrenda(new Prenda());
 		return "prenda.xhtml";
 	}
 
+	public String editar(Prenda prenda) {
+		this.setPrenda(prenda);
+		return "prenda.xhtml";
+	}
+
+	public void limpiar() {
+		this.init();
+	}
+	
 	public void insertar() {
 		try {
-			objeto.setIdUsuarioCreacion(1);
-			service.insertar(objeto);
+			srvPrenda.insertar(prenda);
 			limpiar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
-	public void listar() {
+
+	public void eliminar(Prenda prenda) {
 		try {
-			lista = service.listar();
+			srvPrenda.eliminar(prenda.getId());
+			listarPrendas();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
+	}
+
+	public void listarPrendas() {
+		try {
+			listaPrenda = srvPrenda.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
 	
-	public void limpiar() {
-		this.init();
+	public void listarTallas() {
+		try {
+			listaTalla = srvTalla.listar();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
 	}
 	
-	public void eliminar(Prenda objeto) {
+	public void listarColores() {
 		try {
-			service.eliminar(objeto.getId());
-			listar();
+			listaColor = srvColor.listar();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
+	}
+	
+	public void listarMarcas() {
+		try {
+			listaMarca = srvMarca.listar();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
+	}
+	
+	public void listarTipoPrendas() {
+		try {
+			listaTipoPrenda = srvTipoPrenda.listar();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
+	}
+	
+	public void listarDescuentos() {
+		try {
+			listaDescuento = srvDescuento.listar();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
+	}
+	
+	public void listarComercios() {
+		try {
+			listaComercio = srvComercio.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
@@ -69,18 +190,142 @@ public class PrendaController implements Serializable {
 	}
 	
 	public Prenda getPrenda() {
-		return objeto;
+		return prenda;
 	}
 
-	public void setPrenda(Prenda objeto) {
-		this.objeto = objeto;
+	public void setPrenda(Prenda prenda) {
+		this.prenda = prenda;
 	}
 
-	public List<Prenda> getLista() {
-		return lista;
+	public Talla getTalla() {
+		return talla;
 	}
 
-	public void setLista(List<Prenda> lista) {
-		this.lista = lista;
+	public void setTalla(Talla talla) {
+		this.talla = talla;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public Marca getMarca() {
+		return marca;
+	}
+
+	public void setMarca(Marca marca) {
+		this.marca = marca;
+	}
+
+	public TipoPrenda getTipoPrenda() {
+		return tipoPrenda;
+	}
+
+	public void setTipoPrenda(TipoPrenda tipoPrenda) {
+		this.tipoPrenda = tipoPrenda;
+	}
+
+	public Descuento getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(Descuento descuento) {
+		this.descuento = descuento;
+	}
+
+	public Comercio getComercio() {
+		return comercio;
+	}
+
+	public void setComercio(Comercio comercio) {
+		this.comercio = comercio;
+	}
+
+	public List<Prenda> getListaPrenda() {
+		return listaPrenda;
+	}
+
+	public void setListaPrenda(List<Prenda> listaPrenda) {
+		this.listaPrenda = listaPrenda;
+	}
+
+	public List<Talla> getListaTalla() {
+		return listaTalla;
+	}
+
+	public void setListaTalla(List<Talla> listaTalla) {
+		this.listaTalla = listaTalla;
+	}
+
+	public List<Color> getListaColor() {
+		return listaColor;
+	}
+
+	public void setListaColor(List<Color> listaColor) {
+		this.listaColor = listaColor;
+	}
+
+	public List<Marca> getListaMarca() {
+		return listaMarca;
+	}
+
+	public void setListaMarca(List<Marca> listaMarca) {
+		this.listaMarca = listaMarca;
+	}
+
+	public List<TipoPrenda> getListaTipoPrenda() {
+		return listaTipoPrenda;
+	}
+
+	public void setListaTipoPrenda(List<TipoPrenda> listaTipoPrenda) {
+		this.listaTipoPrenda = listaTipoPrenda;
+	}
+
+	public List<Descuento> getListaDescuento() {
+		return listaDescuento;
+	}
+
+	public void setListaDescuento(List<Descuento> listaDescuento) {
+		this.listaDescuento = listaDescuento;
+	}
+
+	public List<Comercio> getListaComercio() {
+		return listaComercio;
+	}
+
+	public void setListaComercio(List<Comercio> listaComercio) {
+		this.listaComercio = listaComercio;
+	}
+	
+	/*Guardado de imagen*/
+	
+	private Part file;
+	private String folder = "D:\\Ricardo\\sts-workspace2\\OutfitPro\\src\\main\\webapp\\resources\\img\\prendas";
+
+	public Part getFile() {
+		return file;
+	}
+
+	public void setFile(Part file) {
+		this.file = file;
+	}
+	
+	public void guardarFile() {
+		if (file == null) return;
+		try (InputStream input = file.getInputStream()) {
+			String ext = FilenameUtils.getExtension(file.getName());
+			File tempFile = File.createTempFile("prd", ext, new File(folder));
+	        String fileName = tempFile.getName();
+	        tempFile.delete();
+			Files.copy(input, new File(folder, fileName).toPath());
+	        prenda.setImagen(tempFile.toPath().toString());
+	    }
+	    catch (IOException ex) {
+	        ex.printStackTrace();
+	    }
 	}
 }

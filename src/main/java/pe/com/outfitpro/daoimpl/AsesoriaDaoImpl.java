@@ -22,7 +22,7 @@ public class AsesoriaDaoImpl implements IAsesoriaDao, Serializable {
 	@Override
 	public void insertar(Asesoria obj) {
 		try {
-			em.persist(obj);
+			em.merge(obj);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());

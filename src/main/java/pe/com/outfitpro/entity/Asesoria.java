@@ -3,39 +3,38 @@ package pe.com.outfitpro.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="asesoria")
-public class Asesoria extends Seguridad implements Serializable {
+public class Asesoria extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="fechoraini", nullable=false)
+	@Column(name="fecHoraIni", nullable=false)
 	private Date fecHoraIni;
 	
-	@Column(name="fechorafin", nullable=true)
+	@Column(name="fecHoraFin", nullable=true)
 	private Date fecHoraFin;
 	
 	@Column(name="valoracion", nullable=false)
 	private int valoracion;
 	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Usuario cliente;
+	@ManyToOne @JoinColumn(name="clienteId", nullable=false)
+	private Cliente cliente;
 	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Usuario asesor;
+	@ManyToOne @JoinColumn(name="asesorId", nullable=false)
+	private Asesor asesor;
 	
 	public Asesoria() {
 		super();
 	}
 
-	public Asesoria(Date fecHoraIni, Date fecHoraFin, int valoracion, Usuario cliente, Usuario asesor) {
+	public Asesoria(Date fecHoraIni, Date fecHoraFin, int valoracion, Cliente cliente, Asesor asesor) {
 		super();
 		this.fecHoraIni = fecHoraIni;
 		this.fecHoraFin = fecHoraFin;
@@ -68,20 +67,19 @@ public class Asesoria extends Seguridad implements Serializable {
 		this.valoracion = valoracion;
 	}
 
-	public Usuario getCliente() {
+	public Cliente getCliente() {
 		return cliente;
 	}
 
-	public void setCliente(Usuario cliente) {
+	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
 
-	public Usuario getAsesor() {
+	public Asesor getAsesor() {
 		return asesor;
 	}
 
-	public void setAsesor(Usuario asesor) {
+	public void setAsesor(Asesor asesor) {
 		this.asesor = asesor;
 	}
-
 }

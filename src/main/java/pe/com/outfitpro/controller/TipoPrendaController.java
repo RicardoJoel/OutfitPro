@@ -18,26 +18,34 @@ public class TipoPrendaController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Inject
-	private ITipoPrendaService service;
-	private TipoPrenda objeto;
-	private List<TipoPrenda> lista;
+	private ITipoPrendaService srvTipoPrenda;
+	private TipoPrenda tipoPrenda;
+	private List<TipoPrenda> listaTipoPrenda;
 	
 	@PostConstruct
 	public void init() {
-		this.lista = new ArrayList<TipoPrenda>();
-		this.objeto = new TipoPrenda();
-		this.listar();
+		this.tipoPrenda = new TipoPrenda();
+		this.listaTipoPrenda = new ArrayList<TipoPrenda>();
+		this.listarTipoPrendas();
 	}
 	
-	public String nuevoTipoPrenda() {
+	public String nuevo() {
 		this.setTipoPrenda(new TipoPrenda());
 		return "tipoPrenda.xhtml";
 	}
 
+	public String editar(TipoPrenda tipoPrenda) {
+		this.setTipoPrenda(tipoPrenda);
+		return "tipoPrenda.xhtml";
+	}
+
+	public void limpiar() {
+		this.init();
+	}
+	
 	public void insertar() {
 		try {
-			objeto.setIdUsuarioCreacion(1);
-			service.insertar(objeto);
+			srvTipoPrenda.insertar(tipoPrenda);
 			limpiar();
 		}
 		catch (Exception ex) {
@@ -45,42 +53,38 @@ public class TipoPrendaController implements Serializable {
 		}
 	}
 	
-	public void listar() {
+	public void eliminar(TipoPrenda tipoPrenda) {
 		try {
-			lista = service.listar();
+			srvTipoPrenda.eliminar(tipoPrenda.getId());
+			listarTipoPrendas();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
 	
-	public void limpiar() {
-		this.init();
-	}
-	
-	public void eliminar(TipoPrenda objeto) {
+	public void listarTipoPrendas() {
 		try {
-			service.eliminar(objeto.getId());
-			listar();
+			listaTipoPrenda = srvTipoPrenda.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
+
 	public TipoPrenda getTipoPrenda() {
-		return objeto;
+		return tipoPrenda;
 	}
 
-	public void setTipoPrenda(TipoPrenda objeto) {
-		this.objeto = objeto;
+	public void setTipoPrenda(TipoPrenda tipoPrenda) {
+		this.tipoPrenda = tipoPrenda;
 	}
 
-	public List<TipoPrenda> getLista() {
-		return lista;
+	public List<TipoPrenda> getListaTipoPrenda() {
+		return listaTipoPrenda;
 	}
 
-	public void setLista(List<TipoPrenda> lista) {
-		this.lista = lista;
+	public void setListaTipoPrenda(List<TipoPrenda> listaTipoPrenda) {
+		this.listaTipoPrenda = listaTipoPrenda;
 	}
 }

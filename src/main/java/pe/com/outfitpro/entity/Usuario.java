@@ -3,19 +3,16 @@ package pe.com.outfitpro.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
 
-@Entity
-@Table(name="usuario")
-public class Usuario extends Seguridad implements Serializable {
+@MappedSuperclass
+public class Usuario extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Column(name="nombre", nullable=false, length=100)
 	private String nombre;
 	
@@ -36,38 +33,17 @@ public class Usuario extends Seguridad implements Serializable {
 	
 	@Column(name="direccion", nullable=false, length=100)
 	private String direccion;
-	
-	@Column(name="tipdocumento", nullable=false, length=100)
-	private String tipDocumento;
-	
-	@Column(name="coddocumento", nullable=false, length=100)
-	private String codDocumento;
-	
-	@Column(name="referencia", nullable=false, length=500)
-	private String referencia;
-	
-	@Column(name="premium", nullable=false)
-	private Boolean premium;
-	
-	@Column(name="aseslibres", nullable=false)
-	private int asesLibres;
-	
-	@Column(name="valoracion", nullable=false)
-	private int valoracion;
-	
-	@Column(name="fechnacimiento", nullable=true)
-	private Date fechNacimiento;
-	
-	@Column(name="fechaltapremium", nullable=true)
-	private Date fechAltaPremium;
 
-	@Column(name="fechbajapremium", nullable=true)
-	private Date fechBajaPremium;
-	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@Column(name="imagen", nullable=false, length=500)
+	private String imagen;
+
+	@Column(name="nacimiento", nullable=true)
+	private Date nacimiento;
+		
+	@ManyToOne @JoinColumn(name="perfilId", nullable=false)
 	private Perfil perfil;
 	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToOne @JoinColumn(name="ubigeoId", nullable=false)
 	private Ubigeo ubigeo;
 	
 	public Usuario() {
@@ -75,9 +51,7 @@ public class Usuario extends Seguridad implements Serializable {
 	}
 
 	public Usuario(String nombre, String apellido, String correo, String contrasena, String genero, String telefono,
-			String direccion, String tipDocumento, String codDocumento, String referencia, Boolean premium,
-			int asesLibres, int valoracion, Date fechNacimiento, Date fechAltaPremium, Date fechBajaPremium,
-			Perfil perfil, Ubigeo ubigeo) {
+			String direccion, String imagen, Date nacimiento, Perfil perfil, Ubigeo ubigeo) {
 		super();
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -86,15 +60,8 @@ public class Usuario extends Seguridad implements Serializable {
 		this.genero = genero;
 		this.telefono = telefono;
 		this.direccion = direccion;
-		this.tipDocumento = tipDocumento;
-		this.codDocumento = codDocumento;
-		this.referencia = referencia;
-		this.premium = premium;
-		this.asesLibres = asesLibres;
-		this.valoracion = valoracion;
-		this.fechNacimiento = fechNacimiento;
-		this.fechAltaPremium = fechAltaPremium;
-		this.fechBajaPremium = fechBajaPremium;
+		this.imagen = imagen;
+		this.nacimiento = nacimiento;
 		this.perfil = perfil;
 		this.ubigeo = ubigeo;
 	}
@@ -155,76 +122,20 @@ public class Usuario extends Seguridad implements Serializable {
 		this.direccion = direccion;
 	}
 
-	public String getTipDocumento() {
-		return tipDocumento;
+	public String getImagen() {
+		return imagen;
 	}
 
-	public void setTipDocumento(String tipDocumento) {
-		this.tipDocumento = tipDocumento;
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
 	}
 
-	public String getCodDocumento() {
-		return codDocumento;
+	public Date getNacimiento() {
+		return nacimiento;
 	}
 
-	public void setCodDocumento(String codDocumento) {
-		this.codDocumento = codDocumento;
-	}
-
-	public String getReferencia() {
-		return referencia;
-	}
-
-	public void setReferencia(String referencia) {
-		this.referencia = referencia;
-	}
-
-	public Boolean getPremium() {
-		return premium;
-	}
-
-	public void setPremium(Boolean premium) {
-		this.premium = premium;
-	}
-
-	public int getAsesLibres() {
-		return asesLibres;
-	}
-
-	public void setAsesLibres(int asesLibres) {
-		this.asesLibres = asesLibres;
-	}
-
-	public int getValoracion() {
-		return valoracion;
-	}
-
-	public void setValoracion(int valoracion) {
-		this.valoracion = valoracion;
-	}
-
-	public Date getFechNacimiento() {
-		return fechNacimiento;
-	}
-
-	public void setFechNacimiento(Date fechNacimiento) {
-		this.fechNacimiento = fechNacimiento;
-	}
-
-	public Date getFechAltaPremium() {
-		return fechAltaPremium;
-	}
-
-	public void setFechAltaPremium(Date fechAltaPremium) {
-		this.fechAltaPremium = fechAltaPremium;
-	}
-
-	public Date getFechBajaPremium() {
-		return fechBajaPremium;
-	}
-
-	public void setFechBajaPremium(Date fechBajaPremium) {
-		this.fechBajaPremium = fechBajaPremium;
+	public void setNacimiento(Date nacimiento) {
+		this.nacimiento = nacimiento;
 	}
 
 	public Perfil getPerfil() {
@@ -242,5 +153,4 @@ public class Usuario extends Seguridad implements Serializable {
 	public void setUbigeo(Ubigeo ubigeo) {
 		this.ubigeo = ubigeo;
 	}
-	
 }

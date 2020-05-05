@@ -18,50 +18,54 @@ public class ComercioController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Inject
-	private IComercioService service;
-	private Comercio objeto;
-	private List<Comercio> lista;
+	private IComercioService srvComercio;
+	private Comercio comercio;
+	private List<Comercio> listaComercio;
 	
 	@PostConstruct
 	public void init() {
-		this.lista = new ArrayList<Comercio>();
-		this.objeto = new Comercio();
-		this.listar();
+		this.comercio = new Comercio();
+		this.listaComercio = new ArrayList<Comercio>();
+		this.listarComercios();
 	}
 	
-	public String nuevoComercio() {
+	public String nuevo() {
 		this.setComercio(new Comercio());
 		return "comercio.xhtml";
 	}
 
+	public String editar(Comercio comercio) {
+		this.setComercio(comercio);
+		return "comercio.xhtml";
+	}
+
+	public void limpiar() {
+		this.init();
+	}
+	
 	public void insertar() {
 		try {
-			objeto.setIdUsuarioCreacion(1);
-			service.insertar(objeto);
+			srvComercio.insertar(comercio);
 			limpiar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
-	public void listar() {
+
+	public void eliminar(Comercio comercio) {
 		try {
-			lista = service.listar();
+			srvComercio.eliminar(comercio.getId());
+			listarComercios();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
-	public void limpiar() {
-		this.init();
-	}
-	
-	public void eliminar(Comercio objeto) {
+
+	public void listarComercios() {
 		try {
-			service.eliminar(objeto.getId());
-			listar();
+			listaComercio = srvComercio.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
@@ -69,18 +73,19 @@ public class ComercioController implements Serializable {
 	}
 	
 	public Comercio getComercio() {
-		return objeto;
+		return comercio;
 	}
 
-	public void setComercio(Comercio objeto) {
-		this.objeto = objeto;
+	public void setComercio(Comercio comercio) {
+		this.comercio = comercio;
 	}
 
-	public List<Comercio> getLista() {
-		return lista;
+	public List<Comercio> getListaComercio() {
+		return listaComercio;
 	}
 
-	public void setLista(List<Comercio> lista) {
-		this.lista = lista;
+	public void setListaComercio(List<Comercio> listaComercio) {
+		this.listaComercio = listaComercio;
 	}
+	
 }

@@ -2,27 +2,26 @@ package pe.com.outfitpro.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="prenda")
-public class Prenda extends Seguridad implements Serializable {
+public class Prenda extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Column(name="nombre", nullable=false, length=100)
 	private String nombre;
 	
-	@Column(name="descripcion", nullable=false, length=500)
+	@Column(name="descripcion", nullable=true, length=500)
 	private String descripcion;
 	
-	@Column(name="modelo", nullable=false, length=100)
-	private String modelo;
+	@Column(name="imagen", nullable=true, length=500)
+	private String imagen;
 	
 	@Column(name="genero", nullable=false, length=100)
 	private String genero;
@@ -33,31 +32,34 @@ public class Prenda extends Seguridad implements Serializable {
 	@Column(name="stock", nullable=false)
 	private int stock;
 	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToOne @JoinColumn(name="tallaId", nullable=false)
 	private Talla talla;
 	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToOne @JoinColumn(name="colorId", nullable=false)
 	private Color color;
 	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToOne @JoinColumn(name="marcaId", nullable=false)
 	private Marca marca;
 	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToOne @JoinColumn(name="comercioId", nullable=false)
 	private Comercio comercio;
 	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToOne @JoinColumn(name="tipoPrendaId", nullable=false)
 	private TipoPrenda tipoPrenda;
+	
+	@ManyToOne @JoinColumn(name="descuentoId", nullable=true)
+	private Descuento descuento;
 	
 	public Prenda() {
 		super();
 	}
 
-	public Prenda(String nombre, String descripcion, String modelo, String genero, float precio, int stock, Talla talla,
-			Color color, Marca marca, Comercio comercio, TipoPrenda tipoPrenda) {
+	public Prenda(String nombre, String descripcion, String imagen, String genero, float precio, int stock, 
+			Talla talla, Color color, Marca marca, Comercio comercio, TipoPrenda tipoPrenda, Descuento descuento) {
 		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.modelo = modelo;
+		this.imagen = imagen;
 		this.genero = genero;
 		this.precio = precio;
 		this.stock = stock;
@@ -66,6 +68,7 @@ public class Prenda extends Seguridad implements Serializable {
 		this.marca = marca;
 		this.comercio = comercio;
 		this.tipoPrenda = tipoPrenda;
+		this.descuento = descuento;
 	}
 
 	public String getNombre() {
@@ -84,14 +87,14 @@ public class Prenda extends Seguridad implements Serializable {
 		this.descripcion = descripcion;
 	}
 
-	public String getModelo() {
-		return modelo;
+	public String getImagen() {
+		return imagen;
 	}
 
-	public void setModelo(String modelo) {
-		this.modelo = modelo;
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
 	}
-
+	
 	public String getGenero() {
 		return genero;
 	}
@@ -156,4 +159,11 @@ public class Prenda extends Seguridad implements Serializable {
 		this.tipoPrenda = tipoPrenda;
 	}
 
+	public Descuento getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(Descuento descuento) {
+		this.descuento = descuento;
+	}
 }

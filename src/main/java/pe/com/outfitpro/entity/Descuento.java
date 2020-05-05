@@ -3,16 +3,13 @@ package pe.com.outfitpro.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="descuento")
-public class Descuento extends Seguridad implements Serializable {
+public class Descuento extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -22,34 +19,30 @@ public class Descuento extends Seguridad implements Serializable {
 	@Column(name="descripcion", nullable=true, length=500)
 	private String descripcion;
 	
-	@Column(name="monto", nullable=false)
-	private float monto;
+	@Column(name="tipoDesc", nullable=false)
+	private String tipoDesc;
 	
-	@Column(name="porcentaje", nullable=false)
-	private float porcentaje;
+	@Column(name="cantidad", nullable=false)
+	private float cantidad;
 	
-	@Column(name="fechaini", nullable=false)
+	@Column(name="fechaIni", nullable=false)
 	private Date fechaIni;
 	
-	@Column(name="fechafin", nullable=false)
+	@Column(name="fechaFin", nullable=false)
 	private Date fechaFin;
-	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Prenda prenda;
 	
 	public Descuento() {
 		super();
 	}
 
-	public Descuento(String nombre, String descripcion, float monto, float porcentaje, Date fechaIni, Date fechaFin, Prenda prenda) {
+	public Descuento(String nombre, String descripcion, String tipoDesc, float cantidad, Date fechaIni, Date fechaFin) {
 		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.monto = monto;
-		this.porcentaje = porcentaje;
+		this.tipoDesc = tipoDesc;
+		this.cantidad = cantidad;
 		this.fechaIni = fechaIni;
 		this.fechaFin = fechaFin;
-		this.prenda = prenda;
 	}
 
 	public String getNombre() {
@@ -68,20 +61,20 @@ public class Descuento extends Seguridad implements Serializable {
 		this.descripcion = descripcion;
 	}
 
-	public float getMonto() {
-		return monto;
+	public String getTipoDesc() {
+		return tipoDesc;
 	}
 
-	public void setMonto(float monto) {
-		this.monto = monto;
+	public void setTipoDesc(String tipoDesc) {
+		this.tipoDesc = tipoDesc;
 	}
 
-	public float getPorcentaje() {
-		return porcentaje;
+	public float getCantidad() {
+		return cantidad;
 	}
 
-	public void setPorcentaje(float porcentaje) {
-		this.porcentaje = porcentaje;
+	public void setCantidad(float cantidad) {
+		this.cantidad = cantidad;
 	}
 
 	public Date getFechaIni() {
@@ -99,13 +92,4 @@ public class Descuento extends Seguridad implements Serializable {
 	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
 	}
-
-	public Prenda getPrenda() {
-		return prenda;
-	}
-
-	public void setPrenda(Prenda prenda) {
-		this.prenda = prenda;
-	}
-
 }

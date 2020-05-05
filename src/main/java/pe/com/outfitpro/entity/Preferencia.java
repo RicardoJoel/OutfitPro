@@ -2,53 +2,49 @@ package pe.com.outfitpro.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="preferencia")
-public class Preferencia extends Seguridad implements Serializable {
+public class Preferencia extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Column(name="explicita", nullable=false)
-	private Boolean explicita = true;
+	private Boolean explicita;
 	
-	@Column(name="genero", nullable=false, length=100)
-	private String genero;
-	
-	@ManyToOne(optional=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToOne @JoinColumn(name="tallaId", nullable=true)
 	private Talla talla;
 	
-	@ManyToOne(optional=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToOne @JoinColumn(name="colorId", nullable=true)
 	private Color color;
 	
-	@ManyToOne(optional=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToOne @JoinColumn(name="marcaId", nullable=true)
 	private Marca marca;
 	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private TipoPrenda tipoPrenda = new TipoPrenda();
+	@ManyToOne @JoinColumn(name="tipoPrendaId", nullable=false)
+	private TipoPrenda tipoPrenda;
 	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Usuario usuario = new Usuario();
+	@ManyToOne @JoinColumn(name="clienteId", nullable=false)
+	private Cliente cliente;
 	
 	public Preferencia() {
 		super();
 	}
 
-	public Preferencia(Boolean explicita, String genero, Talla talla, Color color, Marca marca, TipoPrenda tipoPrenda, Usuario usuario) {
+	public Preferencia(Boolean explicita, Talla talla, Color color, Marca marca, TipoPrenda tipoPrenda,
+			Cliente cliente) {
 		super();
 		this.explicita = explicita;
-		this.genero = genero;
 		this.talla = talla;
 		this.color = color;
 		this.marca = marca;
 		this.tipoPrenda = tipoPrenda;
-		this.usuario = usuario;
+		this.cliente = cliente;
 	}
 
 	public Boolean getExplicita() {
@@ -57,14 +53,6 @@ public class Preferencia extends Seguridad implements Serializable {
 
 	public void setExplicita(Boolean explicita) {
 		this.explicita = explicita;
-	}
-
-	public String getGenero() {
-		return genero;
-	}
-
-	public void setGenero(String genero) {
-		this.genero = genero;
 	}
 
 	public Talla getTalla() {
@@ -99,12 +87,11 @@ public class Preferencia extends Seguridad implements Serializable {
 		this.tipoPrenda = tipoPrenda;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
-	
 }

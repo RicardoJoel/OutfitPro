@@ -10,7 +10,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import pe.com.outfitpro.entity.Compra;
+import pe.com.outfitpro.entity.Cliente;
 import pe.com.outfitpro.service.ICompraService;
+import pe.com.outfitpro.service.IClienteService;
 
 @Named
 @RequestScoped
@@ -18,50 +20,72 @@ public class CompraController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Inject
-	private ICompraService service;
-	private Compra objeto;
-	private List<Compra> lista;
+	private ICompraService srvCompra;
+	@Inject
+	private IClienteService srvCliente;
+	
+	private Compra compra;
+	private Cliente cliente;
+	
+	private List<Compra> listaCompra;
+	private List<Cliente> listaCliente;
 	
 	@PostConstruct
 	public void init() {
-		this.lista = new ArrayList<Compra>();
-		this.objeto = new Compra();
-		this.listar();
+		this.compra = new Compra();
+		this.cliente = new Cliente();
+		this.listaCompra = new ArrayList<Compra>();
+		this.listaCliente = new ArrayList<Cliente>();
+		this.listarCompras();
+		this.listarClientes();
 	}
 	
-	public String nuevoCompra() {
+	public String nuevo() {
 		this.setCompra(new Compra());
 		return "compra.xhtml";
 	}
 
+	public String editar(Compra compra) {
+		this.setCompra(compra);
+		return "compra.xhtml";
+	}
+
+	public void limpiar() {
+		this.init();
+	}
+	
 	public void insertar() {
 		try {
-			objeto.setIdUsuarioCreacion(1);
-			service.insertar(objeto);
+			srvCompra.insertar(compra);
 			limpiar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
-	public void listar() {
+
+	public void eliminar(Compra compra) {
 		try {
-			lista = service.listar();
+			srvCompra.eliminar(compra.getId());
+			listarCompras();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
+	}
+
+	public void listarCompras() {
+		try {
+			listaCompra = srvCompra.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
 	
-	public void limpiar() {
-		this.init();
-	}
-	
-	public void eliminar(Compra objeto) {
+	public void listarClientes() {
 		try {
-			service.eliminar(objeto.getId());
-			listar();
+			listaCliente = srvCliente.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
@@ -69,18 +93,35 @@ public class CompraController implements Serializable {
 	}
 	
 	public Compra getCompra() {
-		return objeto;
+		return compra;
 	}
 
-	public void setCompra(Compra objeto) {
-		this.objeto = objeto;
+	public void setCompra(Compra compra) {
+		this.compra = compra;
 	}
 
-	public List<Compra> getLista() {
-		return lista;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setLista(List<Compra> lista) {
-		this.lista = lista;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
+
+	public List<Compra> getListaCompra() {
+		return listaCompra;
+	}
+
+	public void setListaCompra(List<Compra> listaCompra) {
+		this.listaCompra = listaCompra;
+	}
+
+	public List<Cliente> getListaCliente() {
+		return listaCliente;
+	}
+
+	public void setListaCliente(List<Cliente> listaCliente) {
+		this.listaCliente = listaCliente;
+	}
+	
 }

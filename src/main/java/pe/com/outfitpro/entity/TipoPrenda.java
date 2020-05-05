@@ -8,10 +8,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="tipoprenda")
-public class TipoPrenda extends Seguridad implements Serializable {
+public class TipoPrenda extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Column(name="nombre", nullable=false, length=100)
 	private String nombre;
 	
@@ -43,5 +43,4 @@ public class TipoPrenda extends Seguridad implements Serializable {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	
 }

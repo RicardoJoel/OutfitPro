@@ -18,42 +18,34 @@
 
 	<ui:define name="content">
 		<h:form>
-			<!-- h:outputLabel for="id" value="Id" 
-				styleClass="control-label" />
-
-			<p:inputText autocomplete="off" id="id"
-				styleClass="form-control" 
-				value="#{colorController.color.id}"
-				required="true" /-->
+			<h:inputHidden id="id" value="#{colorController.color.id}"/>
 				
 			<h:outputLabel for="nombre" value="Nombre"
-				styleClass="control-label" />
-
+				styleClass="control-label"/>
 			<p:inputText autocomplete="off" id="nombre"
 				styleClass="form-control"
 				value="#{colorController.color.nombre}" maxlength="100"
-				required="true" />
+				required="true"/>
 
 			<h:outputLabel for="hexadecimal" value="Hexadecimal"
-				styleClass="control-label" />
-
-			<p:inputText autocomplete="off" id="hexadecimal"
-				styleClass="form-control"
-				value="#{colorController.color.hexadecimal}" maxlength="100"
-				required="true" />
-
-			<br />
-
-			<p:commandButton value="Grabar"
-				actionListener="#{colorController.insertar()}"
-				styleClass="btn btn-primary " update="@form"
-				action="listColor?faces-redirect=true" />
+				styleClass="control-label"/>
+			<p:colorPicker id="hexadecimal"
+				styleClass="form-control" 
+				value="#{colorController.color.hexadecimal}" 
+				opacity="false" format="hex" 
+				control="wheel" required="true"/>
 				
+			<br/>
+
+			<p:commandButton value="Guardar"
+				actionListener="#{colorController.insertar()}"
+				styleClass="btn btn-primary" update="@form"
+				action="listColor?faces-redirect=true"/>
 			<p:commandButton value="Cancelar"
 				action="listColor?faces-redirect=true" immediate="true"
-				styleClass="btn btn-default" ajax="false" />
+				styleClass="btn btn-default" ajax="false"/>
 
-			<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000"/>
 		</h:form>
 	</ui:define>
 

@@ -18,50 +18,54 @@ public class PerfilController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Inject
-	private IPerfilService service;
-	private Perfil objeto;
-	private List<Perfil> lista;
+	private IPerfilService srvPerfil;
+	private Perfil perfil;
+	private List<Perfil> listaPerfil;
 	
 	@PostConstruct
 	public void init() {
-		this.lista = new ArrayList<Perfil>();
-		this.objeto = new Perfil();
-		this.listar();
+		this.perfil = new Perfil();
+		this.listaPerfil = new ArrayList<Perfil>();
+		this.listarPerfiles();
 	}
 	
-	public String nuevoPerfil() {
+	public String nuevo() {
 		this.setPerfil(new Perfil());
 		return "perfil.xhtml";
 	}
 
-	public void insertar() {
-		try {
-			objeto.setIdUsuarioCreacion(1);
-			service.insertar(objeto);
-			limpiar();
-		}
-		catch (Exception ex) {
-			ex.getMessage();
-		}
-	}
-	
-	public void listar() {
-		try {
-			lista = service.listar();
-		}
-		catch (Exception ex) {
-			ex.getMessage();
-		}
+	public String editar(Perfil perfil) {
+		this.setPerfil(perfil);
+		return "perfil.xhtml";
 	}
 	
 	public void limpiar() {
 		this.init();
 	}
 	
-	public void eliminar(Perfil objeto) {
+	public void insertar() {
 		try {
-			service.eliminar(objeto.getId());
-			listar();
+			srvPerfil.insertar(perfil);
+			limpiar();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
+	}	
+
+	public void eliminar(Perfil perfil) {
+		try {
+			srvPerfil.eliminar(perfil.getId());
+			listarPerfiles();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
+	}
+	
+	public void listarPerfiles() {
+		try {
+			listaPerfil = srvPerfil.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
@@ -69,18 +73,18 @@ public class PerfilController implements Serializable {
 	}
 	
 	public Perfil getPerfil() {
-		return objeto;
+		return perfil;
 	}
 
-	public void setPerfil(Perfil objeto) {
-		this.objeto = objeto;
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 
-	public List<Perfil> getLista() {
-		return lista;
+	public List<Perfil> getListaPerfil() {
+		return listaPerfil;
 	}
 
-	public void setLista(List<Perfil> lista) {
-		this.lista = lista;
+	public void setListaPerfil(List<Perfil> listaPerfil) {
+		this.listaPerfil = listaPerfil;
 	}
 }

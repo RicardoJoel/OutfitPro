@@ -10,7 +10,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import pe.com.outfitpro.entity.Talla;
+import pe.com.outfitpro.entity.TipoPrenda;
 import pe.com.outfitpro.service.ITallaService;
+import pe.com.outfitpro.service.ITipoPrendaService;
 
 @Named
 @RequestScoped
@@ -18,69 +20,107 @@ public class TallaController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Inject
-	private ITallaService service;
-	private Talla objeto;
-	private List<Talla> lista;
+	private ITallaService srvTalla;
+	@Inject
+	private ITipoPrendaService srvTipoPrenda;
+	
+	private Talla talla;
+	private TipoPrenda tipoPrenda;
+	
+	private List<Talla> listaTalla;
+	private List<TipoPrenda> listaTipoPrenda;
 	
 	@PostConstruct
 	public void init() {
-		this.lista = new ArrayList<Talla>();
-		this.objeto = new Talla();
-		this.listar();
+		this.talla = new Talla();
+		this.tipoPrenda = new TipoPrenda();
+		this.listaTalla = new ArrayList<Talla>();
+		this.listaTipoPrenda = new ArrayList<TipoPrenda>();
+		this.listarTallas();
+		this.listarTipoPrendas();
 	}
 	
-	public String nuevoTalla() {
+	public String nuevo() {
 		this.setTalla(new Talla());
 		return "talla.xhtml";
 	}
 
+	public String editar(Talla talla) {
+		this.setTalla(talla);
+		return "talla.xhtml";
+	}
+
+	public void limpiar() {
+		this.init();
+	}
+	
 	public void insertar() {
 		try {
-			objeto.setIdUsuarioCreacion(1);
-			service.insertar(objeto);
+			srvTalla.insertar(talla);
 			limpiar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
-	public void listar() {
+
+	public void eliminar(Talla talla) {
 		try {
-			lista = service.listar();
+			srvTalla.eliminar(talla.getId());
+			listarTallas();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
+	}
+
+	public void listarTallas() {
+		try {
+			listaTalla = srvTalla.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
 	
-	public void limpiar() {
-		this.init();
-	}
-	
-	public void eliminar(Talla objeto) {
+	public void listarTipoPrendas() {
 		try {
-			service.eliminar(objeto.getId());
-			listar();
+			listaTipoPrenda = srvTipoPrenda.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
+
 	public Talla getTalla() {
-		return objeto;
+		return talla;
 	}
 
-	public void setTalla(Talla objeto) {
-		this.objeto = objeto;
+	public void setTalla(Talla talla) {
+		this.talla = talla;
 	}
 
-	public List<Talla> getLista() {
-		return lista;
+	public TipoPrenda getTipoPrenda() {
+		return tipoPrenda;
 	}
 
-	public void setLista(List<Talla> lista) {
-		this.lista = lista;
+	public void setTipoPrenda(TipoPrenda tipoPrenda) {
+		this.tipoPrenda = tipoPrenda;
+	}
+
+	public List<Talla> getListaTalla() {
+		return listaTalla;
+	}
+
+	public void setListaTalla(List<Talla> listaTalla) {
+		this.listaTalla = listaTalla;
+	}
+
+	public List<TipoPrenda> getListaTipoPrenda() {
+		return listaTipoPrenda;
+	}
+
+	public void setListaTipoPrenda(List<TipoPrenda> listaTipoPrenda) {
+		this.listaTipoPrenda = listaTipoPrenda;
 	}
 }

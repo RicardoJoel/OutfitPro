@@ -22,7 +22,7 @@ public class PrendaDaoImpl implements IPrendaDao, Serializable {
 	@Override
 	public void insertar(Prenda obj) {
 		try {
-			em.persist(obj);
+			em.merge(obj);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());

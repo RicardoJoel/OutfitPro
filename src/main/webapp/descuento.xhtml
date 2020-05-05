@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="master.xhtml">
+
+	<ui:define name="title">
+        Outfit Pro - Registro de nuevo descuento
+    </ui:define>
+
+	<ui:define name="titleCont">
+		<span>Nuevo descuento</span>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+			<h:inputHidden id="id" value="#{descuentoController.descuento.id}"/>
+
+			<h:outputLabel for="nombre" value="Nombre"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="nombre"
+				styleClass="form-control"
+				value="#{descuentoController.descuento.nombre}" maxlength="100"
+				required="true"/>
+				
+			<h:outputLabel for="descripcion" value="Descripción"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="descripcion"
+				styleClass="form-control"
+				value="#{descuentoController.descuento.descripcion}" maxlength="500"
+				required="false"/>
+				
+			<h:outputLabel for="monto" value="Tipo de descuento"
+				styleClass="control-label"/>
+			<h:selectOneMenu value = "#{descuentoController.descuento.tipoDesc}"
+				styleClass="form-control" required="true"> 
+   				<f:selectItem itemValue = "Porcentaje" itemLabel = "Porcentaje"/> 
+				<f:selectItem itemValue = "Monto fijo" itemLabel = "Monto fijo"/> 
+			</h:selectOneMenu>
+				
+			<h:outputLabel for="cantidad" value="Cantidad"
+				styleClass="control-label"/>
+			<p:inputNumber autocomplete="off" id="cantidad"
+				styleClass="form-control"
+				value="#{descuentoController.descuento.cantidad}" minValue="0" 
+				decimalPlaces="2" decimalSeparator="." thousandSeparator=","
+				required="true"/>
+							
+			<h:outputLabel for="fechaIni" value="Fecha de inicio"
+				styleClass="control-label"/>
+			<p:calendar id="fechaIni" pattern="dd/MM/yyyy"
+				styleClass="form-control"
+				value="#{descuentoController.descuento.fechaIni}" showOn="button"
+				timeZone="UTC" required="true">
+			</p:calendar>
+			
+			<h:outputLabel for="fechaFin" value="Fecha de término"
+				styleClass="control-label"/>
+			<p:calendar id="fechaFin" pattern="dd/MM/yyyy"
+				styleClass="form-control"
+				value="#{descuentoController.descuento.fechaFin}" showOn="button"
+				timeZone="UTC" required="true">
+			</p:calendar>
+			
+			<br/>
+
+			<p:commandButton value="Guardar"
+				actionListener="#{descuentoController.insertar()}"
+				styleClass="btn btn-primary" update="@form"
+				action="listDescuento?faces-redirect=true"/>
+			<p:commandButton value="Cancelar"
+				action="listDescuento?faces-redirect=true" immediate="true"
+				styleClass="btn btn-default" ajax="false"/>
+
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000"/>
+		</h:form>
+	</ui:define>
+
+	<ui:define name="footerCont"></ui:define>
+</ui:composition>
+</html>

@@ -6,7 +6,7 @@
 		<properties>
 			<property
 				name="javax.persistence.schema-generation.database.action"
-				value="none" />
+				value="update" />
 		</properties>
 	</persistence-unit>
 </persistence>

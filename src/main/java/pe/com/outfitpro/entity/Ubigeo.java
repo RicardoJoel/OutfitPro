@@ -8,10 +8,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="ubigeo")
-public class Ubigeo extends Seguridad implements Serializable {
+public class Ubigeo extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Column(name="distrito", nullable=false, length=100)
 	private String distrito;
 	
@@ -54,6 +54,5 @@ public class Ubigeo extends Seguridad implements Serializable {
 
 	public void setDepartamento(String departamento) {
 		this.departamento = departamento;
-	}
-	
+	}	
 }

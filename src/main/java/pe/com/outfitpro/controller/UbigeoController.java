@@ -18,26 +18,34 @@ public class UbigeoController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Inject
-	private IUbigeoService service;
-	private Ubigeo objeto;
-	private List<Ubigeo> lista;
+	private IUbigeoService srvUbigeo;
+	private Ubigeo ubigeo;
+	private List<Ubigeo> listaUbigeo;
 	
 	@PostConstruct
 	public void init() {
-		this.lista = new ArrayList<Ubigeo>();
-		this.objeto = new Ubigeo();
-		this.listar();
+		this.ubigeo = new Ubigeo();
+		this.listaUbigeo = new ArrayList<Ubigeo>();
+		this.listarUbigeos();
 	}
 	
-	public String nuevoUbigeo() {
+	public String nuevo() {
 		this.setUbigeo(new Ubigeo());
 		return "ubigeo.xhtml";
 	}
 
+	public String editar(Ubigeo ubigeo) {
+		this.setUbigeo(ubigeo);
+		return "ubigeo.xhtml";
+	}
+	
+	public void limpiar() {
+		this.init();
+	}
+	
 	public void insertar() {
 		try {
-			objeto.setIdUsuarioCreacion(1);
-			service.insertar(objeto);
+			srvUbigeo.insertar(ubigeo);
 			limpiar();
 		}
 		catch (Exception ex) {
@@ -45,42 +53,38 @@ public class UbigeoController implements Serializable {
 		}
 	}
 	
-	public void listar() {
+	public void eliminar(Ubigeo ubigeo) {
 		try {
-			lista = service.listar();
+			srvUbigeo.eliminar(ubigeo.getId());
+			listarUbigeos();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
 	
-	public void limpiar() {
-		this.init();
-	}
-	
-	public void eliminar(Ubigeo objeto) {
+	public void listarUbigeos() {
 		try {
-			service.eliminar(objeto.getId());
-			listar();
+			listaUbigeo = srvUbigeo.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
+
 	public Ubigeo getUbigeo() {
-		return objeto;
+		return ubigeo;
 	}
 
-	public void setUbigeo(Ubigeo objeto) {
-		this.objeto = objeto;
+	public void setUbigeo(Ubigeo ubigeo) {
+		this.ubigeo = ubigeo;
 	}
 
-	public List<Ubigeo> getLista() {
-		return lista;
+	public List<Ubigeo> getListaUbigeo() {
+		return listaUbigeo;
 	}
 
-	public void setLista(List<Ubigeo> lista) {
-		this.lista = lista;
+	public void setListaUbigeo(List<Ubigeo> listaUbigeo) {
+		this.listaUbigeo = listaUbigeo;
 	}
 }

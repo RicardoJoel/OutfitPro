@@ -18,69 +18,73 @@ public class ColorController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Inject
-	private IColorService service;
-	private Color objeto;
-	private List<Color> lista;
+	private IColorService srvColor;
+	private Color color;
+	private List<Color> listaColor;
 	
 	@PostConstruct
 	public void init() {
-		this.lista = new ArrayList<Color>();
-		this.objeto = new Color();
-		this.listar();
+		this.color = new Color();
+		this.listaColor = new ArrayList<Color>();
+		this.listarColores();
 	}
 	
-	public String nuevoColor() {
+	public String nuevo() {
 		this.setColor(new Color());
 		return "color.xhtml";
 	}
 
+	public String editar(Color color) {
+		this.setColor(color);
+		return "color.xhtml";
+	}
+
+	public void limpiar() {
+		this.init();
+	}
+	
 	public void insertar() {
 		try {
-			objeto.setIdUsuarioCreacion(1);
-			service.insertar(objeto);
+			srvColor.insertar(color);
 			limpiar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
-	public void listar() {
+
+	public void eliminar(Color color) {
 		try {
-			lista = service.listar();
+			srvColor.eliminar(color.getId());
+			listarColores();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
-	public void limpiar() {
-		this.init();
-	}
-	
-	public void eliminar(Color objeto) {
+
+	public void listarColores() {
 		try {
-			service.eliminar(objeto.getId());
-			listar();
+			listaColor = srvColor.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
+
 	public Color getColor() {
-		return objeto;
+		return color;
 	}
 
-	public void setColor(Color objeto) {
-		this.objeto = objeto;
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
-	public List<Color> getLista() {
-		return lista;
+	public List<Color> getListaColor() {
+		return listaColor;
 	}
 
-	public void setLista(List<Color> lista) {
-		this.lista = lista;
+	public void setListaColor(List<Color> listaColor) {
+		this.listaColor = listaColor;
 	}
 }

@@ -22,7 +22,7 @@ public class TipoPrendaDaoImpl implements ITipoPrendaDao, Serializable {
 	@Override
 	public void insertar(TipoPrenda obj) {
 		try {
-			em.persist(obj);
+			em.merge(obj);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());

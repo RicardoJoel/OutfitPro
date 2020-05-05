@@ -22,13 +22,13 @@ public class PerfilDaoImpl implements IPerfilDao, Serializable {
 	@Override
 	public void insertar(Perfil obj) {
 		try {
-			em.persist(obj);
+			em.merge(obj);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Perfil> listar() {

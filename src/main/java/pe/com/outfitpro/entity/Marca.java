@@ -8,14 +8,14 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="marca")
-public class Marca extends Seguridad implements Serializable {
+public class Marca extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Column(name="nombre", nullable=false, length=100)
 	private String nombre;
 	
-	@Column(name="descripcion", nullable=false, length=500)
+	@Column(name="descripcion", nullable=true, length=500)
 	private String descripcion;
 	
 	public Marca() {
@@ -43,5 +43,4 @@ public class Marca extends Seguridad implements Serializable {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	
 }

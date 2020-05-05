@@ -3,86 +3,52 @@ package pe.com.outfitpro.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="compra")
-public class Compra extends Seguridad implements Serializable {
+public class Compra extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="totalsinigv", nullable=false)
-	private float totalSinIGV;
+	@Column(name="montoTotal", nullable=false)
+	private float montoTotal;
 	
-	@Column(name="igv", nullable=false)
-	private float IGV;
+	@Column(name="fecHoraPago", nullable=true)
+	private Date fecHoraPago;
 	
-	@Column(name="totalfinal", nullable=false)
-	private float totalFinal;
+	@Column(name="metodoPago", nullable=true, length=100)
+	private String metodoPago;
 	
 	@Column(name="estado", nullable=false, length=100)
 	private String estado;
 	
-	@Column(name="fechorapago", nullable=true)
-	private Date fecHoraPago;
-	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Usuario usuario = new Usuario();
-	
-	@ManyToOne(optional=false, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private MetodoPago metodoPago = new MetodoPago();
+	@ManyToOne @JoinColumn(name="clienteId", nullable=false)
+	private Cliente cliente;
 	
 	public Compra() {
 		super();
 	}
 
-	public Compra(float totalSinIGV, float IGV, float totalFinal, String estado, Date fecHoraPago, Usuario usuario,
-			MetodoPago metodoPago) {
+	public Compra(float montoTotal, Date fecHoraPago, String metodoPago, String estado, Cliente cliente) {
 		super();
-		this.totalSinIGV = totalSinIGV;
-		this.IGV = IGV;
-		this.totalFinal = totalFinal;
-		this.estado = estado;
+		this.montoTotal = montoTotal;
 		this.fecHoraPago = fecHoraPago;
-		this.usuario = usuario;
 		this.metodoPago = metodoPago;
-	}
-
-	public float getTotalSinIGV() {
-		return totalSinIGV;
-	}
-
-	public void setTotalSinIGV(float totalSinIGV) {
-		this.totalSinIGV = totalSinIGV;
-	}
-
-	public float getIGV() {
-		return IGV;
-	}
-
-	public void setIGV(float IGV) {
-		this.IGV = IGV;
-	}
-
-	public float getTotalFinal() {
-		return totalFinal;
-	}
-
-	public void setTotalFinal(float totalFinal) {
-		this.totalFinal = totalFinal;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
 		this.estado = estado;
+		this.cliente = cliente;
+	}
+
+	public float getMontoTotal() {
+		return montoTotal;
+	}
+
+	public void setMontoTotal(float montoTotal) {
+		this.montoTotal = montoTotal;
 	}
 
 	public Date getFecHoraPago() {
@@ -93,20 +59,27 @@ public class Compra extends Seguridad implements Serializable {
 		this.fecHoraPago = fecHoraPago;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-	public MetodoPago getMetodoPago() {
+	public String getMetodoPago() {
 		return metodoPago;
 	}
 
-	public void setMetodoPago(MetodoPago metodoPago) {
+	public void setMetodoPago(String metodoPago) {
 		this.metodoPago = metodoPago;
 	}
 
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 }

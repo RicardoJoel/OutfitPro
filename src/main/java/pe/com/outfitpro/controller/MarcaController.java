@@ -18,69 +18,74 @@ public class MarcaController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Inject
-	private IMarcaService service;
-	private Marca objeto;
-	private List<Marca> lista;
+	private IMarcaService srvMarca;
+	private Marca marca;
+	private List<Marca> listaMarca;
 	
 	@PostConstruct
 	public void init() {
-		this.lista = new ArrayList<Marca>();
-		this.objeto = new Marca();
-		this.listar();
+		this.marca = new Marca();
+		this.listaMarca = new ArrayList<Marca>();
+		this.listarMarcas();
 	}
 	
-	public String nuevoMarca() {
+	public String nuevo() {
 		this.setMarca(new Marca());
 		return "marca.xhtml";
 	}
 
+	public String editar(Marca marca) {
+		this.setMarca(marca);
+		return "marca.xhtml";
+	}
+
+	public void limpiar() {
+		this.init();
+	}
+	
 	public void insertar() {
 		try {
-			objeto.setIdUsuarioCreacion(1);
-			service.insertar(objeto);
+			srvMarca.insertar(marca);
 			limpiar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
-	public void listar() {
+
+	public void eliminar(Marca marca) {
 		try {
-			lista = service.listar();
+			srvMarca.eliminar(marca.getId());
+			listarMarcas();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
-	public void limpiar() {
-		this.init();
-	}
-	
-	public void eliminar(Marca objeto) {
+
+	public void listarMarcas() {
 		try {
-			service.eliminar(objeto.getId());
-			listar();
+			listaMarca = srvMarca.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
+
 	public Marca getMarca() {
-		return objeto;
+		return marca;
 	}
 
-	public void setMarca(Marca objeto) {
-		this.objeto = objeto;
+	public void setMarca(Marca marca) {
+		this.marca = marca;
 	}
 
-	public List<Marca> getLista() {
-		return lista;
+	public List<Marca> getListaMarca() {
+		return listaMarca;
 	}
 
-	public void setLista(List<Marca> lista) {
-		this.lista = lista;
+	public void setListaMarca(List<Marca> listaMarca) {
+		this.listaMarca = listaMarca;
 	}
+	
 }

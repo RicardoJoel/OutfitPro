@@ -8,17 +8,17 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="perfil")
-public class Perfil extends Seguridad implements Serializable {
+public class Perfil extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Column(name="nombre", nullable=false, length=100)
 	private String nombre;
 	
-	@Column(name="descripcion", nullable=false, length=500)
+	@Column(name="descripcion", nullable=true, length=500)
 	private String descripcion;
 	
-	@Column(name="nivelacceso", nullable=false)
+	@Column(name="nivelAcceso", nullable=false)
 	private int nivelAcceso;
 	
 	public Perfil() {
@@ -55,5 +55,4 @@ public class Perfil extends Seguridad implements Serializable {
 	public void setNivelAcceso(int nivelAcceso) {
 		this.nivelAcceso = nivelAcceso;
 	}
-	
 }

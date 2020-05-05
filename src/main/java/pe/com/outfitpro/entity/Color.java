@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="color")
-public class Color extends Seguridad implements Serializable {
+public class Color extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -43,5 +43,4 @@ public class Color extends Seguridad implements Serializable {
 	public void setHexadecimal(String hexadecimal) {
 		this.hexadecimal = hexadecimal;
 	}
-	
 }

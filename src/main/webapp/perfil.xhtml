@@ -18,50 +18,40 @@
 
 	<ui:define name="content">
 		<h:form>
-			<!-- h:outputLabel for="id" value="Id" 
-				styleClass="control-label" />
-
-			<p:inputText autocomplete="off" id="id"
-				styleClass="form-control" 
-				value="#{perfilController.perfil.id}"
-				required="true" /-->
+			<h:inputHidden id="id" value="#{perfilController.perfil.id}"/>
 				
 			<h:outputLabel for="nombre" value="Nombre"
-				styleClass="control-label" />
-
+				styleClass="control-label"/>
 			<p:inputText autocomplete="off" id="nombre"
 				styleClass="form-control"
 				value="#{perfilController.perfil.nombre}" maxlength="100"
-				required="true" />
+				required="true"/>
 
 			<h:outputLabel for="descripcion" value="Descripción"
-				styleClass="control-label" />
-
+				styleClass="control-label"/>
 			<p:inputText autocomplete="off" id="descripcion"
 				styleClass="form-control"
 				value="#{perfilController.perfil.descripcion}" maxlength="500"
-				required="true" />
+				required="false"/>
 				
 			<h:outputLabel for="nivelAcceso" value="Nivel de acceso"
-				styleClass="control-label" />
-				
+				styleClass="control-label"/>
 			<p:spinner autocomplete="off" id="nivelAcceso" 
                 styleClass="form-control"
                 value="#{perfilController.perfil.nivelAcceso}" min="1" max="5"
-                required="true" />  	
+                required="true"/>
+                
+            <br/>
 
-			<br />
-
-			<p:commandButton value="Grabar"
+			<p:commandButton value="Guardar"
 				actionListener="#{perfilController.insertar()}"
-				styleClass="btn btn-primary " update="@form"
-				action="listPerfil?faces-redirect=true" />
-				
+				styleClass="btn btn-primary" update="@form"
+				action="listPerfil?faces-redirect=true"/>
 			<p:commandButton value="Cancelar"
 				action="listPerfil?faces-redirect=true" immediate="true"
-				styleClass="btn btn-default" ajax="false" />
+				styleClass="btn btn-default" ajax="false"/>
 
-			<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000"/>
 		</h:form>
 	</ui:define>
 

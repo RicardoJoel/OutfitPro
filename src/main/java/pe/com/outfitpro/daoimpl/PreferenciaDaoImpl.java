@@ -22,7 +22,7 @@ public class PreferenciaDaoImpl implements IPreferenciaDao, Serializable {
 	@Override
 	public void insertar(Preferencia obj) {
 		try {
-			em.persist(obj);
+			em.merge(obj);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());

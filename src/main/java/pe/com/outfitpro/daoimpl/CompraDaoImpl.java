@@ -22,7 +22,7 @@ public class CompraDaoImpl implements ICompraDao, Serializable {
 	@Override
 	public void insertar(Compra obj) {
 		try {
-			em.persist(obj);
+			em.merge(obj);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());

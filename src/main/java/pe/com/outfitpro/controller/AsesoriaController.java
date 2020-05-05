@@ -10,7 +10,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import pe.com.outfitpro.entity.Asesoria;
+import pe.com.outfitpro.entity.Cliente;
+import pe.com.outfitpro.entity.Asesor;
 import pe.com.outfitpro.service.IAsesoriaService;
+import pe.com.outfitpro.service.IClienteService;
+import pe.com.outfitpro.service.IAsesorService;
 
 @Named
 @RequestScoped
@@ -18,50 +22,88 @@ public class AsesoriaController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Inject
-	private IAsesoriaService service;
-	private Asesoria objeto;
-	private List<Asesoria> lista;
+	private IAsesoriaService srvAsesoria;
+	@Inject
+	private IClienteService srvCliente;
+	@Inject
+	private IAsesorService srvAsesor;
+	
+	private Asesoria asesoria;
+	private Cliente cliente;
+	private Asesor asesor;
+	
+	private List<Asesoria> listaAsesoria;
+	private List<Cliente> listaCliente;
+	private List<Asesor> listaAsesor;
 	
 	@PostConstruct
 	public void init() {
-		this.lista = new ArrayList<Asesoria>();
-		this.objeto = new Asesoria();
-		this.listar();
+		this.asesoria = new Asesoria();
+		this.cliente = new Cliente();
+		this.asesor = new Asesor();
+		this.listaAsesoria = new ArrayList<Asesoria>();
+		this.listaCliente = new ArrayList<Cliente>();
+		this.listaAsesor = new ArrayList<Asesor>();
+		this.listarAsesorias();
+		this.listarClientes();
+		this.listarAsesores();
 	}
 	
-	public String nuevoAsesoria() {
+	public String nuevo() {
 		this.setAsesoria(new Asesoria());
 		return "asesoria.xhtml";
 	}
 
+	public String editar(Asesoria asesoria) {
+		this.setAsesoria(asesoria);
+		return "asesoria.xhtml";
+	}
+
+	public void limpiar() {
+		this.init();
+	}
+	
 	public void insertar() {
 		try {
-			objeto.setIdUsuarioCreacion(1);
-			service.insertar(objeto);
+			srvAsesoria.insertar(asesoria);
 			limpiar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
-	
-	public void listar() {
+
+	public void eliminar(Asesoria asesoria) {
 		try {
-			lista = service.listar();
+			srvAsesoria.eliminar(asesoria.getId());
+			listarAsesorias();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
+	}
+
+	public void listarAsesorias() {
+		try {
+			listaAsesoria = srvAsesoria.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
 		}
 	}
 	
-	public void limpiar() {
-		this.init();
+	public void listarClientes() {
+		try {
+			listaCliente = srvCliente.listar();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
 	}
 	
-	public void eliminar(Asesoria objeto) {
+	public void listarAsesores() {
 		try {
-			service.eliminar(objeto.getId());
-			listar();
+			listaAsesor = srvAsesor.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
@@ -69,18 +111,51 @@ public class AsesoriaController implements Serializable {
 	}
 	
 	public Asesoria getAsesoria() {
-		return objeto;
+		return asesoria;
 	}
 
-	public void setAsesoria(Asesoria objeto) {
-		this.objeto = objeto;
+	public void setAsesoria(Asesoria asesoria) {
+		this.asesoria = asesoria;
+	}
+	
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public List<Asesoria> getLista() {
-		return lista;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+	
+	public Asesor getAsesor() {
+		return asesor;
 	}
 
-	public void setLista(List<Asesoria> lista) {
-		this.lista = lista;
+	public void setAsesor(Asesor asesor) {
+		this.asesor = asesor;
 	}
+
+	public List<Asesoria> getListaAsesoria() {
+		return listaAsesoria;
+	}
+
+	public void setListaAsesoria(List<Asesoria> listaAsesoria) {
+		this.listaAsesoria = listaAsesoria;
+	}
+	
+	public List<Cliente> getListaCliente() {
+		return listaCliente;
+	}
+
+	public void setListaCliente(List<Cliente> listaCliente) {
+		this.listaCliente = listaCliente;
+	}
+	
+	public List<Asesor> getListaAsesor() {
+		return listaAsesor;
+	}
+
+	public void setListaAsesor(List<Asesor> listaAsesor) {
+		this.listaAsesor = listaAsesor;
+	}
+
 }

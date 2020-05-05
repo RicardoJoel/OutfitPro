@@ -4,7 +4,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui" >
+	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="master.xhtml">
 
@@ -23,8 +23,8 @@
 					<div class="form-group box-main-btn">
 						<span style="display:block; height:30px;"></span>
 						<p:commandButton value="Nuevo"
-							action="#{tallaController.nuevoTalla()}"
-							styleClass="btn btn-primary" ajax="false" />
+							action="#{tallaController.nuevo()}"
+							styleClass="btn btn-primary" ajax="false"/>
 					</div>
 				</div>
 			</div>
@@ -33,31 +33,29 @@
 				<div class="col-sm-12">
 					<div class="form-group table-responsive box-table-class">
 						<p:dataTable id="lstTalla" var="tll"
-							value="#{tallaController.lista}" paginator="true"
+							value="#{tallaController.listaTalla}" paginator="true"
 							paginatorPosition="top" rowsPerPageTemplate="10,20,30,40,50"
 							rows="10" styleClass="table table-bordered"
 							emptyMessage="No existen registros" rowIndexVar="item"
 							style="margin-bottom:0">
 
 							<p:column headerText="Id" sortBy="#{tll.id}">
-								<h:outputText value="#{tll.id}" />
-							</p:column>
-							
-							<p:column headerText="Tipo de prenda" sortBy="#{tll.tipoPrenda.nombre}">
-								<h:outputText value="#{tll.tipoPrenda.nombre}" />
-							</p:column>
-							
-							<p:column headerText="Nombre" sortBy="#{tll.nombre}">
-								<h:outputText value="#{tll.nombre}" />
+								<h:outputText value="#{tll.id}"/>
 							</p:column>
 							
 							<p:column headerText="Detalle" sortBy="#{tll.detalle}">
-								<h:outputText value="#{tll.detalle}" />
+								<h:outputText value="#{tll.detalle}"/>
+							</p:column>
+							
+							<p:column headerText="Tipo de prenda" sortBy="#{tll.tipoPrenda.nombre}">
+								<h:outputText value="#{tll.tipoPrenda.nombre}"/>
 							</p:column>
 							
 							<p:column headerText="Operación" exportable="false">
+								<h:commandLink action="talla" value="Editar	"
+									actionListener="#{tallaController.editar(tll)}"/>
 								<h:commandLink action="listTalla" value="Eliminar"
-									actionListener="#{tallaController.eliminar(tll)}" />
+									actionListener="#{tallaController.eliminar(tll)}"/>
 							</p:column>
 						</p:dataTable>
 					</div>

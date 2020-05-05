@@ -22,7 +22,7 @@ public class ColorDaoImpl implements IColorDao, Serializable {
 	@Override
 	public void insertar(Color obj) {
 		try {
-			em.persist(obj);
+			em.merge(obj);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());

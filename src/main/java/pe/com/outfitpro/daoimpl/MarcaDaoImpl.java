@@ -22,7 +22,7 @@ public class MarcaDaoImpl implements IMarcaDao, Serializable {
 	@Override
 	public void insertar(Marca obj) {
 		try {
-			em.persist(obj);
+			em.merge(obj);
 		}
 		catch (Exception ex) {
 			System.out.println(ex.getMessage());
