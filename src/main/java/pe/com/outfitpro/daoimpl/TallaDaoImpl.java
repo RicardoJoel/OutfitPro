@@ -34,7 +34,7 @@ public class TallaDaoImpl implements ITallaDao, Serializable {
 	public List<Talla> listar() {
 		List<Talla> lista = new ArrayList<Talla>();
 		try {
-			Query q = em.createQuery("select m from Talla m order by detalle asc"); //jpa sql
+			Query q = em.createQuery("select m from Talla m order by nombre asc"); //jpa sql
 			lista = (List<Talla>)q.getResultList();
 		}
 		catch (Exception ex) {

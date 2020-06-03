@@ -1,6 +1,10 @@
 package pe.com.outfitpro.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,9 +12,11 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.Part;
+
+import org.apache.commons.io.FilenameUtils;
 
 import pe.com.outfitpro.entity.Cliente;
-import pe.com.outfitpro.entity.Perfil;
 import pe.com.outfitpro.entity.Ubigeo;
 import pe.com.outfitpro.service.IClienteService;
 import pe.com.outfitpro.service.IPerfilService;
@@ -24,33 +30,30 @@ public class ClienteController implements Serializable {
 	@Inject
 	private IClienteService srvCliente;
 	@Inject
-	private IPerfilService srvPerfil;
-	@Inject
 	private IUbigeoService srvUbigeo;
+	@Inject
+	private IPerfilService srvPerfil;
 	
 	private Cliente cliente;
-	private Perfil perfil;
 	private Ubigeo ubigeo;
 
 	private List<Cliente> listaCliente;
-	private List<Perfil> listaPerfil;
 	private List<Ubigeo> listaUbigeo;
 
 	@PostConstruct
 	public void init() {
 		this.cliente = new Cliente();
-		this.perfil = new Perfil();
 		this.ubigeo = new Ubigeo();
 		this.listaCliente = new ArrayList<Cliente>();
-		this.listaPerfil = new ArrayList<Perfil>();
 		this.listaUbigeo = new ArrayList<Ubigeo>();
 		this.listarClientes();
-		this.listarPerfiles();
 		this.listarUbigeos();
+		this.cliente.setPerfil(srvPerfil.buscarPorNombre("Cliente"));
 	}
 	
 	public String nuevo() {
 		this.setCliente(new Cliente());
+		this.getCliente().setNumAsesLibres(5);
 		return "cliente.xhtml";
 	}
 
@@ -91,15 +94,6 @@ public class ClienteController implements Serializable {
 			ex.getMessage();
 		}
 	}
-
-	public void listarPerfiles() {
-		try {
-			listaPerfil = srvPerfil.listar();
-		}
-		catch (Exception ex) {
-			ex.getMessage();
-		}
-	}
 	
 	public void listarUbigeos() {
 		try {
@@ -117,15 +111,7 @@ public class ClienteController implements Serializable {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-
-	public Perfil getPerfil() {
-		return perfil;
-	}
-
-	public void setPerfil(Perfil perfil) {
-		this.perfil = perfil;
-	}
-
+	
 	public Ubigeo getUbigeo() {
 		return ubigeo;
 	}
@@ -142,14 +128,6 @@ public class ClienteController implements Serializable {
 		this.listaCliente = listaCliente;
 	}
 
-	public List<Perfil> getListaPerfil() {
-		return listaPerfil;
-	}
-
-	public void setListaPerfil(List<Perfil> listaPerfil) {
-		this.listaPerfil = listaPerfil;
-	}
-
 	public List<Ubigeo> getListaUbigeo() {
 		return listaUbigeo;
 	}
@@ -157,5 +135,32 @@ public class ClienteController implements Serializable {
 	public void setListaUbigeo(List<Ubigeo> listaUbigeo) {
 		this.listaUbigeo = listaUbigeo;
 	}
+
+	/* Guardado de imagen */
 	
+	private Part file;
+	private String folder = "D:\\Ricardo\\sts-workspace2\\OutfitPro\\src\\main\\webapp\\resources\\img\\clientes";
+
+	public Part getFile() {
+		return file;
+	}
+
+	public void setFile(Part file) {
+		this.file = file;
+	}
+	
+	public void guardarFile() {
+		if (file == null) return;
+		try (InputStream input = file.getInputStream()) {
+			String ext = FilenameUtils.getExtension(file.getName());
+			File tempFile = File.createTempFile("asr", ext, new File(folder));
+	        String fileName = tempFile.getName();
+	        tempFile.delete();
+			Files.copy(input, new File(folder, fileName).toPath());
+	        cliente.setImagen(tempFile.toPath().toString());
+	    }
+	    catch (IOException ex) {
+	        ex.printStackTrace();
+	    }
+	}
 }

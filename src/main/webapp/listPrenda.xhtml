@@ -64,7 +64,10 @@
 							</p:column>
 							
 							<p:column headerText="Descuento" sortBy="#{prd.descuento.cantidad}">
-								<h:outputText value="#{prd.descuento.cantidad}"/>
+								<h:outputText value="#{prd.descuento.tipoDesc == 'Porcentaje' ? 
+														''.concat(prd.descuento.cantidad).concat('%') : 
+														prd.descuento.tipoDesc == 'Monto fijo' ? 
+														'S/'.concat(prd.descuento.cantidad) : ''}"/>
 							</p:column>
 							
 							<p:column headerText="Operación" exportable="false">

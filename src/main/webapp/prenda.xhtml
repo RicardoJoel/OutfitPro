@@ -37,72 +37,57 @@
 
 			<h:outputLabel for="genero" value="Género"
 				styleClass="control-label"/>
-			<h:selectOneMenu value = "#{prendaController.prenda.genero}"
+			<h:selectOneMenu id="genero" value="#{prendaController.prenda.genero}"
 				styleClass="form-control" required="true">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona un género" 
+					noSelectionOption="true" itemDisabled="true"/>
    				<f:selectItem itemValue="Hombre" itemLabel="Hombre"/>
-				<f:selectItem itemValue="Mujer" itemLabel="Mujer"/> 
+				<f:selectItem itemValue="Mujer"  itemLabel="Mujer"/> 
 				<f:selectItem itemValue="Unisex" itemLabel="Unisex"/>
 			</h:selectOneMenu>
 											
 			<h:outputLabel for="tipoPrenda" value="Tipo de prenda"
 				styleClass="control-label"/><br/>
-			<p:selectOneMenu id="tipoPrenda" 
-				styleClass="form-control"
-				value="#{prendaController.prenda.tipoPrenda}"
-				converter="omnifaces.SelectItemsConverter">
+			<p:selectOneMenu id="tipoPrenda" value="#{prendaController.prenda.tipoPrenda}"
+				converter="omnifaces.SelectItemsConverter"
+				styleClass="form-control" required="true">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona un tipo de prenda" 
+					noSelectionOption="true" itemDisabled="true"/>
 				<f:selectItems value="#{prendaController.listaTipoPrenda}" var="m"
-					itemLabel="#{m.nombre}" itemValue="#{m}"/>
+					itemValue="#{m}" itemLabel="#{m.nombre}"/>
 			</p:selectOneMenu><br/>
 			
-			<h:outputLabel for="marca" value="Marca"
+			<h:outputLabel for="talla" value="Talla"
 				styleClass="control-label"/><br/>
-			<p:selectOneMenu id="marca" 
-				styleClass="form-control"
-				value="#{prendaController.prenda.marca}"
-				converter="omnifaces.SelectItemsConverter">
-				<f:selectItems value="#{prendaController.listaMarca}" var="m"
-					itemLabel="#{m.nombre}" itemValue="#{m}"/>
+			<p:selectOneMenu id="talla" value="#{prendaController.prenda.talla}"
+				converter="omnifaces.SelectItemsConverter"
+				styleClass="form-control" required="true">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona una talla" 
+					noSelectionOption="true" itemDisabled="true"/>
+				<f:selectItems value="#{prendaController.listaTalla}" var="m"
+					itemValue="#{m}" itemLabel="#{m.nombre}"/>
 			</p:selectOneMenu><br/>
 			
 			<h:outputLabel for="color" value="Color"
 				styleClass="control-label"/><br/>
-			<p:selectOneMenu id="color" 
-				styleClass="form-control"
-				value="#{prendaController.prenda.color}"
-				converter="omnifaces.SelectItemsConverter">
+			<p:selectOneMenu id="color" value="#{prendaController.prenda.color}"
+				converter="omnifaces.SelectItemsConverter"
+				styleClass="form-control" required="true">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona un color" 
+					noSelectionOption="true" itemDisabled="true"/>
 				<f:selectItems value="#{prendaController.listaColor}" var="m"
-					itemLabel="#{m.nombre}" itemValue="#{m}"/>
+					itemValue="#{m}" itemLabel="#{m.nombre}"/>
 			</p:selectOneMenu><br/>
-						
-			<h:outputLabel for="talla" value="Talla"
+			
+			<h:outputLabel for="marca" value="Marca"
 				styleClass="control-label"/><br/>
-			<p:selectOneMenu id="talla" 
-				styleClass="form-control"
-				value="#{prendaController.prenda.talla}"
-				converter="omnifaces.SelectItemsConverter">
-				<f:selectItems value="#{prendaController.listaTalla}" var="m"
-					itemLabel="#{m.detalle}" itemValue="#{m}"/>
-			</p:selectOneMenu><br/>
-				
-			<h:outputLabel for="comercio" value="Comercio"
-				styleClass="control-label"/><br/>
-			<p:selectOneMenu id="comercio" 
-				styleClass="form-control"
-				value="#{prendaController.prenda.comercio}"
-				converter="omnifaces.SelectItemsConverter">
-				<f:selectItems value="#{prendaController.listaComercio}" var="m"
-					itemLabel="#{m.nombre}" itemValue="#{m}"/>
-			</p:selectOneMenu><br/>
-				
-			<h:outputLabel for="descuento" value="Descuento"
-				styleClass="control-label"/><br/>
-			<p:selectOneMenu id="descuento" 
-				styleClass="form-control"
-				value="#{prendaController.prenda.descuento}"
-				converter="omnifaces.SelectItemsConverter">
-				<f:selectItem itemValue="#{null}" itemLabel="Ninguno"/>
-				<f:selectItems value="#{prendaController.listaDescuento}" var="m"
-					itemLabel="#{m.nombre}" itemValue="#{m}"/>
+			<p:selectOneMenu id="marca" value="#{prendaController.prenda.marca}"
+				converter="omnifaces.SelectItemsConverter"
+				styleClass="form-control" required="true">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona una marca" 
+					noSelectionOption="true" itemDisabled="true"/>
+				<f:selectItems value="#{prendaController.listaMarca}" var="m"
+					itemValue="#{m}" itemLabel="#{m.nombre}"/>
 			</p:selectOneMenu><br/>
 			
 			<h:outputLabel for="precio" value="Precio (S/)"
@@ -120,20 +105,43 @@
 				value="#{prendaController.prenda.stock}" 
 				minValue="0" decimalPlaces="0"
 				required="true"/>
+						
+			<h:outputLabel for="comercio" value="Comercio"
+				styleClass="control-label"/><br/>
+			<p:selectOneMenu id="comercio" value="#{prendaController.prenda.comercio}"
+				converter="omnifaces.SelectItemsConverter"
+				styleClass="form-control" required="true">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona un comercio" 
+					noSelectionOption="true" itemDisabled="true"/>
+				<f:selectItems value="#{prendaController.listaComercio}" var="m"
+					itemValue="#{m}" itemLabel="#{m.nombre}"/>
+			</p:selectOneMenu><br/>
+			
+			<h:outputLabel for="descuento" value="Descuento"
+				styleClass="control-label"/><br/>
+			<p:selectOneMenu id="descuento" value="#{prendaController.prenda.descuento}"
+				converter="omnifaces.SelectItemsConverter"
+				styleClass="form-control" required="false">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona un descuento" 
+					noSelectionOption="true" itemDisabled="true"/>
+				<f:selectItem itemValue="#{null}" itemLabel="Ninguno"/>
+				<f:selectItems value="#{prendaController.listaDescuento}" var="m"
+					itemValue="#{m}" itemLabel="#{m.nombre}"/>
+			</p:selectOneMenu><br/>
 			
 			<h:outputLabel for="urlimagen" value="Imagen" 
 				styleClass="control-label"/><br/>
 			<p:graphicImage id="urlimagen" value="#{prendaController.prenda.imagen}" 
-				alt="Imagen no disponible" width="500" height="100%"/><br/>
-			<h:inputFile id="file"
-				value="#{prendaController.file}"/><br/>
+				alt="Imagen no disponible" width="500" height="100%"/><br/><br/>
+			<h:inputFile id="file" value="#{prendaController.file}">
+				<!-- f:ajax execute="@form" render="urlimagen"/-->
+			</h:inputFile><br/>
 				
 			<br/>
 			
 			<h:commandButton value="Guardar"
 				styleClass="btn btn-primary" update="@form"
 				action="listPrenda?faces-redirect=true">
-				<!-- f:ajax execute="@form" render="urlimagen"/-->
 				<f:actionListener binding="#{prendaController.guardarFile()}"/>
 				<f:actionListener binding="#{prendaController.insertar()}"/>
 			</h:commandButton>

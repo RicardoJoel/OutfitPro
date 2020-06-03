@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="asesor")
-public class Asesor extends Master implements Serializable {
+public class Asesor extends Usuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	

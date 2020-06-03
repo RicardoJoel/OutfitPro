@@ -16,7 +16,7 @@ public class Master implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="activo", nullable=false)
+	@Column(name="activo", nullable=false, columnDefinition = "boolean default true")
 	private Boolean activo = true;
 
 	public Master() {

@@ -10,8 +10,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import pe.com.outfitpro.entity.Compra;
+import pe.com.outfitpro.entity.Prenda;
 import pe.com.outfitpro.entity.Cliente;
 import pe.com.outfitpro.service.ICompraService;
+import pe.com.outfitpro.service.IPrendaService;
 import pe.com.outfitpro.service.IClienteService;
 
 @Named
@@ -22,21 +24,28 @@ public class CompraController implements Serializable {
 	@Inject
 	private ICompraService srvCompra;
 	@Inject
+	private IPrendaService srvPrenda;
+	@Inject
 	private IClienteService srvCliente;
 	
 	private Compra compra;
+	private Prenda prenda;
 	private Cliente cliente;
 	
 	private List<Compra> listaCompra;
+	private List<Prenda> listaPrenda;
 	private List<Cliente> listaCliente;
 	
 	@PostConstruct
 	public void init() {
 		this.compra = new Compra();
+		this.prenda = new Prenda();
 		this.cliente = new Cliente();
 		this.listaCompra = new ArrayList<Compra>();
+		this.listaPrenda = new ArrayList<Prenda>();
 		this.listaCliente = new ArrayList<Cliente>();
 		this.listarCompras();
+		this.listarPrendas();
 		this.listarClientes();
 	}
 	
@@ -82,7 +91,16 @@ public class CompraController implements Serializable {
 			ex.getMessage();
 		}
 	}
-	
+
+	public void listarPrendas() {
+		try {
+			listaPrenda = srvPrenda.listar();
+		}
+		catch (Exception ex) {
+			ex.getMessage();
+		}
+	}
+		
 	public void listarClientes() {
 		try {
 			listaCliente = srvCliente.listar();
@@ -100,6 +118,14 @@ public class CompraController implements Serializable {
 		this.compra = compra;
 	}
 
+	public Prenda getPrenda() {
+		return prenda;
+	}
+
+	public void setPrenda(Prenda prenda) {
+		this.prenda = prenda;
+	}
+
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -114,6 +140,14 @@ public class CompraController implements Serializable {
 
 	public void setListaCompra(List<Compra> listaCompra) {
 		this.listaCompra = listaCompra;
+	}
+
+	public List<Prenda> getListaPrenda() {
+		return listaPrenda;
+	}
+
+	public void setListaPrenda(List<Prenda> listaPrenda) {
+		this.listaPrenda = listaPrenda;
 	}
 
 	public List<Cliente> getListaCliente() {

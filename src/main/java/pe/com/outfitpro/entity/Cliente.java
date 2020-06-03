@@ -13,8 +13,8 @@ public class Cliente extends Usuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="premium", nullable=false)
-	private Boolean premium;
+	@Column(name="premium", nullable=false, columnDefinition = "boolean default true")
+	private Boolean premium = false;
 	
 	@Column(name="fecAltaPremium", nullable=true)
 	private Date fecAltaPremium;

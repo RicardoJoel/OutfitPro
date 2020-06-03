@@ -16,7 +16,7 @@ public class Asesoria extends Master implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(name="fecHoraIni", nullable=false)
-	private Date fecHoraIni;
+	private Date fecHoraIni = new Date();
 	
 	@Column(name="fecHoraFin", nullable=true)
 	private Date fecHoraFin;

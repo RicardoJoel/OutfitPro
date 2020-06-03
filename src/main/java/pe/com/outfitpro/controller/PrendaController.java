@@ -45,51 +45,51 @@ public class PrendaController implements Serializable {
 	@Inject
 	private IMarcaService srvMarca;
 	@Inject
-	private ITipoPrendaService srvTipoPrenda;
+	private IComercioService srvComercio;
 	@Inject
 	private IDescuentoService srvDescuento;
 	@Inject
-	private IComercioService srvComercio;
+	private ITipoPrendaService srvTipoPrenda;
 	
 	private Prenda prenda;
 	private Talla talla;
 	private Color color;
 	private Marca marca;
-	private TipoPrenda tipoPrenda;
-	private Descuento descuento;
 	private Comercio comercio;
+	private Descuento descuento;
+	private TipoPrenda tipoPrenda;
 	
 	private List<Prenda> listaPrenda;
 	private List<Talla> listaTalla;
 	private List<Color> listaColor;
 	private List<Marca> listaMarca;
-	private List<TipoPrenda> listaTipoPrenda;
-	private List<Descuento> listaDescuento;
 	private List<Comercio> listaComercio;
-		
+	private List<Descuento> listaDescuento;
+	private List<TipoPrenda> listaTipoPrenda;
+	
 	@PostConstruct
 	public void init() {
 		this.prenda = new Prenda();
 		this.talla = new Talla();
 		this.color = new Color();
 		this.marca = new Marca();
-		this.tipoPrenda = new TipoPrenda();
-		this.descuento = new Descuento();
 		this.comercio = new Comercio();
+		this.descuento = new Descuento();
+		this.tipoPrenda = new TipoPrenda();
 		this.listaPrenda = new ArrayList<Prenda>();
 		this.listaTalla = new ArrayList<Talla>();
 		this.listaColor = new ArrayList<Color>();
 		this.listaMarca = new ArrayList<Marca>();
-		this.listaTipoPrenda = new ArrayList<TipoPrenda>();
-		this.listaDescuento = new ArrayList<Descuento>();
 		this.listaComercio = new ArrayList<Comercio>();
+		this.listaDescuento = new ArrayList<Descuento>();
+		this.listaTipoPrenda = new ArrayList<TipoPrenda>();
 		this.listarPrendas();
 		this.listarTallas();
 		this.listarColores();
 		this.listarMarcas();
-		this.listarTipoPrendas();
-		this.listarDescuentos();
 		this.listarComercios();
+		this.listarDescuentos();
+		this.listarTipoPrendas();
 	}
 	
 	public String nuevo() {
@@ -161,10 +161,10 @@ public class PrendaController implements Serializable {
 			ex.getMessage();
 		}
 	}
-	
-	public void listarTipoPrendas() {
+
+	public void listarComercios() {
 		try {
-			listaTipoPrenda = srvTipoPrenda.listar();
+			listaComercio = srvComercio.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
@@ -179,10 +179,10 @@ public class PrendaController implements Serializable {
 			ex.getMessage();
 		}
 	}
-	
-	public void listarComercios() {
+
+	public void listarTipoPrendas() {
 		try {
-			listaComercio = srvComercio.listar();
+			listaTipoPrenda = srvTipoPrenda.listar();
 		}
 		catch (Exception ex) {
 			ex.getMessage();
@@ -195,6 +195,14 @@ public class PrendaController implements Serializable {
 
 	public void setPrenda(Prenda prenda) {
 		this.prenda = prenda;
+	}
+
+	public TipoPrenda getTipoPrenda() {
+		return tipoPrenda;
+	}
+
+	public void setTipoPrenda(TipoPrenda tipoPrenda) {
+		this.tipoPrenda = tipoPrenda;
 	}
 
 	public Talla getTalla() {
@@ -221,12 +229,12 @@ public class PrendaController implements Serializable {
 		this.marca = marca;
 	}
 
-	public TipoPrenda getTipoPrenda() {
-		return tipoPrenda;
+	public Comercio getComercio() {
+		return comercio;
 	}
 
-	public void setTipoPrenda(TipoPrenda tipoPrenda) {
-		this.tipoPrenda = tipoPrenda;
+	public void setComercio(Comercio comercio) {
+		this.comercio = comercio;
 	}
 
 	public Descuento getDescuento() {
@@ -237,20 +245,20 @@ public class PrendaController implements Serializable {
 		this.descuento = descuento;
 	}
 
-	public Comercio getComercio() {
-		return comercio;
-	}
-
-	public void setComercio(Comercio comercio) {
-		this.comercio = comercio;
-	}
-
 	public List<Prenda> getListaPrenda() {
 		return listaPrenda;
 	}
 
 	public void setListaPrenda(List<Prenda> listaPrenda) {
 		this.listaPrenda = listaPrenda;
+	}
+
+	public List<TipoPrenda> getListaTipoPrenda() {
+		return listaTipoPrenda;
+	}
+
+	public void setListaTipoPrenda(List<TipoPrenda> listaTipoPrenda) {
+		this.listaTipoPrenda = listaTipoPrenda;
 	}
 
 	public List<Talla> getListaTalla() {
@@ -277,22 +285,6 @@ public class PrendaController implements Serializable {
 		this.listaMarca = listaMarca;
 	}
 
-	public List<TipoPrenda> getListaTipoPrenda() {
-		return listaTipoPrenda;
-	}
-
-	public void setListaTipoPrenda(List<TipoPrenda> listaTipoPrenda) {
-		this.listaTipoPrenda = listaTipoPrenda;
-	}
-
-	public List<Descuento> getListaDescuento() {
-		return listaDescuento;
-	}
-
-	public void setListaDescuento(List<Descuento> listaDescuento) {
-		this.listaDescuento = listaDescuento;
-	}
-
 	public List<Comercio> getListaComercio() {
 		return listaComercio;
 	}
@@ -301,7 +293,15 @@ public class PrendaController implements Serializable {
 		this.listaComercio = listaComercio;
 	}
 	
-	/*Guardado de imagen*/
+	public List<Descuento> getListaDescuento() {
+		return listaDescuento;
+	}
+
+	public void setListaDescuento(List<Descuento> listaDescuento) {
+		this.listaDescuento = listaDescuento;
+	}
+
+	/* Guardado de imagen */
 	
 	private Part file;
 	private String folder = "D:\\Ricardo\\sts-workspace2\\OutfitPro\\src\\main\\webapp\\resources\\img\\prendas";

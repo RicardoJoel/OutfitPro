@@ -15,10 +15,7 @@ public class Usuario extends Master implements Serializable {
 
 	@Column(name="nombre", nullable=false, length=100)
 	private String nombre;
-	
-	@Column(name="apellido", nullable=false, length=100)
-	private String apellido;
-	
+
 	@Column(name="correo", nullable=false, length=100)
 	private String correo;
 	
@@ -50,11 +47,10 @@ public class Usuario extends Master implements Serializable {
 		super();
 	}
 
-	public Usuario(String nombre, String apellido, String correo, String contrasena, String genero, String telefono,
+	public Usuario(String nombre, String correo, String contrasena, String genero, String telefono,
 			String direccion, String imagen, Date nacimiento, Perfil perfil, Ubigeo ubigeo) {
 		super();
 		this.nombre = nombre;
-		this.apellido = apellido;
 		this.correo = correo;
 		this.contrasena = contrasena;
 		this.genero = genero;
@@ -72,14 +68,6 @@ public class Usuario extends Master implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public String getApellido() {
-		return apellido;
-	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
 	}
 
 	public String getCorreo() {

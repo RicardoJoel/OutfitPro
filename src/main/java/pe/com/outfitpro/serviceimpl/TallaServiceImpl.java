@@ -28,7 +28,7 @@ public class TallaServiceImpl implements ITallaService, Serializable {
 	public List<Talla> listar() {
 		return md.listar();
 	}
-
+	
 	@Override
 	public void eliminar(int id) {
 		md.eliminar(id);

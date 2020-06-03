@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,20 +12,32 @@ public class Talla extends Master implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="detalle", nullable=false, length=100)
+	@Column(name="nombre", nullable=false, length=100)
+	private String nombre;
+	
+	@Column(name="detalle", nullable=true, length=100)
 	private String detalle;
-	
-	@ManyToOne @JoinColumn(name="tipoPrendaId", nullable=false)
-	private TipoPrenda tipoPrenda;
-	
+
 	public Talla() {
 		super();
 	}
 
-	public Talla(String detalle, TipoPrenda tipoPrenda) {
+	public Talla(int id, Boolean activo) {
+		super(id, activo);
+	}
+
+	public Talla(String nombre, String detalle) {
 		super();
+		this.nombre = nombre;
 		this.detalle = detalle;
-		this.tipoPrenda = tipoPrenda;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	public String getDetalle() {
@@ -37,12 +47,5 @@ public class Talla extends Master implements Serializable {
 	public void setDetalle(String detalle) {
 		this.detalle = detalle;
 	}
-
-	public TipoPrenda getTipoPrenda() {
-		return tipoPrenda;
-	}
-
-	public void setTipoPrenda(TipoPrenda tipoPrenda) {
-		this.tipoPrenda = tipoPrenda;
-	}
+	
 }

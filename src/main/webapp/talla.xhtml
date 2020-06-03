@@ -20,21 +20,19 @@
 		<h:form>
 			<h:inputHidden id="id" value="#{tallaController.talla.id}"/>
 			
-			<h:outputLabel for="tipoPrenda" value="Tipo de prenda" 
-				styleClass="control-label"/><br/>
-			<p:selectOneMenu id="tipoPrenda" styleClass="form-control"
-				value="#{tallaController.talla.tipoPrenda}"
-				converter="omnifaces.SelectItemsConverter">
-				<f:selectItems value="#{tallaController.listaTipoPrenda}" var="m"
-					itemLabel="#{m.nombre}" itemValue="#{m}"/>
-			</p:selectOneMenu><br/>
+			<h:outputLabel for="nombre" value="Nombre"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="nombre"
+				styleClass="form-control"
+				value="#{tallaController.talla.nombre}" maxlength="100"
+				required="true"/>
 			
 			<h:outputLabel for="detalle" value="Detalle"
 				styleClass="control-label"/>
 			<p:inputText autocomplete="off" id="detalle"
 				styleClass="form-control"
 				value="#{tallaController.talla.detalle}" maxlength="100"
-				required="true"/>
+				required="false"/>
 				
 			<br/>
 

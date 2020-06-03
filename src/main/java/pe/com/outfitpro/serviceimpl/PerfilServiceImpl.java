@@ -28,7 +28,12 @@ public class PerfilServiceImpl implements IPerfilService, Serializable {
 	public List<Perfil> listar() {
 		return md.listar();
 	}
-
+	
+	@Override
+	public Perfil buscarPorNombre(String nombre) {
+		return md.buscarPorNombre(nombre);
+	}
+	
 	@Override
 	public void eliminar(int id) {
 		md.eliminar(id);

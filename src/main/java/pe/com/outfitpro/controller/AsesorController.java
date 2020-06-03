@@ -1,6 +1,10 @@
 package pe.com.outfitpro.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,9 +12,11 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.Part;
+
+import org.apache.commons.io.FilenameUtils;
 
 import pe.com.outfitpro.entity.Asesor;
-import pe.com.outfitpro.entity.Perfil;
 import pe.com.outfitpro.entity.Ubigeo;
 import pe.com.outfitpro.service.IAsesorService;
 import pe.com.outfitpro.service.IPerfilService;
@@ -24,29 +30,25 @@ public class AsesorController implements Serializable {
 	@Inject
 	private IAsesorService srvAsesor;
 	@Inject
-	private IPerfilService srvPerfil;
-	@Inject
 	private IUbigeoService srvUbigeo;
+	@Inject
+	private IPerfilService srvPerfil;
 	
 	private Asesor asesor;
-	private Perfil perfil;
 	private Ubigeo ubigeo;
 
 	private List<Asesor> listaAsesor;
-	private List<Perfil> listaPerfil;
 	private List<Ubigeo> listaUbigeo;
 
 	@PostConstruct
 	public void init() {
 		this.asesor = new Asesor();
-		this.perfil = new Perfil();
 		this.ubigeo = new Ubigeo();
 		this.listaAsesor = new ArrayList<Asesor>();
-		this.listaPerfil = new ArrayList<Perfil>();
 		this.listaUbigeo = new ArrayList<Ubigeo>();
 		this.listarAsesores();
-		this.listarPerfiles();
 		this.listarUbigeos();
+		this.asesor.setPerfil(srvPerfil.buscarPorNombre("Asesor"));
 	}
 	
 	public String nuevo() {
@@ -91,15 +93,6 @@ public class AsesorController implements Serializable {
 			ex.getMessage();
 		}
 	}
-
-	public void listarPerfiles() {
-		try {
-			listaPerfil = srvPerfil.listar();
-		}
-		catch (Exception ex) {
-			ex.getMessage();
-		}
-	}
 	
 	public void listarUbigeos() {
 		try {
@@ -118,14 +111,6 @@ public class AsesorController implements Serializable {
 		this.asesor = asesor;
 	}
 
-	public Perfil getPerfil() {
-		return perfil;
-	}
-
-	public void setPerfil(Perfil perfil) {
-		this.perfil = perfil;
-	}
-
 	public Ubigeo getUbigeo() {
 		return ubigeo;
 	}
@@ -142,14 +127,6 @@ public class AsesorController implements Serializable {
 		this.listaAsesor = listaAsesor;
 	}
 
-	public List<Perfil> getListaPerfil() {
-		return listaPerfil;
-	}
-
-	public void setListaPerfil(List<Perfil> listaPerfil) {
-		this.listaPerfil = listaPerfil;
-	}
-
 	public List<Ubigeo> getListaUbigeo() {
 		return listaUbigeo;
 	}
@@ -157,5 +134,32 @@ public class AsesorController implements Serializable {
 	public void setListaUbigeo(List<Ubigeo> listaUbigeo) {
 		this.listaUbigeo = listaUbigeo;
 	}
+
+	/* Guardado de imagen */
 	
+	private Part file;
+	private String folder = "D:\\Ricardo\\sts-workspace2\\OutfitPro\\src\\main\\webapp\\resources\\img\\asesores";
+
+	public Part getFile() {
+		return file;
+	}
+
+	public void setFile(Part file) {
+		this.file = file;
+	}
+	
+	public void guardarFile() {
+		if (file == null) return;
+		try (InputStream input = file.getInputStream()) {
+			String ext = FilenameUtils.getExtension(file.getName());
+			File tempFile = File.createTempFile("asr", ext, new File(folder));
+	        String fileName = tempFile.getName();
+	        tempFile.delete();
+			Files.copy(input, new File(folder, fileName).toPath());
+	        asesor.setImagen(tempFile.toPath().toString());
+	    }
+	    catch (IOException ex) {
+	        ex.printStackTrace();
+	    }
+	}
 }

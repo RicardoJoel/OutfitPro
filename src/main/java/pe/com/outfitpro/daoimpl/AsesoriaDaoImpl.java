@@ -34,7 +34,7 @@ public class AsesoriaDaoImpl implements IAsesoriaDao, Serializable {
 	public List<Asesoria> listar() {
 		List<Asesoria> lista = new ArrayList<Asesoria>();
 		try {
-			Query q = em.createQuery("select m from Asesoria m order by nombre asc"); //jpa sql
+			Query q = em.createQuery("select m from Asesoria m order by fecHoraIni asc"); //jpa sql
 			lista = (List<Asesoria>)q.getResultList();
 		}
 		catch (Exception ex) {

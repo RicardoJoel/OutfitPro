@@ -43,6 +43,20 @@ public class PerfilDaoImpl implements IPerfilDao, Serializable {
 		return lista;
 	}
 
+	@Override
+	public Perfil buscarPorNombre(String nombre) {
+		Perfil perfil = null;
+		try {
+			Query q = em.createQuery("select m from Perfil m where nombre = ?1"); //jpa sql
+			q.setParameter(1, nombre);
+			perfil = (Perfil)q.getResultList().get(0);
+		}
+		catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		return perfil;
+	}
+
 	@Transactional
 	@Override
 	public void eliminar(int id) {
