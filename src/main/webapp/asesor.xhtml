@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="master.xhtml">
+
+	<ui:define name="title">
+        Outfit Pro - Registro de nuevo asesor
+    </ui:define>
+
+	<ui:define name="titleCont">
+		<span>Nuevo asesor</span>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form enctype="multipart/form-data">
+			<h:inputHidden id="id" value="#{asesorController.asesor.id}"/>
+			<h:inputHidden id="imagen" value="#{asesorController.asesor.imagen}"/>
+			
+			<h:outputLabel for="nombre" value="Nombre"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="nombre"
+				styleClass="form-control"
+				value="#{asesorController.asesor.nombre}" maxlength="100"
+				required="true"/>
+
+			<h:outputLabel for="correo" value="Correo"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="correo"
+				styleClass="form-control"
+				value="#{asesorController.asesor.correo}" maxlength="100"
+				required="true"/>
+				
+			<h:outputLabel for="contrasena" value="Contraseña"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="contrasena"
+				styleClass="form-control"
+				value="#{asesorController.asesor.contrasena}" maxlength="100"
+				required="true"/>
+
+			<h:outputLabel for="referencia" value="Referencia personal"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="referencia"
+				styleClass="form-control"
+				value="#{asesorController.asesor.referencia}" maxlength="500"
+				required="false"/>
+							
+			<h:outputLabel for="telefono" value="Teléfono"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="telefono"
+				styleClass="form-control"
+				value="#{asesorController.asesor.telefono}" maxlength="100"
+				required="true"/>
+				
+			<h:outputLabel for="direccion" value="Dirección"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="direccion"
+				styleClass="form-control"
+				value="#{asesorController.asesor.direccion}" maxlength="100"
+				required="true"/>
+						
+			<h:outputLabel for="ubigeo" value="Ubigeo"
+				styleClass="control-label"/><br/>
+			<p:selectOneMenu id="ubigeo" value="#{asesorController.asesor.ubigeo}"
+				converter="omnifaces.SelectItemsConverter"
+				styleClass="form-control" required="true">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona un ubigeo" 
+					noSelectionOption="true" itemDisabled="true"/>
+				<f:selectItems value="#{asesorController.listaUbigeo}" var="m"
+					itemValue="#{m}" itemLabel="#{m.departamento.concat(' / ').concat(m.provincia).concat(' / ').concat(m.distrito)}"/>
+			</p:selectOneMenu><br/>
+			
+			<h:outputLabel for="genero" value="Género"
+				styleClass="control-label"/>
+			<h:selectOneMenu id="genero" value="#{asesorController.asesor.genero}"
+				styleClass="form-control" required="true">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona un género" 
+					noSelectionOption="true" itemDisabled="true"/>
+   				<f:selectItem itemValue="Hombre" itemLabel="Hombre"/>
+				<f:selectItem itemValue="Mujer"  itemLabel="Mujer"/> 
+				<f:selectItem itemValue="Unisex" itemLabel="Unisex"/>
+			</h:selectOneMenu>
+				
+			<h:outputLabel for="nacimiento" value="Fecha de nacimiento"
+				styleClass="control-label" />
+			<p:calendar pattern="dd/MM/yyyy" id="nacimiento"
+				styleClass="form-control"
+				value="#{asesorController.asesor.nacimiento}" showOn="button"
+				timeZone="UTC" yearRange="1900:2011" required="true">
+			</p:calendar>
+			
+			<h:outputLabel for="valoracion" value="Calificación promedio"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="valoracion"
+				styleClass="form-control"
+				value="#{''.concat(asesorController.asesor.valoracion).concat('/5')}"
+				readonly="true" required="true"/>
+			
+			<h:outputLabel for="urlimagen" value="Imagen" 
+				styleClass="control-label"/><br/>
+			<p:graphicImage id="urlimagen" value="#{asesorController.asesor.imagen}" 
+				alt="Imagen no disponible" width="500" height="100%"/><br/><br/>
+			<h:inputFile id="file" value="#{asesorController.file}">
+				<!-- f:ajax execute="@form" render="urlimagen"/-->
+			</h:inputFile><br/>
+				
+			<br/>
+			
+			<h:commandButton value="Guardar"
+				styleClass="btn btn-primary" update="@form"
+				action="listAsesor?faces-redirect=true">
+				<f:actionListener binding="#{asesorController.guardarFile()}"/>
+				<f:actionListener binding="#{asesorController.insertar()}"/>
+			</h:commandButton>
+			<h:commandButton value="Cancelar"
+				action="listAsesor?faces-redirect=true" immediate="true"
+				styleClass="btn btn-default" ajax="false"/>
+				
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000"/>
+		</h:form>
+	</ui:define>
+
+	<ui:define name="footerCont"></ui:define>
+</ui:composition>
+</html>

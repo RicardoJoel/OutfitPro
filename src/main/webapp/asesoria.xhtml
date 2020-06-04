@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="master.xhtml">
+
+	<ui:define name="title">
+        Outfit Pro - Registro de nueva asesoria
+    </ui:define>
+
+	<ui:define name="titleCont">
+		<span>Nueva asesoria</span>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form enctype="multipart/form-data">
+			<h:inputHidden id="id" value="#{asesoriaController.asesoria.id}"/>
+											
+			<h:outputLabel for="cliente" value="Cliente"
+				styleClass="control-label"/><br/>
+			<p:selectOneMenu id="cliente" value="#{asesoriaController.asesoria.cliente}"
+				converter="omnifaces.SelectItemsConverter"
+				styleClass="form-control" required="true">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona un cliente" 
+					noSelectionOption="true" itemDisabled="true"/>
+				<f:selectItems value="#{asesoriaController.listaCliente}" var="m"
+					itemValue="#{m}" itemLabel="#{m.nombre}"/>
+			</p:selectOneMenu><br/>
+			
+			<h:outputLabel for="asesor" value="Asesor"
+				styleClass="control-label"/><br/>
+			<p:selectOneMenu id="asesor" value="#{asesoriaController.asesoria.asesor}"
+				converter="omnifaces.SelectItemsConverter"
+				styleClass="form-control" required="true">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona un asesor" 
+					noSelectionOption="true" itemDisabled="true"/>
+				<f:selectItems value="#{asesoriaController.listaAsesor}" var="m"
+					itemValue="#{m}" itemLabel="#{m.nombre}"/>
+			</p:selectOneMenu><br/>
+			
+			<h:outputLabel for="valoracion" value="Valoración"
+				styleClass="control-label"/>
+			<p:inputNumber autocomplete="off" id="valoracion"
+				styleClass="form-control"
+				value="#{asesoriaController.asesoria.valoracion}" 
+				minValue="1" maxValue="5" decimalPlaces="0"
+				required="true"/>
+				
+			<br/>
+			
+			<p:commandButton value="Guardar"
+				actionListener="#{asesoriaController.insertar()}"
+				styleClass="btn btn-primary" update="@form"
+				action="listAsesoria?faces-redirect=true"/>	
+			<p:commandButton value="Cancelar"
+				action="listAsesoria?faces-redirect=true" immediate="true"
+				styleClass="btn btn-default" ajax="false"/>
+				
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000"/>
+		</h:form>
+	</ui:define>
+
+	<ui:define name="footerCont"></ui:define>
+</ui:composition>
+</html>

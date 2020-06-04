@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="master.xhtml">
+
+	<ui:define name="title">
+        Outfit Pro - Registro de Compra
+    </ui:define>
+
+	<ui:define name="titleCont">
+		<span>Nueva Compra</span>
+	</ui:define>
+
+	<ui:define name="content">
+
+	   <h:form enctype="multipart/form-data">
+       			<h:inputHidden id="id" value="#{compraController.compra.id}"></h:inputHidden>
+
+			<h:outputLabel for="estado" value="Nombre de la Prenda"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="estado"
+				styleClass="form-control"
+				value="#{compraController.compra.estado}" maxlength="100"
+				required="true"/>
+
+			<h:outputLabel for="fechaIni" value="Fecha de la Compra"
+				styleClass="control-label"/>
+			<p:calendar id="fecHoraPago" pattern="dd/MM/yyyy"
+				styleClass="form-control"
+				value="#{compraController.compra.fecHoraPago}" showOn="button"
+				timeZone="UTC" required="true">
+			</p:calendar>
+
+			<h:outputLabel for="metodoPago" value="Metodo de pago"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="metodoPago"
+				styleClass="form-control"
+				value="#{compraController.compra.metodoPago}" maxlength="100"
+				required="true"/>
+
+				<h:outputLabel for="cliente" value="Nombre del Cliente"
+					styleClass="control-label"/><br/>
+				<p:selectOneMenu id="cliente" 
+				styleClass="form-control"
+				value="#{compraController.cliente}"
+				converter="omnifaces.SelectItemsConverter">
+				<f:selectItems value="#{compraController.listaCliente}" var="m"
+					itemLabel="#{m.nombre}" itemValue="#{m}"/>
+			</p:selectOneMenu><br/>
+
+			<h:commandButton value="Guardar"
+				styleClass="btn btn-primary" update="@form"
+				action="listCompra?faces-redirect=true">
+				<f:actionListener binding="#{compraController.insertar()}"/>
+			</h:commandButton>
+			<h:commandButton value="Cancelar"
+				action="listCompra?faces-redirect=true" immediate="true"
+				styleClass="btn btn-default" ajax="false"/>
+
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000"/>
+		</h:form>
+	</ui:define>
+
+	<ui:define name="footerCont"></ui:define>
+</ui:composition>
+</html>

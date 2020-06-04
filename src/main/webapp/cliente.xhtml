@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="master.xhtml">
+
+	<ui:define name="title">
+        Outfit Pro - Registro de nuevo cliente
+    </ui:define>
+
+	<ui:define name="titleCont">
+		<span>Nuevo cliente</span>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form enctype="multipart/form-data">
+			<h:inputHidden id="id" value="#{clienteController.cliente.id}"/>
+			<h:inputHidden id="imagen" value="#{clienteController.cliente.imagen}"/>
+			
+			<h:outputLabel for="nombre" value="Nombre"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="nombre"
+				styleClass="form-control"
+				value="#{clienteController.cliente.nombre}" maxlength="100"
+				required="true"/>
+
+			<h:outputLabel for="correo" value="Correo"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="correo"
+				styleClass="form-control"
+				value="#{clienteController.cliente.correo}" maxlength="100"
+				required="true"/>
+				
+			<h:outputLabel for="contrasena" value="Contraseña"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="contrasena"
+				styleClass="form-control"
+				value="#{clienteController.cliente.contrasena}" maxlength="100"
+				required="true"/>
+							
+			<h:outputLabel for="telefono" value="Teléfono"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="telefono"
+				styleClass="form-control"
+				value="#{clienteController.cliente.telefono}" maxlength="100"
+				required="true"/>
+				
+			<h:outputLabel for="direccion" value="Dirección"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="direccion"
+				styleClass="form-control"
+				value="#{clienteController.cliente.direccion}" maxlength="100"
+				required="true"/>
+						
+			<h:outputLabel for="ubigeo" value="Ubigeo"
+				styleClass="control-label"/><br/>
+			<p:selectOneMenu id="ubigeo" value="#{clienteController.cliente.ubigeo}"
+				converter="omnifaces.SelectItemsConverter"
+				styleClass="form-control" required="true">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona un ubigeo" 
+					noSelectionOption="true" itemDisabled="true"/>
+				<f:selectItems value="#{clienteController.listaUbigeo}" var="m"
+					itemValue="#{m}" itemLabel="#{m.departamento.concat(' / ').concat(m.provincia).concat(' / ').concat(m.distrito)}"/>
+			</p:selectOneMenu><br/>
+			
+			<h:outputLabel for="genero" value="Género"
+				styleClass="control-label"/>
+			<h:selectOneMenu id="genero" value="#{clienteController.cliente.genero}"
+				styleClass="form-control" required="true">
+				<f:selectItem itemValue="#{null}" itemLabel="Selecciona un género" 
+					noSelectionOption="true" itemDisabled="true"/>
+   				<f:selectItem itemValue="Hombre" itemLabel="Hombre"/>
+				<f:selectItem itemValue="Mujer"  itemLabel="Mujer"/> 
+				<f:selectItem itemValue="Unisex" itemLabel="Unisex"/>
+			</h:selectOneMenu>
+				
+			<h:outputLabel for="nacimiento" value="Fecha de nacimiento"
+				styleClass="control-label" />
+			<p:calendar pattern="dd/MM/yyyy" id="nacimiento"
+				styleClass="form-control"
+				value="#{clienteController.cliente.nacimiento}" showOn="button"
+				timeZone="UTC" yearRange="1900:2011" required="true">
+			</p:calendar>
+			
+			<h:outputLabel for="numAsesLibres" value="Asesorías gratis"
+				styleClass="control-label"/>
+			<p:inputText autocomplete="off" id="numAsesLibres"
+				styleClass="form-control"
+				value="#{''.concat(clienteController.cliente.numAsesLibres).concat('/5')}"
+				readonly="true" required="true"/>
+			
+			<h:outputLabel for="urlimagen" value="Imagen" 
+				styleClass="control-label"/><br/>
+			<p:graphicImage id="urlimagen" value="#{clienteController.cliente.imagen}" 
+				alt="Imagen no disponible" width="500" height="100%"/><br/><br/>
+			<h:inputFile id="file" value="#{clienteController.file}">
+				<!-- f:ajax execute="@form" render="urlimagen"/-->
+			</h:inputFile><br/>
+				
+			<br/>
+			
+			<h:commandButton value="Guardar"
+				styleClass="btn btn-primary" update="@form"
+				action="listCliente?faces-redirect=true">
+				<f:actionListener binding="#{clienteController.guardarFile()}"/>
+				<f:actionListener binding="#{clienteController.insertar()}"/>
+			</h:commandButton>
+			<h:commandButton value="Cancelar"
+				action="listCliente?faces-redirect=true" immediate="true"
+				styleClass="btn btn-default" ajax="false"/>
+				
+			<p:growl id="growl" sticky="true" showDetail="true" life="3000"/>
+		</h:form>
+	</ui:define>
+
+	<ui:define name="footerCont"></ui:define>
+</ui:composition>
+</html>
